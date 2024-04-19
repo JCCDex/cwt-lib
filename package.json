@@ -1,6 +1,6 @@
 {
-  "name": "jwt-lib",
-  "version": "1.0.0",
+  "name": "jwt-lib-test",
+  "version": "0.0.2",
   "description": "",
   "main": "index.js",
   "type": "module",
