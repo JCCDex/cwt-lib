@@ -18,6 +18,8 @@ describe('compressPubKey', () => {
     const wallet = walletJwt.generate();
     const compressedPubKey = walletJwt.compressPubKey(wallet.privateKey);
     expect(compressedPubKey).toHaveLength(66);
+
+    expect(()=>{walletJwt.compressPubKey("123456789")}).toThrow(new Error('invalid private key'));
   });
 });
 
@@ -36,10 +38,8 @@ describe('signOfjwt', () => {
     const jwt = walletJwt.signOfjwt(data, wallet.privateKey);
     expect(jwt).toBeTruthy();
 
-    const errorJwt_noPayload = walletJwt.signOfjwt({}, wallet.privateKey);
-    expect(errorJwt_noPayload).toEqual(new Error('payload is required'));
-    const errorJwt_invalidKey = walletJwt.signOfjwt(data, "123456789");
-    expect(errorJwt_invalidKey).toEqual(new Error('invalid private key'));
+    expect(()=>{walletJwt.signOfjwt({}, wallet.privateKey)}).toThrow(new Error('payload is required'));
+    expect(()=>{walletJwt.signOfjwt(data, "123456789")}).toThrow(new Error('invalid private key'));
   });
 });
 

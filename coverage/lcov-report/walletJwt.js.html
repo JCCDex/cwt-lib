@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">87.5% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>14/16</span>
+                <span class='fraction'>16/16</span>
             </div>
         
             
@@ -123,26 +123,7 @@
 <a name='L58'></a><a href='#L58'>58</a>
 <a name='L59'></a><a href='#L59'>59</a>
 <a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a>
-<a name='L65'></a><a href='#L65'>65</a>
-<a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a>
-<a name='L72'></a><a href='#L72'>72</a>
-<a name='L73'></a><a href='#L73'>73</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L61'></a><a href='#L61'>61</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -154,10 +135,8 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -169,7 +148,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -177,7 +155,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -193,68 +170,56 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// 导入jsontokens库中的TokenSigner、decodeToken、TokenVerifier类
-import { TokenSigner, decodeToken, TokenVerifier } from 'jsontokens'
-// 导入Wallet类，用于生成钱包
-import Wallet from 'ethereumjs-wallet'
-// 导入publicKeyCreate函数，用于压缩公钥
-import { publicKeyCreate } from 'ethereum-cryptography/secp256k1-compat';
-// 导入isValidPrivate和isValidPublic函数，用于检查私钥和公钥的有效性
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { TokenSigner, decodeToken, TokenVerifier, SECP256K1Client } from 'jsontokens'
+import { Wallet } from '@ethereumjs/wallet'
 import { isValidPrivate, isValidPublic, } from '@ethereumjs/util'
 &nbsp;
-// 定义ethWalletJwt类
 class walletJwt {
-  // 定义signOfjwt函数，用于签名jwt
+  // 签名 jwt
   static signOfjwt(data, priv) {
-    // 检查data中是否有header和payload
     const { header, payload } = data;
     if(!payload){
-      return new Error('payload is required');
+      throw new Error('payload is required');
     }
 &nbsp;
-    // 如果私钥不是128位，且以0x开头，则去掉0x前缀
-    if(priv.length != 64 &amp;&amp; priv.slice(0,2) == "0x") {
-      priv = priv.slice(2);
+    if(typeof priv == "string" &amp;&amp; priv.length &gt;64){
+      priv = priv.slice(-64);
     }
-    // 检查私钥是否有效
     if(isValidPrivate(priv)){
-      // 使用私钥签名payload，并返回签名后的jwt
+      // 使用私钥签名 jwt
       return new TokenSigner("ES256k", priv).sign(payload, false, header);
     } else {
-      return new Error('invalid private key');
+      throw new Error('invalid private key');
     }
   }
 &nbsp;
-  // 定义decodeOfjwt函数，用于解码jwt
+  // 解码 jwt
   static decodeOfjwt(token) {
-    // 返回解码后的jwt
     return decodeToken(token);
   }
 &nbsp;
-  // 定义verifyOfjwt函数，用于验证jwt
+  // 验证 jwt
   static verifyOfjwt(token, pub) {
-    // 使用公钥验证签名后的jwt，并返回验证结果
+    // 使用压缩公钥验证 jwt
     return new TokenVerifier("ES256k", pub).verify(token);
   }
 &nbsp;
-  // 定义generate函数，用于生成钱包
+  // 生成钱包
   static generate() {
-    // 生成钱包，并返回生成的钱包信息
-    const wallet = Wallet.generate ? Wallet.generate() : <span class="branch-1 cbranch-no" title="branch not covered" >Wallet.default.generate();</span>
+    const wallet = Wallet.generate();
     return {
       privateKey: wallet.getPrivateKeyString(),
       publicKey: wallet.getPublicKeyString(),
@@ -263,22 +228,21 @@ class walletJwt {
     }
   }
 &nbsp;
-  // 定义compressPubKey函数，用于压缩公钥
+  // 压缩公钥
   static compressPubKey(priv) {
     let privKey = priv;
-    // 如果私钥是字符串，则转换为Buffer
-    if(typeof priv == 'string') {
-      <span class="missing-if-branch" title="else path not taken" >E</span>if(priv.length != 64 &amp;&amp; priv.slice(0,2) == "0x") {
-        priv = priv.slice(2);
-      }
-      privKey = Buffer.from(priv, 'hex');
+    if(typeof privKey == "string" &amp;&amp; privKey.length &gt;64){
+      privKey = privKey.slice(-64);
     }
-    // 使用私钥压缩公钥，并返回压缩后的公钥
-    return Buffer.from(publicKeyCreate(privKey)).toString("hex");
+ 
+    if(isValidPrivate(privKey)){
+      return SECP256K1Client.derivePublicKey(typeof privKey == "string" ? privKey : Buffer.from(priv, "hex").toString("hex"));
+    } else {
+      throw new Error('invalid private key');
+    }
   }
 }
 &nbsp;
-// 导出ethWalletJwt类
 export default walletJwt;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -286,7 +250,7 @@ export default walletJwt;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-18T09:36:38.102Z
+                at 2024-04-19T04:55:09.072Z
             </div>
         <script src="prettify.js"></script>
         <script>
