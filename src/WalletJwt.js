@@ -2,6 +2,19 @@ import { TokenSigner, decodeToken, TokenVerifier, SECP256K1Client } from 'jsonto
 import { Wallet } from '@ethereumjs/wallet'
 import { isValidPrivate, isValidPublic, stripHexPrefix } from '@ethereumjs/util'
 
+function oddEvenHex(str) {
+  // 获取字符串的最后一个字符，并将其转换为小写
+  const last = str.toLowerCase()[127]
+  // 定义一个包含奇数个数的数组
+  const odd = ["1","3","5","7","9","b","d","f"];
+  // 如果奇数个数的数组中包含最后一个字符，则返回true，否则返回false
+  if(odd.indexOf(last) > -1) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 class WalletJwt {
   // 签名 jwt
   static sign(data, priv) {
@@ -10,9 +23,7 @@ class WalletJwt {
       throw new Error('payload is required');
     }
 
-    if(typeof priv == "string" && priv.toLowerCase().slice(0,2) == '0x') {
-      priv = stripHexPrefix(priv);
-    }
+    priv = stripHexPrefix(priv);
     if(this.isValidPrivate(priv)){
       // 使用私钥签名 jwt
       return new TokenSigner("ES256k", priv).sign(payload, false, header);
@@ -28,7 +39,7 @@ class WalletJwt {
 
   // 验证 jwt
   static verify(token, pub, isCompress = true) {
-    if(this.#judgeType(pub) != "String") {
+    if(typeof pub != "string") {
       throw new Error('The public key used for verification must be a hex string');
     }
     let compressPubKey = pub;
@@ -72,20 +83,16 @@ class WalletJwt {
     }
 
     if(this.isValidPublic(pubKey)){
-      if(this.#judgeType(pubKey) != "String"){
+      if(typeof pubKey != "string"){
         pubKey = Buffer.from(pubKey).toString("hex");
       }
       // 判断pub的奇偶性，如果为偶数，前缀为02，如果为奇数，前缀为03
-      const prefix = !this.#oddEvenHex(pubKey) ? '02' : '03';
+      const prefix = !oddEvenHex(pubKey) ? '02' : '03';
       // 返回前缀加上pub的前64位
       return prefix + pubKey.slice(0, 64);
     } else {
       throw new Error('The public key used for compression is invalid');
     }
-  }
-
-  static #judgeType(str) {
-    return Object.prototype.toString.call(str).slice(8, -1);
   }
 
   static isValidPrivate(str) {
@@ -94,24 +101,11 @@ class WalletJwt {
 
   static isValidPublic(str, isCompress = false) {
     let key = str;
-    const type = this.#judgeType(key);
-    if(type == "String") {
+    const type = typeof key;
+    if(type == "string") {
       key = Buffer.from(key, "hex");
     }
     return isValidPublic(key, isCompress);
-  }
-   
-  static #oddEvenHex(str) {
-    // 获取字符串的最后一个字符，并将其转换为小写
-    const last = str.toLowerCase()[127]
-    // 定义一个包含奇数个数的数组
-    const odd = ["1","3","5","7","9","b","d","f"];
-    // 如果奇数个数的数组中包含最后一个字符，则返回true，否则返回false
-    if(odd.indexOf(last) > -1) {
-      return true;
-    } else {
-      return false;
-    }
   }
 }
 

@@ -38,4 +38,6 @@ console.log(WalletJwt.verify(sign, wallet.compressPubKey));
 // Verification by using a public key (uncompressed)
 console.log(WalletJwt.verify(sign, wallet.publicKey, false));
 ```
+You'll see this image and you'll see what happens.
+
 ![Test Screenshot](run_result.png)
