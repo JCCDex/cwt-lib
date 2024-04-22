@@ -1,3 +1,3 @@
-import walletJwt from "./src/walletJwt.js";
+import WalletJwt from "./src/WalletJwt.js";
 
-export default walletJwt;
+export default WalletJwt;
