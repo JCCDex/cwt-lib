@@ -2,19 +2,6 @@ import { TokenSigner, decodeToken, TokenVerifier, SECP256K1Client } from 'jsonto
 import { Wallet } from '@ethereumjs/wallet'
 import { isValidPrivate, isValidPublic, stripHexPrefix } from '@ethereumjs/util'
 
-function oddEvenHex(str) {
-  // 获取字符串的最后一个字符，并将其转换为小写
-  const last = str.toLowerCase()[127]
-  // 定义一个包含奇数个数的数组
-  const odd = ["1","3","5","7","9","b","d","f"];
-  // 如果奇数个数的数组中包含最后一个字符，则返回true，否则返回false
-  if(odd.indexOf(last) > -1) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
 class WalletJwt {
   // 签名 jwt
   static sign(data, priv) {
@@ -24,7 +11,7 @@ class WalletJwt {
     }
 
     priv = stripHexPrefix(priv);
-    if(this.isValidPrivate(priv)){
+    if(isValidPrivate(priv)){
       // 使用私钥签名 jwt
       return new TokenSigner("ES256k", priv).sign(payload, false, header);
     } else {
@@ -38,16 +25,20 @@ class WalletJwt {
   }
 
   // 验证 jwt
-  static verify(token, pub, isCompress = true) {
+  static verify(token, pub) {
     if(typeof pub != "string") {
       throw new Error('The public key used for verification must be a hex string');
     }
-    let compressPubKey = pub;
-    if(!isCompress){
-      compressPubKey = this.compressPubKeyByPubKey(compressPubKey);
+    
+    let pubKey = pub;
+    pubKey = stripHexPrefix(pubKey);
+    let isCompress = pubKey.length == 128 ? false : true;
+    if(isValidPublic(Buffer.from(pubKey, "hex"), isCompress)) {
+      pubKey = (isCompress ? "" : "04") + pubKey;
+      return new TokenVerifier("ES256k", pubKey).verify(token);
+    } else {
+      throw new Error('invalid public key');
     }
-    // 使用压缩公钥验证 jwt
-    return new TokenVerifier("ES256k", compressPubKey).verify(token);
   }
 
   // 生成钱包
@@ -56,56 +47,23 @@ class WalletJwt {
     return {
       privateKey: wallet.getPrivateKeyString(),
       publicKey: wallet.getPublicKeyString(),
-      compressPubKey: this.compressPubKeyByPrivateKey(wallet.getPrivateKey()),
+      compressPubKey: this.compressPubKey(wallet.getPrivateKey()),
       address: wallet.getAddressString()
     }
   }
 
   // 通过私钥压缩公钥
-  static compressPubKeyByPrivateKey(priv) {
+  static compressPubKey(priv) {
     let privKey = priv;
-    if(typeof privKey == "string" && privKey.toLowerCase().slice(0,2) == '0x') {
-      privKey = stripHexPrefix(priv);
+    if(typeof privKey != "string") {
+      privKey = Buffer.from(privKey, "hex").toString("hex");
     }
- 
-    if(this.isValidPrivate(privKey)){
-      return SECP256K1Client.derivePublicKey(typeof privKey == "string" ? privKey : Buffer.from(priv, "hex").toString("hex"));
+    privKey = stripHexPrefix(privKey);
+    if(isValidPrivate(privKey)){
+      return SECP256K1Client.derivePublicKey(privKey);
     } else {
       throw new Error('invalid private key');
     }
-  }
-
-  // 通过公钥（未压缩）进行压缩公钥
-  static compressPubKeyByPubKey(pub) {
-    let pubKey = pub;
-    if(typeof pubKey == "string" && pubKey.toLowerCase().slice(0,2) == '0x') {
-      pubKey = stripHexPrefix(pub);
-    }
-
-    if(this.isValidPublic(pubKey)){
-      if(typeof pubKey != "string"){
-        pubKey = Buffer.from(pubKey).toString("hex");
-      }
-      // 判断pub的奇偶性，如果为偶数，前缀为02，如果为奇数，前缀为03
-      const prefix = !oddEvenHex(pubKey) ? '02' : '03';
-      // 返回前缀加上pub的前64位
-      return prefix + pubKey.slice(0, 64);
-    } else {
-      throw new Error('The public key used for compression is invalid');
-    }
-  }
-
-  static isValidPrivate(str) {
-    return isValidPrivate(str);
-  }
-
-  static isValidPublic(str, isCompress = false) {
-    let key = str;
-    const type = typeof key;
-    if(type == "string") {
-      key = Buffer.from(key, "hex");
-    }
-    return isValidPublic(key, isCompress);
   }
 }
 

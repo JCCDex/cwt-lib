@@ -9,13 +9,13 @@
 ## INSTALL
 
 ```shell
-npm install jwt-lib-test
+npm install @maincc/jwt-lib
 ```
 
 ## Code demonstration
 
 ```bash
-import WalletJwt from "jwt-lib-test"
+import WalletJwt from "@maincc/jwt-lib"
 
 const wallet = WalletJwt.generate();
 console.log(wallet);
