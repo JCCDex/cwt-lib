@@ -36,7 +36,7 @@ console.log(WalletJwt.decode(sign));
 // Verification by using a compressed public key
 console.log(WalletJwt.verify(sign, wallet.compressPubKey));
 // Verification by using a public key (uncompressed)
-console.log(WalletJwt.verify(sign, wallet.publicKey, false));
+console.log(WalletJwt.verify(sign, wallet.publicKey));
 ```
 You'll see this image and you'll see what happens.
 
