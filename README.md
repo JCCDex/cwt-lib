@@ -77,7 +77,7 @@ import WalletJwt from "@maincc/jwt-lib";
   }
   ```
   <br>
-  - **`example`** verify  
+  - **`example`** verify
   ```js
   WalletJwt.verify(jwt, wallet.publicKey) or WalletJwt.verify(jwt, wallet.compressPubKey)
   ```
