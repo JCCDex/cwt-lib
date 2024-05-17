@@ -77,7 +77,7 @@ import WalletJwt from "@maincc/jwt-lib";
   }
   ```
   <br>
-  - **`example`** verify
+  - **`example`** verify  
   ```js
   WalletJwt.verify(jwt, wallet.publicKey) or WalletJwt.verify(jwt, wallet.compressPubKey)
   ```
@@ -94,11 +94,11 @@ import WalletJwt from "@maincc/jwt-lib";
   <br>
   ```js
   WalletJwt.privToPem(wallet.privateKey)
-  ```
+  ```  
   Convert the private key to pem format. Note: The resulting pem is SEC1 specification.  
-  将私钥转换成pem格式，注：生成的是SEC1规范的pem。
+  将私钥转换成pem格式，注：生成的是SEC1规范的pem。  
 
-    **`result`**
+    **`result`**  
   ```js
   -----BEGIN EC PRIVATE KEY-----
   MHQCAQEEIMW4k674wuhH3BTdrbff075XgbelpG4MvMAL+pksYm3coAcGBSuBBAAK
@@ -113,9 +113,9 @@ import WalletJwt from "@maincc/jwt-lib";
   WalletJwt.pubToPem(wallet.publicKey)
   ```
   Convert the public key to pem format. Note: The parameter must be an uncompressed public key.  
-  将公钥转换成pem格式，注：参数必须是未压缩的公钥。
+  将公钥转换成pem格式，注：参数必须是未压缩的公钥。  
 
-    **`result`**
+    **`result`**  
   ```js
   -----BEGIN PUBLIC KEY-----
   MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEb1knV/jmUGpflQ32/LtrgACz7wDCTMad
@@ -130,9 +130,9 @@ import WalletJwt from "@maincc/jwt-lib";
   WalletJwt.verify(jwt70, wallet.publicKey, 70);
   ```
   Generate jwt in ASN.1 DER format (to meet openssl and other cryptographic libraries) and verify.  
-  生成符合ASN.1 DER格式的jwt（满足openssl等密码库）并验证。
+  生成符合ASN.1 DER格式的jwt（满足openssl等密码库）并验证。  
 
-    **`result`**
+    **`result`**  
   ```js
   eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksiLCJ0eXBlIjoiQ1dUIiwiY2hhaW4iOiJldGhlcmV1bSJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIn0.MEUCIQDlkgI5fbaM09V57BvejR-wxIkzTgJCc7lohtlpb-99qQIgMGFEXkdvpmRIg5M_ns3ZpDh-sSjm52Q6THDQp7_Z_kc
   true
