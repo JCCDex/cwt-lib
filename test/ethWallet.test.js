@@ -42,10 +42,10 @@ describe('sign', () => {
     };
     const jwt = WalletJwt.sign(data, wallet.privateKey);
     expect(jwt).toBeTruthy();
-    const jwt70 = WalletJwt.sign(data, wallet.privateKey, 70);
-    expect(jwt70).toBeTruthy();
+    const jwtDer = WalletJwt.sign(data, wallet.privateKey, 'der');
+    expect(jwtDer).toBeTruthy();
 
-    expect(()=>{WalletJwt.sign(data, wallet.privateKey, 123)}).toThrow(new Error('byteNum must be 64 or 70,saw 123'));
+    expect(()=>{WalletJwt.sign(data, wallet.privateKey, 123)}).toThrow(new Error('format must be jose or der,saw 123'));
     expect(()=>{WalletJwt.sign({}, wallet.privateKey)}).toThrow(new Error('payload is required'));
     expect(()=>{WalletJwt.sign(data, "123456789")}).toThrow(new Error('invalid private key'));
   });
@@ -79,15 +79,15 @@ describe('verify', () => {
       }
     };
     const jwt = WalletJwt.sign(data, wallet.privateKey);
-    const jwt70 = WalletJwt.sign(data, wallet.privateKey, 70);
+    const jwtDer = WalletJwt.sign(data, wallet.privateKey, 'der');
     const isVerified = WalletJwt.verify(jwt, wallet.compressPubKey);
     expect(isVerified).toBeTruthy();
-    const isVerified2 = WalletJwt.verify(jwt70, wallet.publicKey, 70);
+    const isVerified2 = WalletJwt.verify(jwtDer, wallet.publicKey, 'der');
     expect(isVerified2).toBeTruthy();
 
     expect(()=>{WalletJwt.verify(jwt, {})}).toThrow(new Error('The public key used for verification must be a hex string'));
     expect(()=>{WalletJwt.verify(jwt, "123")}).toThrow(new Error('invalid public key'));
-    expect(()=>{WalletJwt.verify(jwt, wallet.publicKey, "123")}).toThrow(new Error('byteNum must be 64 or 70,saw 123'));
+    expect(()=>{WalletJwt.verify(jwt, wallet.publicKey, "123")}).toThrow(new Error('format must be jose or der,saw 123'));
   });
 });
 
