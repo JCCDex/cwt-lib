@@ -42,7 +42,10 @@ describe('sign', () => {
     };
     const jwt = WalletJwt.sign(data, wallet.privateKey);
     expect(jwt).toBeTruthy();
+    const jwt70 = WalletJwt.sign(data, wallet.privateKey, 70);
+    expect(jwt70).toBeTruthy();
 
+    expect(()=>{WalletJwt.sign(data, wallet.privateKey, 123)}).toThrow(new Error('byteNum must be 64 or 70,saw 123'));
     expect(()=>{WalletJwt.sign({}, wallet.privateKey)}).toThrow(new Error('payload is required'));
     expect(()=>{WalletJwt.sign(data, "123456789")}).toThrow(new Error('invalid private key'));
   });
@@ -67,20 +70,36 @@ describe('decode', () => {
 // 测试WalletJwt类的verify函数
 describe('verify', () => {
   it('should verify the signed jwt correctly', async () => {
-    const jwt = WalletJwt.sign({
+    const data = {
       payload: {
         key: 'value'
       },
       header: {
         alg: 'ES256k'
       }
-    }, wallet.privateKey);
+    };
+    const jwt = WalletJwt.sign(data, wallet.privateKey);
+    const jwt70 = WalletJwt.sign(data, wallet.privateKey, 70);
     const isVerified = WalletJwt.verify(jwt, wallet.compressPubKey);
     expect(isVerified).toBeTruthy();
-    const isVerified2 = WalletJwt.verify(jwt, wallet.publicKey);
+    const isVerified2 = WalletJwt.verify(jwt70, wallet.publicKey, 70);
     expect(isVerified2).toBeTruthy();
 
     expect(()=>{WalletJwt.verify(jwt, {})}).toThrow(new Error('The public key used for verification must be a hex string'));
     expect(()=>{WalletJwt.verify(jwt, "123")}).toThrow(new Error('invalid public key'));
+    expect(()=>{WalletJwt.verify(jwt, wallet.publicKey, "123")}).toThrow(new Error('byteNum must be 64 or 70,saw 123'));
   });
 });
+
+// 
+describe('conversion', () => {
+  it('output the public and private keys in pem format', async () => {
+    const privPem = WalletJwt.privToPem(wallet.privateKey);
+    expect(privPem).toBeTruthy();
+    const pubPem = WalletJwt.pubToPem("0x04" + wallet.publicKey.slice(2));
+    expect(pubPem).toBeTruthy();
+
+    expect(()=>{WalletJwt.privToPem("123")}).toThrow(new Error('invalid private key'));
+    expect(()=>{WalletJwt.pubToPem(wallet.compressPubKey)}).toThrow(new Error('Invalid uncompressed public key'));
+  });
+})

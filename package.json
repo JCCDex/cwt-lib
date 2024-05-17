@@ -1,9 +1,11 @@
 {
   "name": "@maincc/jwt-lib",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "index.js",
   "type": "module",
+  "homepage": "https://github.com/maincc/jwt-lib",
+  "repository": "maincc/jwt-lib",
   "scripts": {
     "test": "jest"
   },
@@ -28,7 +30,10 @@
   "dependencies": {
     "@ethereumjs/util": "^9.0.3",
     "@ethereumjs/wallet": "^2.0.3",
-    "jsontokens": "^4.0.1"
+    "base64-js": "^1.5.1",
+    "ecdsa-sig-formatter": "^1.0.11",
+    "jsontokens": "^4.0.1",
+    "key-encoder": "^2.0.3"
   },
   "husky": {
     "hooks": {
