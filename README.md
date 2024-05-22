@@ -14,6 +14,8 @@ npm install @maincc/cwt-lib
 
 ## Documentation
 
+#### cwt (chain web token)
+
 **`example`** import
 ```js
 import WalletCwt from "@maincc/cwt-lib";

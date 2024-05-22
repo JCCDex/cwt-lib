@@ -5,7 +5,6 @@ import * as formatter from "ecdsa-sig-formatter"
 import { Wallet } from '@ethereumjs/wallet'
 import { isValidPrivate, isValidPublic, stripHexPrefix } from '@ethereumjs/util'
 import KeyEncoder from "key-encoder";
-import BigNumber from 'bignumber.js'
 
 class WalletCwt {
   // 签名 jwt
@@ -129,7 +128,7 @@ class WalletCwt {
         },
         payload: {
           usr: usr,
-          time: BigNumber(new Date().getTime()).idiv(1000).toNumber()
+          time: Math.floor(new Date() / 1000)
         }
       }
       return this.sign(data, priv, "der")

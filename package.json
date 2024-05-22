@@ -31,7 +31,6 @@
     "@ethereumjs/util": "^9.0.3",
     "@ethereumjs/wallet": "^2.0.3",
     "base64-js": "^1.5.1",
-    "bignumber.js": "^9.1.2",
     "ecdsa-sig-formatter": "^1.0.11",
     "jsontokens": "^4.0.1",
     "key-encoder": "^2.0.3"
