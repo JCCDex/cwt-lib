@@ -6,7 +6,7 @@ import { Wallet } from '@ethereumjs/wallet'
 import { isValidPrivate, isValidPublic, stripHexPrefix } from '@ethereumjs/util'
 import KeyEncoder from "key-encoder";
 
-class WalletJwt {
+class WalletCwt {
   // 签名 jwt
   static sign(data, priv, format = 'jose') {
     const { header, payload } = data;
@@ -111,6 +111,31 @@ class WalletJwt {
       throw new Error('Invalid uncompressed public key');
     }
   }
+
+  static cwtSign(pr, usr, chain) {
+    if(!pr || !usr || !chain) {
+      throw new Error('private, usr and chain cannot be empty');
+    }
+    const priv = stripHexPrefix(pr);
+    if(isValidPrivate(priv)){
+      const wallet = new Wallet(Buffer.from(priv, "hex"));
+      const pubPem = this.pubToPem(wallet.getPublicKeyString());
+      const data = {
+        header: {
+          x5c: [pubPem],
+          type: 'CWT',
+          chain: chain,
+        },
+        payload: {
+          usr: usr,
+          time: Math.floor(new Date() / 1000)
+        }
+      }
+      return this.sign(data, priv, "der")
+    } else {
+      throw new Error('invalid private key');
+    }
+  }
 }
 
-export default WalletJwt;
+export default WalletCwt;
