@@ -10,14 +10,15 @@ class WalletJwt {
   // 签名 jwt
   static sign(data, priv, format = 'jose') {
     const { header, payload } = data;
-    if(!payload){
-      throw new Error('payload is required');
+    if(!payload || !header){
+      throw new Error('The signature content must contain header and payload.');
     }
 
     priv = stripHexPrefix(priv);
     if(isValidPrivate(priv)){
+      const adjustHeader = Object.assign({typ: undefined, alg: undefined}, header);
       // 使用私钥签名 jwt
-      const token = new TokenSigner("ES256k", priv).sign(payload, false, header);
+      const token = new TokenSigner("ES256k", priv).sign(payload, false, adjustHeader);
       if(format == 'jose') {
         return token;
       }else if (format == 'der') {

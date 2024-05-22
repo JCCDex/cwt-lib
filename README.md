@@ -59,9 +59,9 @@ import WalletJwt from "@maincc/jwt-lib";
     ```js
     eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksiLCJ0eXBlIjoiQ1dUIiwiY2hhaW4iOiJldGhlcmV1bSJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIn0.5ZICOX22jNPVeewb3o0fsMSJM04CQnO5aIbZaW_vfakwYUReR2-mZEiDkz-ezdmkOH6xKObnZDpMcNCnv9n-Rw
     ```
-   The signature must carry the payload field. During the signature, typ: 'JWT', alg: 'ES256K' is automatically added to the header.
+   The signature must contain payload and header fields.
     
-    签名的内容必须带有payload字段，签名过程中会在header里自动添加 typ: 'JWT', alg: 'ES256K'
+    签名的内容必须带有payload和header字段。
   - **`example`** decode
   ```js
   WalletJwt.decode(jwt)

@@ -46,7 +46,9 @@ describe('sign', () => {
     expect(jwtDer).toBeTruthy();
 
     expect(()=>{WalletJwt.sign(data, wallet.privateKey, 123)}).toThrow(new Error('format must be jose or der,saw 123'));
-    expect(()=>{WalletJwt.sign({}, wallet.privateKey)}).toThrow(new Error('payload is required'));
+    expect(()=>{WalletJwt.sign({}, wallet.privateKey)}).toThrow(new Error('The signature content must contain header and payload.'));
+    expect(()=>{WalletJwt.sign({payload: {test: 123}}, wallet.privateKey)}).toThrow(new Error('The signature content must contain header and payload.'));
+    expect(()=>{WalletJwt.sign({header: {test: 123}}, wallet.privateKey)}).toThrow(new Error('The signature content must contain header and payload.'));
     expect(()=>{WalletJwt.sign(data, "123456789")}).toThrow(new Error('invalid private key'));
   });
 });
