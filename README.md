@@ -16,15 +16,28 @@ npm install @maincc/jwt-lib
 
 **`example`** import
 ```js
-import WalletJwt from "@maincc/jwt-lib";
+import WalletCwt from "@maincc/jwt-lib";
 ```
+- Generate cwt from the private key, user, and chain name.  
+  通过私钥、用户和链名生成cwt。
 
+  **`example`** cwtSign(pr, usr, chain) :pr -> 私钥，usr -> 用户名，chain -> 区块链链名
+  ```js
+  const priv = '105d31c6d6b19fdac7e3873572f5e1cd787afe912344a4bf3984d94b0cbb8876'
+  const cwt = WalletCwt.cwtSign(priv, "zhye", "ethereum")
+  ```
+
+  **`result`**
+  ```js
+  eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1GWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RRZ0FFaWJpcmx6eEtnZ0EzNWp1TUNtSmRhbUNDZ0hhOE9ZSkdcbk9HMFlIRzYxMUk5UDdrTEFBYlNqNGg0SFJHeUNSZnA0Ky9ndkxtcGU1Uis3UFV2bDNHU0NvZz09XG4tLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0iXSwidHlwZSI6IkNXVCIsImNoYWluIjoiZXRoZXJldW0ifQ.eyJ1c3IiOiJ6aHllIiwidGltZSI6MTcxNjM2NTIxOX0.MEUCIGFG7GfUdQl2FeB8FSN_i_aHslbMp8G_XjMUN7HVL-fqAiEArrkKTTJWmWJvFTx4NlPLdSpuMJQNPMfu7pV-fIpEM24
+  ```
+  <br>
 - If you don't have an Ethereum account, you can generate it through generate.  
   如果你并没有以太坊的账户，可以通过generate生成。
 
   **`example`** generate
   ```js
-  const wallet = WalletJwt.generate();
+  const wallet = WalletCwt.generate();
   ```
 
   **`result`**
@@ -52,7 +65,7 @@ import WalletJwt from "@maincc/jwt-lib";
       name: 'John Doe',
     }
   };
-  const jwt = WalletJwt.sign(data, wallet.privateKey);
+  const jwt = WalletCwt.sign(data, wallet.privateKey);
   ```
 
     **`result`**
@@ -64,7 +77,7 @@ import WalletJwt from "@maincc/jwt-lib";
     签名的内容必须带有payload和header字段。
   - **`example`** decode
   ```js
-  WalletJwt.decode(jwt)
+  WalletCwt.decode(jwt)
   ```
 
     **`result`**
@@ -77,7 +90,7 @@ import WalletJwt from "@maincc/jwt-lib";
   ```
   - **`example`** verify  
   ```js
-  WalletJwt.verify(jwt, wallet.publicKey) or WalletJwt.verify(jwt, wallet.compressPubKey)
+  WalletCwt.verify(jwt, wallet.publicKey) or WalletCwt.verify(jwt, wallet.compressPubKey)
   ```
   **`result`**
   <br>
@@ -90,7 +103,7 @@ import WalletJwt from "@maincc/jwt-lib";
 
   - **`example`** privToPem  
   ```js
-  WalletJwt.privToPem(wallet.privateKey)
+  WalletCwt.privToPem(wallet.privateKey)
   ```  
   Convert the private key to pem format. Note: The resulting pem is SEC1 specification.  
   将私钥转换成pem格式，注：生成的是SEC1规范的pem。  
@@ -105,7 +118,7 @@ import WalletJwt from "@maincc/jwt-lib";
   ```
   - **`example`** pubToPem  
   ```js
-  WalletJwt.pubToPem(wallet.publicKey)
+  WalletCwt.pubToPem(wallet.publicKey)
   ```
   Convert the public key to pem format. Note: The parameter must be an uncompressed public key.  
   将公钥转换成pem格式，注：参数必须是未压缩的公钥。  
@@ -119,8 +132,8 @@ import WalletJwt from "@maincc/jwt-lib";
   ```
   - **`example`** sign(... , 'der') && verify(... , 'der')  
   ```js
-  const jwtDer = WalletJwt.sign(data, wallet.privateKey, 'der');
-  WalletJwt.verify(jwtDer, wallet.publicKey, 'der');
+  const jwtDer = WalletCwt.sign(data, wallet.privateKey, 'der');
+  WalletCwt.verify(jwtDer, wallet.publicKey, 'der');
   ```
   Generate jwt in ASN.1 DER format (to meet openssl and other cryptographic libraries) and verify.  
   生成符合ASN.1 DER格式的jwt（满足openssl等密码库）并验证。  

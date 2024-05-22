@@ -1,4 +1,4 @@
-import WalletJwt from "../src/WalletJwt.js";
+import WalletCwt from "../src/WalletCwt.js";
 import { isValidPrivate, isValidPublic } from "@ethereumjs/util";
 
 const wallet = {
@@ -8,28 +8,28 @@ const wallet = {
   address: '0x0ab2385095227b33b3a9d77b6626f0c28344de41'
 };
 
-// 测试WalletJwt类的generate函数
+// 测试WalletCwt类的generate函数
 describe('generate', () => {
   it('should generate a valid wallet', async () => {
-    const wallet = WalletJwt.generate();
+    const wallet = WalletCwt.generate();
     expect(isValidPrivate(Buffer.from(wallet.privateKey.slice(2), "hex"))).toBe(true);
     expect(isValidPublic(Buffer.from(wallet.publicKey.slice(2), "hex"))).toBe(true);
-    expect(WalletJwt.compressPubKey(wallet.privateKey)).toBe(wallet.compressPubKey);
+    expect(WalletCwt.compressPubKey(wallet.privateKey)).toBe(wallet.compressPubKey);
     expect(wallet.address).toBeTruthy();
   });
 });
 
-// 测试WalletJwt类的compressPubKey函数
+// 测试WalletCwt类的compressPubKey函数
 describe('compressPubKey', () => {
   it('should compress the public key correctly with the private key', async () => {
-    const compressedPubKey = WalletJwt.compressPubKey(wallet.privateKey);
+    const compressedPubKey = WalletCwt.compressPubKey(wallet.privateKey);
     expect(compressedPubKey).toEqual(wallet.compressPubKey);
 
-    expect(()=>{WalletJwt.compressPubKey("123456789")}).toThrow(new Error('invalid private key'));
+    expect(()=>{WalletCwt.compressPubKey("123456789")}).toThrow(new Error('invalid private key'));
   });
 });
 
-// 测试WalletJwt类的sign函数
+// 测试WalletCwt类的sign函数
 describe('sign', () => {
   it('should sign the jwt correctly', async () => {
     const data = {
@@ -40,23 +40,23 @@ describe('sign', () => {
         alg: 'ES256k'
       }
     };
-    const jwt = WalletJwt.sign(data, wallet.privateKey);
+    const jwt = WalletCwt.sign(data, wallet.privateKey);
     expect(jwt).toBeTruthy();
-    const jwtDer = WalletJwt.sign(data, wallet.privateKey, 'der');
+    const jwtDer = WalletCwt.sign(data, wallet.privateKey, 'der');
     expect(jwtDer).toBeTruthy();
 
-    expect(()=>{WalletJwt.sign(data, wallet.privateKey, 123)}).toThrow(new Error('format must be jose or der,saw 123'));
-    expect(()=>{WalletJwt.sign({}, wallet.privateKey)}).toThrow(new Error('The signature content must contain header and payload.'));
-    expect(()=>{WalletJwt.sign({payload: {test: 123}}, wallet.privateKey)}).toThrow(new Error('The signature content must contain header and payload.'));
-    expect(()=>{WalletJwt.sign({header: {test: 123}}, wallet.privateKey)}).toThrow(new Error('The signature content must contain header and payload.'));
-    expect(()=>{WalletJwt.sign(data, "123456789")}).toThrow(new Error('invalid private key'));
+    expect(()=>{WalletCwt.sign(data, wallet.privateKey, 123)}).toThrow(new Error('format must be jose or der,saw 123'));
+    expect(()=>{WalletCwt.sign({}, wallet.privateKey)}).toThrow(new Error('The signature content must contain header and payload.'));
+    expect(()=>{WalletCwt.sign({payload: {test: 123}}, wallet.privateKey)}).toThrow(new Error('The signature content must contain header and payload.'));
+    expect(()=>{WalletCwt.sign({header: {test: 123}}, wallet.privateKey)}).toThrow(new Error('The signature content must contain header and payload.'));
+    expect(()=>{WalletCwt.sign(data, "123456789")}).toThrow(new Error('invalid private key'));
   });
 });
 
-// 测试WalletJwt类的decode函数
+// 测试WalletCwt类的decode函数
 describe('decode', () => {
   it('should decode the jwt correctly', async () => {
-    const jwt = WalletJwt.sign({
+    const jwt = WalletCwt.sign({
       payload: {
         key: 'value'
       },
@@ -64,12 +64,12 @@ describe('decode', () => {
         alg: 'ES256k'
       }
     }, wallet.privateKey);
-    const decodedJwt = WalletJwt.decode(jwt);
+    const decodedJwt = WalletCwt.decode(jwt);
     expect(decodedJwt).toBeTruthy();
   });
 });
 
-// 测试WalletJwt类的verify函数
+// 测试WalletCwt类的verify函数
 describe('verify', () => {
   it('should verify the signed jwt correctly', async () => {
     const data = {
@@ -80,28 +80,39 @@ describe('verify', () => {
         alg: 'ES256k'
       }
     };
-    const jwt = WalletJwt.sign(data, wallet.privateKey);
-    const jwtDer = WalletJwt.sign(data, wallet.privateKey, 'der');
-    const isVerified = WalletJwt.verify(jwt, wallet.compressPubKey);
+    const jwt = WalletCwt.sign(data, wallet.privateKey);
+    const jwtDer = WalletCwt.sign(data, wallet.privateKey, 'der');
+    const isVerified = WalletCwt.verify(jwt, wallet.compressPubKey);
     expect(isVerified).toBeTruthy();
-    const isVerified2 = WalletJwt.verify(jwtDer, wallet.publicKey, 'der');
+    const isVerified2 = WalletCwt.verify(jwtDer, wallet.publicKey, 'der');
     expect(isVerified2).toBeTruthy();
 
-    expect(()=>{WalletJwt.verify(jwt, {})}).toThrow(new Error('The public key used for verification must be a hex string'));
-    expect(()=>{WalletJwt.verify(jwt, "123")}).toThrow(new Error('invalid public key'));
-    expect(()=>{WalletJwt.verify(jwt, wallet.publicKey, "123")}).toThrow(new Error('format must be jose or der,saw 123'));
+    expect(()=>{WalletCwt.verify(jwt, {})}).toThrow(new Error('The public key used for verification must be a hex string'));
+    expect(()=>{WalletCwt.verify(jwt, "123")}).toThrow(new Error('invalid public key'));
+    expect(()=>{WalletCwt.verify(jwt, wallet.publicKey, "123")}).toThrow(new Error('format must be jose or der,saw 123'));
   });
 });
 
-// 
+// 测试WalletCwt类的pubToPem和privToPem函数
 describe('conversion', () => {
   it('output the public and private keys in pem format', async () => {
-    const privPem = WalletJwt.privToPem(wallet.privateKey);
+    const privPem = WalletCwt.privToPem(wallet.privateKey);
     expect(privPem).toBeTruthy();
-    const pubPem = WalletJwt.pubToPem("0x04" + wallet.publicKey.slice(2));
+    const pubPem = WalletCwt.pubToPem("0x04" + wallet.publicKey.slice(2));
     expect(pubPem).toBeTruthy();
 
-    expect(()=>{WalletJwt.privToPem("123")}).toThrow(new Error('invalid private key'));
-    expect(()=>{WalletJwt.pubToPem(wallet.compressPubKey)}).toThrow(new Error('Invalid uncompressed public key'));
+    expect(()=>{WalletCwt.privToPem("123")}).toThrow(new Error('invalid private key'));
+    expect(()=>{WalletCwt.pubToPem(wallet.compressPubKey)}).toThrow(new Error('Invalid uncompressed public key'));
   });
+})
+
+// 测试WalletCwt类的cwtSign函数
+describe('cwtSign', () => {
+  it('should sign the cwt correctly', async () => {
+    const cwt = WalletCwt.cwtSign(wallet.privateKey, "zhye", "ethereum");
+    expect(cwt).toBeTruthy();
+    
+    expect(()=>{WalletCwt.cwtSign("123", "zhye", "ethereum")}).toThrow(new Error('invalid private key'));
+    expect(()=>{WalletCwt.cwtSign()}).toThrow(new Error('private, usr and chain cannot be empty'));
+  })
 })
