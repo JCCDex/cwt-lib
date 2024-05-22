@@ -1,4 +1,4 @@
-# jwt-lib
+# cwt-lib
 
 > A cryptocurrency-compliant js library
 > 一个实现符合加密货币的js库
@@ -9,14 +9,14 @@
 ## INSTALL
 
 ```shell
-npm install @maincc/jwt-lib
+npm install @maincc/cwt-lib
 ```
 
 ## Documentation
 
 **`example`** import
 ```js
-import WalletCwt from "@maincc/jwt-lib";
+import WalletCwt from "@maincc/cwt-lib";
 ```
 - Generate cwt from the private key, user, and chain name.  
   通过私钥、用户和链名生成cwt。
