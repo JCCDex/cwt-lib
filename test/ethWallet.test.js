@@ -31,7 +31,7 @@ describe('compressPubKey', () => {
 
 // 测试WalletCwt类的sign函数
 describe('sign', () => {
-  it('should sign the jwt correctly', async () => {
+  it('should sign the cwt correctly', async () => {
     const data = {
       payload: {
         key: 'value'
@@ -40,10 +40,10 @@ describe('sign', () => {
         alg: 'ES256k'
       }
     };
-    const jwt = WalletCwt.sign(data, wallet.privateKey);
-    expect(jwt).toBeTruthy();
-    const jwtDer = WalletCwt.sign(data, wallet.privateKey, 'der');
-    expect(jwtDer).toBeTruthy();
+    const cwt = WalletCwt.sign(data, wallet.privateKey);
+    expect(cwt).toBeTruthy();
+    const cwtDer = WalletCwt.sign(data, wallet.privateKey, 'der');
+    expect(cwtDer).toBeTruthy();
 
     expect(()=>{WalletCwt.sign(data, wallet.privateKey, 123)}).toThrow(new Error('format must be jose or der,saw 123'));
     expect(()=>{WalletCwt.sign({}, wallet.privateKey)}).toThrow(new Error('The signature content must contain header and payload.'));
@@ -55,8 +55,8 @@ describe('sign', () => {
 
 // 测试WalletCwt类的decode函数
 describe('decode', () => {
-  it('should decode the jwt correctly', async () => {
-    const jwt = WalletCwt.sign({
+  it('should decode the cwt correctly', async () => {
+    const cwt = WalletCwt.sign({
       payload: {
         key: 'value'
       },
@@ -64,14 +64,14 @@ describe('decode', () => {
         alg: 'ES256k'
       }
     }, wallet.privateKey);
-    const decodedJwt = WalletCwt.decode(jwt);
-    expect(decodedJwt).toBeTruthy();
+    const decodedcwt = WalletCwt.decode(cwt);
+    expect(decodedcwt).toBeTruthy();
   });
 });
 
 // 测试WalletCwt类的verify函数
 describe('verify', () => {
-  it('should verify the signed jwt correctly', async () => {
+  it('should verify the signed cwt correctly', async () => {
     const data = {
       payload: {
         key: 'value'
@@ -80,16 +80,16 @@ describe('verify', () => {
         alg: 'ES256k'
       }
     };
-    const jwt = WalletCwt.sign(data, wallet.privateKey);
-    const jwtDer = WalletCwt.sign(data, wallet.privateKey, 'der');
-    const isVerified = WalletCwt.verify(jwt, wallet.compressPubKey);
+    const cwt = WalletCwt.sign(data, wallet.privateKey);
+    const cwtDer = WalletCwt.sign(data, wallet.privateKey, 'der');
+    const isVerified = WalletCwt.verify(cwt, wallet.compressPubKey);
     expect(isVerified).toBeTruthy();
-    const isVerified2 = WalletCwt.verify(jwtDer, wallet.publicKey, 'der');
+    const isVerified2 = WalletCwt.verify(cwtDer, wallet.publicKey, 'der');
     expect(isVerified2).toBeTruthy();
 
-    expect(()=>{WalletCwt.verify(jwt, {})}).toThrow(new Error('The public key used for verification must be a hex string'));
-    expect(()=>{WalletCwt.verify(jwt, "123")}).toThrow(new Error('invalid public key'));
-    expect(()=>{WalletCwt.verify(jwt, wallet.publicKey, "123")}).toThrow(new Error('format must be jose or der,saw 123'));
+    expect(()=>{WalletCwt.verify(cwt, {})}).toThrow(new Error('The public key used for verification must be a hex string'));
+    expect(()=>{WalletCwt.verify(cwt, "123")}).toThrow(new Error('invalid public key'));
+    expect(()=>{WalletCwt.verify(cwt, wallet.publicKey, "123")}).toThrow(new Error('format must be jose or der,saw 123'));
   });
 });
 

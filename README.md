@@ -52,8 +52,8 @@ import WalletCwt from "@maincc/cwt-lib";
   }
   ```
   <br>
-- If you have an Ethereum account and have its public and private keys. Then you can perform jwt related operations.  
-  如果你拥有了以太坊的账户，并掌握其公私钥。那么可以进行jwt的相关操作。
+- If you have an Ethereum account and have its public and private keys. Then you can perform cwt related operations.  
+  如果你拥有了以太坊的账户，并掌握其公私钥。那么可以进行cwt的相关操作。
 
   - **`example`** sign
   ```js
@@ -67,7 +67,7 @@ import WalletCwt from "@maincc/cwt-lib";
       name: 'John Doe',
     }
   };
-  const jwt = WalletCwt.sign(data, wallet.privateKey);
+  const cwt = WalletCwt.sign(data, wallet.privateKey);
   ```
 
     **`result`**
@@ -79,20 +79,20 @@ import WalletCwt from "@maincc/cwt-lib";
     签名的内容必须带有payload和header字段。
   - **`example`** decode
   ```js
-  WalletCwt.decode(jwt)
+  WalletCwt.decode(cwt)
   ```
 
     **`result`**
   ```js
   {
-    header: { typ: 'JWT', alg: 'ES256K', type: 'CWT', chain: 'ethereum' },
+    header: { typ: 'cwt', alg: 'ES256K', type: 'CWT', chain: 'ethereum' },
     payload: { sub: '1234567890', name: 'John Doe' },
     signature: '5ZICOX22jNPVeewb3o0fsMSJM04CQnO5aIbZaW_vfakwYUReR2-mZEiDkz-ezdmkOH6xKObnZDpMcNCnv9n-Rw'
   }
   ```
   - **`example`** verify  
   ```js
-  WalletCwt.verify(jwt, wallet.publicKey) or WalletCwt.verify(jwt, wallet.compressPubKey)
+  WalletCwt.verify(cwt, wallet.publicKey) or WalletCwt.verify(cwt, wallet.compressPubKey)
   ```
   **`result`**
   <br>
@@ -100,8 +100,8 @@ import WalletCwt from "@maincc/cwt-lib";
   true
   ```
   <br>
--  If you need public and private keys in pem format, or Signature in jwt is ASN.1 DER format.  
-  如果你需要pem格式的公私钥,或者需要jwt里的Signature是ASN.1 DER格式。
+-  If you need public and private keys in pem format, or Signature in cwt is ASN.1 DER format.  
+  如果你需要pem格式的公私钥,或者需要cwt里的Signature是ASN.1 DER格式。
 
   - **`example`** privToPem  
   ```js
@@ -134,11 +134,11 @@ import WalletCwt from "@maincc/cwt-lib";
   ```
   - **`example`** sign(... , 'der') && verify(... , 'der')  
   ```js
-  const jwtDer = WalletCwt.sign(data, wallet.privateKey, 'der');
-  WalletCwt.verify(jwtDer, wallet.publicKey, 'der');
+  const cwtDer = WalletCwt.sign(data, wallet.privateKey, 'der');
+  WalletCwt.verify(cwtDer, wallet.publicKey, 'der');
   ```
-  Generate jwt in ASN.1 DER format (to meet openssl and other cryptographic libraries) and verify.  
-  生成符合ASN.1 DER格式的jwt（满足openssl等密码库）并验证。  
+  Generate cwt in ASN.1 DER format (to meet openssl and other cryptographic libraries) and verify.  
+  生成符合ASN.1 DER格式的cwt（满足openssl等密码库）并验证。  
   
     **`result`**  
   ```js
