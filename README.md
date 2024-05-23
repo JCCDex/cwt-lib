@@ -1,7 +1,7 @@
 # cwt-lib
 
-> A cryptocurrency-compliant js library
-> 一个实现符合加密货币的js库
+> A cryptocurrency-compliant js library for generating cwt libraries. chain web token (cwt) is an extension based on jwt (json web token).  
+> 一个实现符合加密货币的js库，用于生成cwt库。cwt（chain web token）基于jwt（json web token）进行扩展。
 >
 > Based on jsontokens library (https://github.com/stacks-network/jsontokens-js).
 > 基于jsontokens库进行扩展。
@@ -72,7 +72,7 @@ import WalletCwt from "@maincc/cwt-lib";
 
     **`result`**
     ```js
-    eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksiLCJ0eXBlIjoiQ1dUIiwiY2hhaW4iOiJldGhlcmV1bSJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIn0.5ZICOX22jNPVeewb3o0fsMSJM04CQnO5aIbZaW_vfakwYUReR2-mZEiDkz-ezdmkOH6xKObnZDpMcNCnv9n-Rw
+    eyJ0eXBlIjoiQ1dUIiwiY2hhaW4iOiJldGhlcmV1bSJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIn0.   j76aew7N2LPJkx1uSpcJ1Wh15EbClTBdIa-ozUuMLtOHQzmWbN8-VWCtYJ_hoj-ZzvJG9tsOOPCWcUX_uRMZPQ
     ```
    The signature must contain payload and header fields.
     
@@ -84,11 +84,11 @@ import WalletCwt from "@maincc/cwt-lib";
 
     **`result`**
   ```js
-  {
-    header: { typ: 'cwt', alg: 'ES256K', type: 'CWT', chain: 'ethereum' },
-    payload: { sub: '1234567890', name: 'John Doe' },
-    signature: '5ZICOX22jNPVeewb3o0fsMSJM04CQnO5aIbZaW_vfakwYUReR2-mZEiDkz-ezdmkOH6xKObnZDpMcNCnv9n-Rw'
-  }
+    {
+      header: { type: 'CWT', chain: 'ethereum' },
+      payload: { sub: '1234567890', name: 'John Doe' },
+      signature: 'P3AtyDwKLZAGx2JLPnTEln_LGmd7KE48n2XLormwg5e-CyB0k5BNX-y1kg8DA4hMUjtz1cMLtZHHtO8b6fLNAQ'
+    }
   ```
   - **`example`** verify  
   ```js
@@ -142,7 +142,7 @@ import WalletCwt from "@maincc/cwt-lib";
   
     **`result`**  
   ```js
-  eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksiLCJ0eXBlIjoiQ1dUIiwiY2hhaW4iOiJldGhlcmV1bSJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIn0.MEUCIQDlkgI5fbaM09V57BvejR-wxIkzTgJCc7lohtlpb-99qQIgMGFEXkdvpmRIg5M_ns3ZpDh-sSjm52Q6THDQp7_Z_kc
+  eyJ0eXBlIjoiQ1dUIiwiY2hhaW4iOiJldGhlcmV1bSJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIn0. MEUCIFmR0Jy4-F9oiHjqe01qrNxhtbuBm2T4EKF-ScXu3r4YAiEA-rtEmmLZifsj1isv9wF6-RXDQtxJjkIYTnp4i6GtNmg
   true
   ```
 
