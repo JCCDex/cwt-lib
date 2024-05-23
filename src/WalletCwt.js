@@ -7,7 +7,7 @@ import { isValidPrivate, isValidPublic, stripHexPrefix } from '@ethereumjs/util'
 import KeyEncoder from "key-encoder";
 
 class WalletCwt {
-  // 签名 jwt
+  // 签名 cwt
   static sign(data, priv, format = 'jose') {
     const { header, payload } = data;
     if(!payload || !header){
@@ -17,7 +17,7 @@ class WalletCwt {
     priv = stripHexPrefix(priv);
     if(isValidPrivate(priv)){
       const adjustHeader = Object.assign({typ: undefined, alg: undefined}, header);
-      // 使用私钥签名 jwt
+      // 使用私钥签名 cwt
       const token = new TokenSigner("ES256k", priv).sign(payload, false, adjustHeader);
       if(format == 'jose') {
         return token;
@@ -32,12 +32,12 @@ class WalletCwt {
     }
   }
 
-  // 解码 jwt
+  // 解码 cwt
   static decode(token) {
     return decodeToken(token);
   }
 
-  // 验证 jwt
+  // 验证 cwt
   static verify(token, pub, format = 'jose') {
     if(typeof pub != "string") {
       throw new Error('The public key used for verification must be a hex string');
