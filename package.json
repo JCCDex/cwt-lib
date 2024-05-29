@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
-  "type": "module",
   "homepage": "https://github.com/maincc/cwt-lib",
   "repository": "maincc/cwt-lib",
   "scripts": {
