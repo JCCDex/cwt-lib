@@ -1,5 +1,4 @@
-import ChainToken from "../src/index"
-import { EthWallet, RippleWallet } from "../src/wallet"
+import { ChainToken, EthWallet, RippleWallet } from "../src/index"
 import { getPrivatePem, getPublicPem } from "../src/utils/getPem"
 
 const ethWallet = EthWallet.generate();

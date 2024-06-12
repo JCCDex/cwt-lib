@@ -1,3 +1,4 @@
 import ChainToken from "./chainToken";
+import { EthWallet, RippleWallet } from "./wallet";
 
-export default ChainToken;
+export { ChainToken, EthWallet, RippleWallet};
