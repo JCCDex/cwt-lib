@@ -13,9 +13,9 @@ Verify the cwt using the blockchain's public key to prove its identity;
 - [Installtion_&&_import](#Installtion_&&_import)
 - [Quick_sign](#Quick_sign)
 - [Decode](#Decode)
-- [Class:_ChainToken](#Class:_ChainToken)
-- [Class:_EthWallet](#Class:_EthWallet)
-- [Class:_RippleWallet](#Class:_RippleWallet)
+- [Class_ChainToken](#Class_ChainToken)
+- [Class_EthWallet](#Class_EthWallet)
+- [Class_RippleWallet](#Class_RippleWallet)
 
 Synopsis
 =========
@@ -28,7 +28,7 @@ Synopsis
 目前支持`ethereum`、`ripple`。  
 `ethereum` and `ripple` are currently supported.
 
-Installation && Import
+Installation_&&_Import
 ======================
 **Installation**
 
@@ -42,7 +42,7 @@ npm install @maincc/cwt-lib
 import ChainToken from "@maincc/cwt-lib"
 ```
 
-Quick Sign
+Quick_Sign
 ==========
 ` quickSign(key: string, usr: string, chain: string, alg: string) `  
 
@@ -60,7 +60,7 @@ Decode
 **解码**; 将生成的 cwt 进行解码。  
 **Decode**; Decode the generated cwt.
 
-Class: ChainToken
+Class_ChainToken
 =================
 
 - static **quickSign(key: string, usr: string, chain: string, alg: string)** => *用于快速签名生成cwt。*
@@ -159,12 +159,12 @@ console.log(chainToken.verify(cwt));
 
 ```
 
-Class: EthWallet
+Class_EthWallet
 =================
 继承@ethereumjs/wallet库，用于生成以太坊相关密钥对。  
 Inherit the @ethereumjs/wallet library for generating Ethereum-related key pairs.
 
-Class: RippleWallet
+Class_RippleWallet
 ====================
 对@swtc/wallet库进行扩展，用于生成ripple相关密钥对。  
 Extension of the @swtc/wallet library for generating Ripple-related key pairs.
