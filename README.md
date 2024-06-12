@@ -10,12 +10,12 @@ Using the private key data structure of the blockchain ({header:... , payload: .
 Verify the cwt using the blockchain's public key to prove its identity;  
 
 - [Synopsis](#Synopsis)
-- [Installtion && import](#Installtion && import)
-- [Quick sign](#Quick sign)
+- [Installtion_&&_import](#Installtion_&&_import)
+- [Quick_sign](#Quick_sign)
 - [Decode](#Decode)
-- [Class: ChainToken](#Class: ChainToken)
-- [Class: EthWallet](#Class: EthWallet)
-- [Class: RippleWallet](#Class: RippleWallet)
+- [Class:_ChainToken](#Class:_ChainToken)
+- [Class:_EthWallet](#Class:_EthWallet)
+- [Class:_RippleWallet](#Class:_RippleWallet)
 
 Synopsis
 =========
