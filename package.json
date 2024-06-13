@@ -9,7 +9,8 @@
   "repository": "maincc/cwt-lib",
   "scripts": {
     "test": "jest",
-    "compile": "tsc"
+    "compile": "tsc",
+    "prepublishOnly": "npm run compile"
   },
   "author": "",
   "license": "ISC",
@@ -48,5 +49,6 @@
       "eslint --fix",
       "prettier --write"
     ]
-  }
+  },
+  "files": ["lib/src/**/*"]
 }
