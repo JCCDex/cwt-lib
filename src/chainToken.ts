@@ -17,6 +17,27 @@ function getChainWallet(chain: string, alg: string, key: string, keyType: string
   }
 }
 
+function getAlg(chain: string, key: string, keyType: string): string {
+  switch(chain){
+    case "ethereum":
+      return "secp256k1";
+    case "ripple":
+      if(keyType == "secret") {
+        if(key.length == 31 && key.slice(0,3) == 'sEd')
+          return "ed25519";
+        else
+          return "secp256k1";
+      }else{
+        if(key.slice(0,2) == 'ED')
+          return "ed25519";
+        else
+          return "secp256k1";
+      }
+    default:
+      throw new Error(`chain ${chain} is not supported`);
+  }
+}
+
 export default class ChainToken {
   static getAllowChain(): Iterator<string> {
     return CHAIN_MAP.keys();
@@ -29,10 +50,10 @@ export default class ChainToken {
   readonly chain: string
   readonly alg: string
   wallet: any;
-  constructor (chain: string, alg: string, key: string, keyType: string){
+  constructor (chain: string, key: string, keyType: string){
     this.chain = chain;
-    this.alg = alg;
-    this.wallet = getChainWallet(chain, alg, key, keyType);
+    this.alg = getAlg(chain, key, keyType);
+    this.wallet = getChainWallet(chain, this.alg, key, keyType);
   }
 
   public sign(data: {header: any, payload: any}, format: string = "der"): string {
@@ -65,11 +86,12 @@ export default class ChainToken {
     }
   }
 
-  static quickSign(key: string, usr: string, chain: string, alg: string): string {
+  static quickSign(key: string, usr: string, chain: string): string {
     if(!CHAIN_USE_KEY.has(chain)){
       throw new Error(`chain ${chain} is not supported`);
     }
-    const tokenItem = new ChainToken(chain, alg, key, CHAIN_USE_KEY.get(chain).sign);
+    const alg = getAlg(chain, key, CHAIN_USE_KEY.get(chain).keyType);
+    const tokenItem = new ChainToken(chain, key, CHAIN_USE_KEY.get(chain).sign);
     const data = {
       header: {
         x5c: [getPublicPem(tokenItem.wallet.hexPublickey, alg)],
@@ -89,8 +111,12 @@ export default class ChainToken {
     switch(this.alg) {
       case "secp256k1":
         if(format == 'der'){
-          const tokenList = token.split(".");
-          handleToken = tokenList[0] + "." + tokenList[1] + "." + formatter.derToJose(tokenList[2], 'ES256');
+          try {
+            const tokenList = token.split(".");
+            handleToken = tokenList[0] + "." + tokenList[1] + "." + formatter.derToJose(tokenList[2], 'ES256');
+          } catch (error) {
+            return false;
+          }
         }else if(format != 'jose'){
           throw new Error(`${this.alg}: format ${format} is not supported`);
         }
@@ -101,7 +127,7 @@ export default class ChainToken {
         }
         const tokenList = token.split(".");
         const signData = tokenList[0] + "." + tokenList[1];
-        return crypto.verify(null, Buffer.from(signData), getPublicPem(this.wallet.hexPublickey, this.alg), Buffer.from(unescape(tokenList[2]), 'base64'));
+          return crypto.verify(null, Buffer.from(signData), getPublicPem(this.wallet.hexPublickey, this.alg), Buffer.from(unescape(tokenList[2]), 'base64'));
       default:
         throw new Error(`alg ${this.alg} is not supported`);
     }

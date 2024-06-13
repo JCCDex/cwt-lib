@@ -44,12 +44,12 @@ import ChainToken from "@maincc/cwt-lib"
 
 Quick_Sign
 ==========
-` quickSign(key: string, usr: string, chain: string, alg: string) `  
+` quickSign(key: string, usr: string, chain: string) `  
 
-**syntax:** *const cwt = ChainToken.quickSign(key, usr, chain, alg)*  
+**syntax:** *const cwt = ChainToken.quickSign(key, usr, chain)*  
 
-**快速签名**; 通过私钥或者密钥、用户名、链名和算法快速生成cwt。  
-** Quick Signature **; quickly generate cwt by privateKey or secret, usr, chain and alg.
+**快速签名**; 通过私钥或者密钥、用户名和链名快速生成cwt。  
+** Quick Signature **; quickly generate cwt by privateKey or secret, usr and chain.
 
 Decode
 ======
@@ -63,14 +63,14 @@ Decode
 Class_ChainToken
 =================
 
-- static **quickSign(key: string, usr: string, chain: string, alg: string)** => *用于快速签名生成cwt。*
+- static **quickSign(key: string, usr: string, chain: string)** => *用于快速签名生成cwt。*
 
 `key:` 用于签名的私钥和密钥；`usr:` 用于验证身份的用户名；  
 
-`chain:` cwt-lib支持的链名； `alg:` chain生成key的算法；
+`chain:` cwt-lib支持的链名；
 
 ```js
-const cwt = ChainToken.quickSign('sh3BFjgUiiN3MQvj9toyTZty3RepE', 'jc_ripple', 'ripple', 'secp256k1');
+const cwt = ChainToken.quickSign('sh3BFjgUiiN3MQvj9toyTZty3RepE', 'jc_ripple', 'ripple');
 
 // eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1GWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RRZ0FFWGZCeTNSaHhkNWliUjlXbDhhOVVYUDQ1SDM1M2NONkdcbkpSckt1VTNrbE5rWFNiNFJiNFZUMk0rNU9Za3dMV0tMWXE2MEJyZkFzL3d3YkQzTmlGbFNlZz09XG4tLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0iXSwidHlwZSI6IkNXVCIsImNoYWluIjoicmlwcGxlIn0.eyJ1c3IiOiJqY19yaXBwbGUiLCJ0aW1lIjoxNzE4MTYzNTU0fQ.MEUCIFbRfg9tDyLMXY_qTFgpEvP3U6VZrYdR2p34Y3Hc_3WPAiEAuaPlEHEzBd-37wXFbH7wEyHm1R2tA-u64hRLdYV_UJY
 ```
@@ -97,11 +97,11 @@ const decoded = ChainToken.decode(cwt);
 //   }
 ```
 
-- **constructor (chain: string, alg: string, key: string, keyType: string)** => *构造函数。*  
+- **constructor (chain: string, key: string, keyType: string)** => *构造函数。*  
  
-`chain:` cwt-lib支持的链名； `alg:` chain生成key的算法； 
+`chain:` cwt-lib支持的链名； `key:` chain所需要的公钥、私钥或者密钥；  
 
-`key:` chain所需要的公钥、私钥或者密钥； `keyType:` key的种类**（private、public、secret）**；
+`keyType:` key的种类**（private、public、secret）**；
 
 - **sign(data: {header: any, payload: any}, format: string = "der")** => *进行签名。*  
 
@@ -134,7 +134,7 @@ const data = {
   },
   payload: { usr: 'jc_ripple', time: 1718163554 },
 }
-const chainToken = new ChainToken('ripple', 'secp256k1', ripple.secret, 'secret')
+const chainToken = new ChainToken('ripple', ripple.secret, 'secret')
 const cwt = chainToken.sign(data);
 console.log(cwt);
 console.log(ChainToken.decode(cwt));

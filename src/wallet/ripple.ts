@@ -35,7 +35,10 @@ export default class RippleWallet implements WalletInterface{
     this.alg = alg;
     RippleWallet.elliptic = getElliptic(alg);
     if(keyType == "public") {
-      this.hexPublickey = key;
+      this.hexPublickey = stripHexPrefix(key, alg);
+      if(this.alg == 'secp256k1') {
+        this.hexPublickey = RippleWallet.elliptic.keyFromPublic(this.hexPublickey, 'hex').getPublic('hex');
+      }
     }else if(keyType == "secret") {
       const keypair = wallet.KeyPair.deriveKeypair(key);
       this.hexPrivatekey = stripHexPrefix(keypair.privateKey, alg);
@@ -48,9 +51,13 @@ export default class RippleWallet implements WalletInterface{
     this.elliptic = getElliptic(alg);
     const secret_address = wallet.generate({algorithm: alg});
     const keypair = wallet.KeyPair.deriveKeypair(secret_address.secret);
+    // return Object.assign(secret_address, {
+    //   privateKey: stripHexPrefix(keypair.privateKey, alg).toLocaleLowerCase(),
+    //   publicKey: this.elliptic.keyFromPublic(stripHexPrefix(keypair.publicKey, alg), 'hex').getPublic('hex')
+    // })
     return Object.assign(secret_address, {
-      privateKey: stripHexPrefix(keypair.privateKey, alg).toLocaleLowerCase(),
-      publicKey: this.elliptic.keyFromPublic(stripHexPrefix(keypair.publicKey, alg), 'hex').getPublic('hex')
+      privateKey: keypair.privateKey,
+      publicKey: keypair.publicKey
     })
   }
 }
