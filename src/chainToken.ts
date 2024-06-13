@@ -97,6 +97,7 @@ export default class ChainToken {
         x5c: [getPublicPem(tokenItem.wallet.hexPublickey, alg)],
         type: 'CWT',
         chain: chain,
+        alg: alg
       },
       payload: {
         usr: usr,
