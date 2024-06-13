@@ -25,7 +25,8 @@
     "husky": "^9.0.11",
     "jest": "^29.7.0",
     "lint-staged": "^15.2.2",
-    "prettier": "^3.2.5"
+    "prettier": "^3.2.5",
+    "ts-jest": "^29.1.4"
   },
   "dependencies": {
     "@ethereumjs/util": "^9.0.3",
@@ -35,8 +36,7 @@
     "ecdsa-sig-formatter": "^1.0.11",
     "elliptic": "^6.5.5",
     "jsontokens": "^4.0.1",
-    "key-encoder": "^2.0.3",
-    "ts-jest": "^29.1.4"
+    "key-encoder": "^2.0.3"
   },
   "husky": {
     "hooks": {
