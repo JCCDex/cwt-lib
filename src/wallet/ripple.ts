@@ -51,10 +51,6 @@ export default class RippleWallet implements WalletInterface{
     this.elliptic = getElliptic(alg);
     const secret_address = wallet.generate({algorithm: alg});
     const keypair = wallet.KeyPair.deriveKeypair(secret_address.secret);
-    // return Object.assign(secret_address, {
-    //   privateKey: stripHexPrefix(keypair.privateKey, alg).toLocaleLowerCase(),
-    //   publicKey: this.elliptic.keyFromPublic(stripHexPrefix(keypair.publicKey, alg), 'hex').getPublic('hex')
-    // })
     return Object.assign(secret_address, {
       privateKey: keypair.privateKey,
       publicKey: keypair.publicKey

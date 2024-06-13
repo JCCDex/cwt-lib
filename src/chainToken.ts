@@ -23,7 +23,7 @@ function getAlg(chain: string, key: string, keyType: string): string {
       return "secp256k1";
     case "ripple":
       if(keyType == "secret") {
-        if(key.length == 31 && key.slice(0,3) == 'sEd')
+        if(key.slice(0,3) == 'sEd')
           return "ed25519";
         else
           return "secp256k1";
