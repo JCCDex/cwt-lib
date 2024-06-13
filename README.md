@@ -1,149 +1,173 @@
-# cwt-lib
+# cwt-lib (chain-web-token)
 
-> A cryptocurrency-compliant js library for generating cwt libraries. chain web token (cwt) is an extension based on jwt (json web token).  
-> 一个实现符合加密货币的js库，用于生成cwt库。cwt（chain web token）基于jwt（json web token）进行扩展。
->
-> Based on jsontokens library (https://github.com/stacks-network/jsontokens-js).
-> 基于jsontokens库进行扩展。
+用于区块链身份认证的js库；  
+js library for blockchain identity authentication;  
 
-## INSTALL
+使用区块链的私钥对数据结构（{header: ... , payload: ...}）进行签名，生成cwt;  
+Using the private key data structure of the blockchain ({header:... , payload: ... }) sign and generate cwt;  
+
+使用区块链的公钥对cwt进行验证，证明其身份；  
+Verify the cwt using the blockchain's public key to prove its identity;  
+
+- [Synopsis](#Synopsis)
+- [Installtion_&&_import](#Installtion_&&_import)
+- [Quick_sign](#Quick_sign)
+- [Decode](#Decode)
+- [Class_ChainToken](#Class_ChainToken)
+- [Class_EthWallet](#Class_EthWallet)
+- [Class_RippleWallet](#Class_RippleWallet)
+
+Synopsis
+=========
+`chain web token （缩写cwt)` 是有三部分组成 ` header.payload.Signature `,其中的 `Signature` 是对 ` header.payload `进行签名。  
+`chain web token (abbreviated cwt)` is composed of three parts` header.payload.Signature `, where ` Signature ` is the signature of `header.payload`.
+
+` cwt-lib ` 是基于 `jsontokens、crypto` 库进行扩展。  
+` cwt-lib ` is based on the ` jsontokens, crypto ` library extension.
+
+目前支持`ethereum`、`ripple`。  
+`ethereum` and `ripple` are currently supported.
+
+Installation_&&_Import
+======================
+**Installation**
 
 ```shell
 npm install @maincc/cwt-lib
 ```
 
-## Documentation
+**Import**
 
-#### cwt (chain web token)
-
-**`example`** import
 ```js
-import WalletCwt from "@maincc/cwt-lib";
+import ChainToken from "@maincc/cwt-lib"
 ```
-- Generate cwt from the private key, user, and chain name.  
-  通过私钥、用户和链名生成cwt。
 
-  **`example`** cwtSign(pr, usr, chain) :pr -> 私钥，usr -> 用户名，chain -> 区块链链名
-  ```js
-  const priv = '105d31c6d6b19fdac7e3873572f5e1cd787afe912344a4bf3984d94b0cbb8876'
-  const cwt = WalletCwt.cwtSign(priv, "zhye", "ethereum")
-  ```
+Quick_Sign
+==========
+` quickSign(key: string, usr: string, chain: string) `  
 
-  **`result`**
-  ```js
-  eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1GWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RRZ0FFaWJpcmx6eEtnZ0EzNWp1TUNtSmRhbUNDZ0hhOE9ZSkdcbk9HMFlIRzYxMUk5UDdrTEFBYlNqNGg0SFJHeUNSZnA0Ky9ndkxtcGU1Uis3UFV2bDNHU0NvZz09XG4tLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0iXSwidHlwZSI6IkNXVCIsImNoYWluIjoiZXRoZXJldW0ifQ.eyJ1c3IiOiJ6aHllIiwidGltZSI6MTcxNjM2NTIxOX0.MEUCIGFG7GfUdQl2FeB8FSN_i_aHslbMp8G_XjMUN7HVL-fqAiEArrkKTTJWmWJvFTx4NlPLdSpuMJQNPMfu7pV-fIpEM24
-  ```
-  <br>
-- If you don't have an Ethereum account, you can generate it through generate.  
-  如果你并没有以太坊的账户，可以通过generate生成。
+**syntax:** *const cwt = ChainToken.quickSign(key, usr, chain)*  
 
-  **`example`** generate
-  ```js
-  const wallet = WalletCwt.generate();
-  ```
+**快速签名**; 通过私钥或者密钥、用户名和链名快速生成cwt。  
+** Quick Signature **; quickly generate cwt by privateKey or secret, usr and chain.
 
-  **`result`**
-  ```js
-  {
-    privateKey: '0xc5b893aef8c2e847dc14ddadb7dfd3be5781b7a5a46e0cbcc00bfa992c626ddc',
-    publicKey: '0x6f592757f8e6506a5f950df6fcbb6b8000b3ef00c24cc69dfdb3155d322b182c4d31216ae1154b63211c8970977ccb2a72272ac0cce8004e0c26c86dfc01046a',
-    compressPubKey: '026f592757f8e6506a5f950df6fcbb6b8000b3ef00c24cc69dfdb3155d322b182c',
-    address: '0x50692568f1184911ecbfa2de4147fecba5b0b386'
-  }
-  ```
-  <br>
-- If you have an Ethereum account and have its public and private keys. Then you can perform cwt related operations.  
-  如果你拥有了以太坊的账户，并掌握其公私钥。那么可以进行cwt的相关操作。
+Decode
+======
+` decode(token: string) `
 
-  - **`example`** sign
-  ```js
-  const data = {
-    header:{
-      type: 'CWT',
-      chain: 'ethereum'
-    },
-    payload:{
-      sub: '1234567890',
-      name: 'John Doe',
-    }
+**syntax:** *const decode = ChainToken.decode(cwt)*  
+
+**解码**; 将生成的 cwt 进行解码。  
+**Decode**; Decode the generated cwt.
+
+Class_ChainToken
+=================
+
+- static **quickSign(key: string, usr: string, chain: string)** => *用于快速签名生成cwt。*
+
+`key:` 用于签名的私钥和密钥；`usr:` 用于验证身份的用户名；  
+
+`chain:` cwt-lib支持的链名；
+
+```js
+const cwt = ChainToken.quickSign('sh3BFjgUiiN3MQvj9toyTZty3RepE', 'jc_ripple', 'ripple');
+
+// eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1GWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RRZ0FFWGZCeTNSaHhkNWliUjlXbDhhOVVYUDQ1SDM1M2NONkdcbkpSckt1VTNrbE5rWFNiNFJiNFZUMk0rNU9Za3dMV0tMWXE2MEJyZkFzL3d3YkQzTmlGbFNlZz09XG4tLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0iXSwidHlwZSI6IkNXVCIsImNoYWluIjoicmlwcGxlIn0.eyJ1c3IiOiJqY19yaXBwbGUiLCJ0aW1lIjoxNzE4MTYzNTU0fQ.MEUCIFbRfg9tDyLMXY_qTFgpEvP3U6VZrYdR2p34Y3Hc_3WPAiEAuaPlEHEzBd-37wXFbH7wEyHm1R2tA-u64hRLdYV_UJY
+```
+- static **decode(token: string)** => *解码生成的cwt。*
+
+`token:` 生成的cwt；
+
+```js
+const decoded = ChainToken.decode(cwt);
+
+// {
+//     header: {
+//       x5c: [
+//         '-----BEGIN PUBLIC KEY-----\n' +
+//           'MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEXfBy3Rhxd5ibR9Wl8a9UXP45H353cN6G\n' +
+//           'JRrKuU3klNkXSb4Rb4VT2M+5OYkwLWKLYq60BrfAs/wwbD3NiFlSeg==\n' +
+//           '-----END PUBLIC KEY-----'
+//       ],
+//       type: 'CWT',
+//       chain: 'ripple'
+//     },
+//     payload: { usr: 'jc_ripple', time: 1718163554 },
+//     signature: 'MEUCIFbRfg9tDyLMXY_qTFgpEvP3U6VZrYdR2p34Y3Hc_3WPAiEAuaPlEHEzBd-37wXFbH7wEyHm1R2tA-u64hRLdYV_UJY'
+//   }
+```
+
+- **constructor (chain: string, key: string, keyType: string)** => *构造函数。*  
+ 
+`chain:` cwt-lib支持的链名； `key:` chain所需要的公钥、私钥或者密钥；  
+
+`keyType:` key的种类**（private、public、secret）**；
+
+- **sign(data: {header: any, payload: any}, format: string = "der")** => *进行签名。*  
+
+`data:` 需要签名的数据结构； `format:` 指定cwt里的signature部分的格式；可以是`jose`和`der`,默认是`der`；
+
+- **verify(token: string, format: string = "der")** => *对生成cwt验证。*
+
+`token:` 生成的cwt； `format:` 指定cwt里的signature部分的格式；可以是`jose`和`der`,默认是`der`；
+
+#### CODE:
+```js
+import { ChainToken } from "@maincc/cwt-lib";
+
+const ripple = {
+    secret: 'sh3BFjgUiiN3MQvj9toyTZty3RepE',
+    address: 'rhhH4HZc3h5XtK3i1SbDtHzdUr9jseNPgd',
+    privateKey: 'c541eaf57d65d5c842ef777cbab1fb8249fce14d5e4ab56e439ec78547a040e7',
+    publicKey: '045df072dd187177989b47d5a5f1af545cfe391f7e7770de86251acab94de494d91749be116f8553d8cfb93989302d628b62aeb406b7c0b3fc306c3dcd8859527a'
   };
-  const cwt = WalletCwt.sign(data, wallet.privateKey);
-  ```
+const data = {
+  header: {
+    x5c: [
+      '-----BEGIN PUBLIC KEY-----\n' +
+        'MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEXfBy3Rhxd5ibR9Wl8a9UXP45H353cN6G\n' +
+        'JRrKuU3klNkXSb4Rb4VT2M+5OYkwLWKLYq60BrfAs/wwbD3NiFlSeg==\n' +
+        '-----END PUBLIC KEY-----'
+    ],
+    type: 'CWT',
+    chain: 'ripple'
+  },
+  payload: { usr: 'jc_ripple', time: 1718163554 },
+}
+const chainToken = new ChainToken('ripple', ripple.secret, 'secret')
+const cwt = chainToken.sign(data);
+console.log(cwt);
+console.log(ChainToken.decode(cwt));
+console.log(chainToken.verify(cwt));
 
-    **`result`**
-    ```js
-    eyJ0eXBlIjoiQ1dUIiwiY2hhaW4iOiJldGhlcmV1bSJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIn0.   j76aew7N2LPJkx1uSpcJ1Wh15EbClTBdIa-ozUuMLtOHQzmWbN8-VWCtYJ_hoj-ZzvJG9tsOOPCWcUX_uRMZPQ
-    ```
-   The signature must contain payload and header fields.
-    
-    签名的内容必须带有payload和header字段。
-  - **`example`** decode
-  ```js
-  WalletCwt.decode(cwt)
-  ```
+// eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1GWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RRZ0FFWGZCeTNSaHhkNWliUjlXbDhhOVVYUDQ1SDM1M2NONkdcbkpSckt1VTNrbE5rWFNiNFJiNFZUMk0rNU9Za3dMV0tMWXE2MEJyZkFzL3d3YkQzTmlGbFNlZz09XG4tLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0iXSwidHlwZSI6IkNXVCIsImNoYWluIjoicmlwcGxlIn0.eyJ1c3IiOiJqY19yaXBwbGUiLCJ0aW1lIjoxNzE4MTYzNTU0fQ.MEUCIFbRfg9tDyLMXY_qTFgpEvP3U6VZrYdR2p34Y3Hc_3WPAiEAuaPlEHEzBd-37wXFbH7wEyHm1R2tA-u64hRLdYV_UJY
+// {
+//   header: {
+//     x5c: [
+//       '-----BEGIN PUBLIC KEY-----\n' +
+//         'MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEXfBy3Rhxd5ibR9Wl8a9UXP45H353cN6G\n' +
+//         'JRrKuU3klNkXSb4Rb4VT2M+5OYkwLWKLYq60BrfAs/wwbD3NiFlSeg==\n' +
+//         '-----END PUBLIC KEY-----'
+//     ],
+//     type: 'CWT',
+//     chain: 'ripple'
+//   },
+//   payload: { usr: 'jc_ripple', time: 1718163554 },
+//   signature: 'MEUCIFbRfg9tDyLMXY_qTFgpEvP3U6VZrYdR2p34Y3Hc_3WPAiEAuaPlEHEzBd-37wXFbH7wEyHm1R2tA-u64hRLdYV_UJY'
+// }
+// true
 
-    **`result`**
-  ```js
-    {
-      header: { type: 'CWT', chain: 'ethereum' },
-      payload: { sub: '1234567890', name: 'John Doe' },
-      signature: 'P3AtyDwKLZAGx2JLPnTEln_LGmd7KE48n2XLormwg5e-CyB0k5BNX-y1kg8DA4hMUjtz1cMLtZHHtO8b6fLNAQ'
-    }
-  ```
-  - **`example`** verify  
-  ```js
-  WalletCwt.verify(cwt, wallet.publicKey) or WalletCwt.verify(cwt, wallet.compressPubKey)
-  ```
-  **`result`**
-  <br>
-  ```js
-  true
-  ```
-  <br>
--  If you need public and private keys in pem format, or Signature in cwt is ASN.1 DER format.  
-  如果你需要pem格式的公私钥,或者需要cwt里的Signature是ASN.1 DER格式。
+```
 
-  - **`example`** privToPem  
-  ```js
-  WalletCwt.privToPem(wallet.privateKey)
-  ```  
-  Convert the private key to pem format. Note: The resulting pem is SEC1 specification.  
-  将私钥转换成pem格式，注：生成的是SEC1规范的pem。  
-  
-    **`result`**  
-  ```js
-  -----BEGIN EC PRIVATE KEY-----
-  MHQCAQEEIMW4k674wuhH3BTdrbff075XgbelpG4MvMAL+pksYm3coAcGBSuBBAAK
-  oUQDQgAEb1knV/jmUGpflQ32/LtrgACz7wDCTMad/bMVXTIrGCxNMSFq4RVLYyEc
-  iXCXfMsqcicqwMzoAE4MJsht/AEEag==
-  -----END EC PRIVATE KEY-----
-  ```
-  - **`example`** pubToPem  
-  ```js
-  WalletCwt.pubToPem(wallet.publicKey)
-  ```
-  Convert the public key to pem format. Note: The parameter must be an uncompressed public key.  
-  将公钥转换成pem格式，注：参数必须是未压缩的公钥。  
-  
-    **`result`**  
-  ```js
-  -----BEGIN PUBLIC KEY-----
-  MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEb1knV/jmUGpflQ32/LtrgACz7wDCTMad
-  /bMVXTIrGCxNMSFq4RVLYyEciXCXfMsqcicqwMzoAE4MJsht/AEEag==
-  -----END PUBLIC KEY-----
-  ```
-  - **`example`** sign(... , 'der') && verify(... , 'der')  
-  ```js
-  const cwtDer = WalletCwt.sign(data, wallet.privateKey, 'der');
-  WalletCwt.verify(cwtDer, wallet.publicKey, 'der');
-  ```
-  Generate cwt in ASN.1 DER format (to meet openssl and other cryptographic libraries) and verify.  
-  生成符合ASN.1 DER格式的cwt（满足openssl等密码库）并验证。  
-  
-    **`result`**  
-  ```js
-  eyJ0eXBlIjoiQ1dUIiwiY2hhaW4iOiJldGhlcmV1bSJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIn0. MEUCIFmR0Jy4-F9oiHjqe01qrNxhtbuBm2T4EKF-ScXu3r4YAiEA-rtEmmLZifsj1isv9wF6-RXDQtxJjkIYTnp4i6GtNmg
-  true
-  ```
+Class_EthWallet
+=================
+继承@ethereumjs/wallet库，用于生成以太坊相关密钥对。  
+Inherit the @ethereumjs/wallet library for generating Ethereum-related key pairs.
+
+Class_RippleWallet
+====================
+对@swtc/wallet库进行扩展，用于生成ripple相关密钥对。  
+Extension of the @swtc/wallet library for generating Ripple-related key pairs.
+
 
 <br>
