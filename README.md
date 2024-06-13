@@ -72,7 +72,7 @@ Class_ChainToken
 ```js
 const cwt = ChainToken.quickSign('sh3BFjgUiiN3MQvj9toyTZty3RepE', 'jc_ripple', 'ripple');
 
-// eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1GWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RRZ0FFWGZCeTNSaHhkNWliUjlXbDhhOVVYUDQ1SDM1M2NONkdcbkpSckt1VTNrbE5rWFNiNFJiNFZUMk0rNU9Za3dMV0tMWXE2MEJyZkFzL3d3YkQzTmlGbFNlZz09XG4tLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0iXSwidHlwZSI6IkNXVCIsImNoYWluIjoicmlwcGxlIn0.eyJ1c3IiOiJqY19yaXBwbGUiLCJ0aW1lIjoxNzE4MTYzNTU0fQ.MEUCIFbRfg9tDyLMXY_qTFgpEvP3U6VZrYdR2p34Y3Hc_3WPAiEAuaPlEHEzBd-37wXFbH7wEyHm1R2tA-u64hRLdYV_UJY
+// eyJhbGciOiJzZWNwMjU2azEiLCJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1GWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RRZ0FFWGZCeTNSaHhkNWliUjlXbDhhOVVYUDQ1SDM1M2NONkdcbkpSckt1VTNrbE5rWFNiNFJiNFZUMk0rNU9Za3dMV0tMWXE2MEJyZkFzL3d3YkQzTmlGbFNlZz09XG4tLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0iXSwidHlwZSI6IkNXVCIsImNoYWluIjoicmlwcGxlIn0.eyJ1c3IiOiJqY19yaXBwbGUiLCJ0aW1lIjoxNzE4MjcwMDAwfQ.MEUCIQD1BInytqKAMWACLLZf6hNyLW4GotcJBC18_uW_jPNVawIgDKH1iY-DyVTB845YQAz9X0QgN0cIb84sZnJSugeJM2M
 ```
 - static **decode(token: string)** => *解码生成的cwt。*
 
@@ -83,6 +83,7 @@ const decoded = ChainToken.decode(cwt);
 
 // {
 //     header: {
+//       alg: 'secp256k1',
 //       x5c: [
 //         '-----BEGIN PUBLIC KEY-----\n' +
 //           'MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEXfBy3Rhxd5ibR9Wl8a9UXP45H353cN6G\n' +
@@ -92,8 +93,8 @@ const decoded = ChainToken.decode(cwt);
 //       type: 'CWT',
 //       chain: 'ripple'
 //     },
-//     payload: { usr: 'jc_ripple', time: 1718163554 },
-//     signature: 'MEUCIFbRfg9tDyLMXY_qTFgpEvP3U6VZrYdR2p34Y3Hc_3WPAiEAuaPlEHEzBd-37wXFbH7wEyHm1R2tA-u64hRLdYV_UJY'
+//     payload: { usr: 'jc_ripple', time: 1718270000 },
+//     signature: 'MEUCIQD1BInytqKAMWACLLZf6hNyLW4GotcJBC18_uW_jPNVawIgDKH1iY-DyVTB845YQAz9X0QgN0cIb84sZnJSugeJM2M'
 //   }
 ```
 
@@ -123,6 +124,7 @@ const ripple = {
   };
 const data = {
   header: {
+    alg: 'secp256k1',
     x5c: [
       '-----BEGIN PUBLIC KEY-----\n' +
         'MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEXfBy3Rhxd5ibR9Wl8a9UXP45H353cN6G\n' +
@@ -132,7 +134,7 @@ const data = {
     type: 'CWT',
     chain: 'ripple'
   },
-  payload: { usr: 'jc_ripple', time: 1718163554 },
+  payload: { usr: 'jc_ripple', time: 1718270000 },
 }
 const chainToken = new ChainToken('ripple', ripple.secret, 'secret')
 const cwt = chainToken.sign(data);
@@ -140,9 +142,10 @@ console.log(cwt);
 console.log(ChainToken.decode(cwt));
 console.log(chainToken.verify(cwt));
 
-// eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1GWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RRZ0FFWGZCeTNSaHhkNWliUjlXbDhhOVVYUDQ1SDM1M2NONkdcbkpSckt1VTNrbE5rWFNiNFJiNFZUMk0rNU9Za3dMV0tMWXE2MEJyZkFzL3d3YkQzTmlGbFNlZz09XG4tLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0iXSwidHlwZSI6IkNXVCIsImNoYWluIjoicmlwcGxlIn0.eyJ1c3IiOiJqY19yaXBwbGUiLCJ0aW1lIjoxNzE4MTYzNTU0fQ.MEUCIFbRfg9tDyLMXY_qTFgpEvP3U6VZrYdR2p34Y3Hc_3WPAiEAuaPlEHEzBd-37wXFbH7wEyHm1R2tA-u64hRLdYV_UJY
+// eyJhbGciOiJzZWNwMjU2azEiLCJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1GWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RRZ0FFWGZCeTNSaHhkNWliUjlXbDhhOVVYUDQ1SDM1M2NONkdcbkpSckt1VTNrbE5rWFNiNFJiNFZUMk0rNU9Za3dMV0tMWXE2MEJyZkFzL3d3YkQzTmlGbFNlZz09XG4tLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0iXSwidHlwZSI6IkNXVCIsImNoYWluIjoicmlwcGxlIn0.eyJ1c3IiOiJqY19yaXBwbGUiLCJ0aW1lIjoxNzE4MjcwMDAwfQ.MEUCIQD1BInytqKAMWACLLZf6hNyLW4GotcJBC18_uW_jPNVawIgDKH1iY-DyVTB845YQAz9X0QgN0cIb84sZnJSugeJM2M
 // {
 //   header: {
+//     alg: 'secp256k1',
 //     x5c: [
 //       '-----BEGIN PUBLIC KEY-----\n' +
 //         'MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEXfBy3Rhxd5ibR9Wl8a9UXP45H353cN6G\n' +
@@ -152,7 +155,7 @@ console.log(chainToken.verify(cwt));
 //     type: 'CWT',
 //     chain: 'ripple'
 //   },
-//   payload: { usr: 'jc_ripple', time: 1718163554 },
+//   payload: { usr: 'jc_ripple', time: 1718270000 },
 //   signature: 'MEUCIFbRfg9tDyLMXY_qTFgpEvP3U6VZrYdR2p34Y3Hc_3WPAiEAuaPlEHEzBd-37wXFbH7wEyHm1R2tA-u64hRLdYV_UJY'
 // }
 // true
