@@ -8,7 +8,8 @@
   "homepage": "https://github.com/maincc/cwt-lib",
   "repository": "maincc/cwt-lib",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "compile": "tsc"
   },
   "author": "",
   "license": "ISC",
