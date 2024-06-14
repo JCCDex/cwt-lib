@@ -90,7 +90,7 @@ export default class ChainToken {
     if(!CHAIN_USE_KEY.has(chain)){
       throw new Error(`chain ${chain} is not supported`);
     }
-    const alg = getAlg(chain, key, CHAIN_USE_KEY.get(chain).keyType);
+    const alg = getAlg(chain, key, CHAIN_USE_KEY.get(chain).sign);
     const tokenItem = new ChainToken(chain, key, CHAIN_USE_KEY.get(chain).sign);
     const data = {
       header: {
