@@ -17,11 +17,15 @@ function getChainWallet(chain: string, alg: string, key: string, keyType: string
   }
 }
 
-function getAlg(chain: string, key: string, keyType: string): string {
+function getAlg(chain: string, key: string, keyType: string, guomi:boolean = false): string {
   switch(chain){
+    case 'bitcoin':
     case "ethereum":
       return "secp256k1";
+    case "jingtum":
     case "ripple":
+      if(guomi)
+        throw new Error(`${chain}: guomi does not support it yet`);
       if(keyType == "secret") {
         if(key.slice(0,3) == 'sEd')
           return "ed25519";

@@ -1,6 +1,6 @@
 {
   "name": "@maincc/cwt-lib",
-  "version": "0.0.4",
+  "version": "0.0.4-beta.0",
   "description": "",
   "main": "lib/src/index.js",
   "module": "lib/src/index.js",
@@ -34,10 +34,13 @@
     "@ethereumjs/wallet": "^2.0.3",
     "@swtc/wallet": "^1.1.1",
     "base64-js": "^1.5.1",
+    "bitcoinjs-lib": "^6.1.6",
     "ecdsa-sig-formatter": "^1.0.11",
+    "ecpair": "^2.1.0",
     "elliptic": "^6.5.5",
     "jsontokens": "^4.0.1",
-    "key-encoder": "^2.0.3"
+    "key-encoder": "^2.0.3",
+    "tiny-secp256k1": "^2.2.3"
   },
   "husky": {
     "hooks": {
@@ -50,5 +53,7 @@
       "prettier --write"
     ]
   },
-  "files": ["lib/src/**/*"]
+  "files": [
+    "lib/src/**/*"
+  ]
 }

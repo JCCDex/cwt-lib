@@ -16,6 +16,8 @@ Verify the cwt using the blockchain's public key to prove its identity;
 - [Class_ChainToken](#Class_ChainToken)
 - [Class_EthWallet](#Class_EthWallet)
 - [Class_RippleWallet](#Class_RippleWallet)
+- [Class_BitcoinWallet](#Class_BitcoinWallet)
+- [Class_JingtumWallet](#Class_JingtumWallet)
 
 Synopsis
 =========
@@ -25,8 +27,8 @@ Synopsis
 ` cwt-lib ` 是基于 `jsontokens、crypto` 库进行扩展。  
 ` cwt-lib ` is based on the ` jsontokens, crypto ` library extension.
 
-目前支持`ethereum`、`ripple`。  
-`ethereum` and `ripple` are currently supported.
+目前支持`ethereum`、`ripple`、`bitcoin`、`jingtum`。  
+Currently support `ethereum`, `ripple`, `bitcoin`, `jingtum`.
 
 Installation_&&_Import
 ======================
@@ -164,13 +166,23 @@ console.log(chainToken.verify(cwt));
 
 Class_EthWallet
 =================
-继承@ethereumjs/wallet库，用于生成以太坊相关密钥对。  
-Inherit the @ethereumjs/wallet library for generating Ethereum-related key pairs.
+继承@ethereumjs/wallet库，用于生成以太坊相关公私钥对。  
+Inherit the @ethereumjs/wallet library for generating Ethereum-related public and private key pairs.
 
 Class_RippleWallet
 ====================
 对@swtc/wallet库进行扩展，用于生成ripple相关密钥对。  
 Extension of the @swtc/wallet library for generating Ripple-related key pairs.
+
+Class_BitcoinWallet
+=====================
+对bitcoinjs-lib、ecpair、tiny-secp256k1等库进行扩展，用于生成bitcoin相关公私钥对。  
+Extended libraries such as bitcoinjs-lib, ecpair, tiny-secp256k1 for generating Bitcoin-related public and private key pairs.
+
+Class_JingtumWallet
+=====================
+对@swtc/wallet库进行扩展，用于生成jingtum相关密钥对。  
+Extend the @swtc/wallet library to generate jingtum-related key pairs.
 
 
 <br>
