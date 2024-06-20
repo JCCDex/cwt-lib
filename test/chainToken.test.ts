@@ -1,9 +1,12 @@
-import { ChainToken, EthWallet, RippleWallet } from "../src/index"
+import { ChainToken, EthWallet, RippleWallet, BitcoinWallet, JingtumWallet } from "../src/index"
 import { getPrivatePem, getPublicPem } from "../src/utils/getPem"
 
 const ethWallet = EthWallet.generate();
+const bitcoinWallet = BitcoinWallet.generate();
 const rippleWallet_secp256k1 = RippleWallet.generate('secp256k1');
 const rippleWallet_ed25519 = RippleWallet.generate('ed25519');
+const jingtumWallet_secp256k1 = JingtumWallet.generate();
+const jingtumWallet_ed25519 = JingtumWallet.generate({ algorithm: 'ed25519' });
 
 // 测试ChainToken的快速签名和验证
 describe('quickSign and verify', () => {
@@ -14,18 +17,39 @@ describe('quickSign and verify', () => {
     const result = chainToken.verify(ethCwt);
     expect(result).toBe(true);
   });
+  it('In Bitcoin, fast cwt signature and verification', async () => {
+    const bitcoinCwt = ChainToken.quickSign(bitcoinWallet.privateKey, "bitcoin_usr", "ethereum");
+    expect(bitcoinCwt).toBeTruthy();
+    const chainToken = new ChainToken("bitcoin", bitcoinWallet.publicKey, "public");
+    const result = chainToken.verify(bitcoinCwt);
+    expect(result).toBe(true);
+  });
   it('In ripple, fast cwt signature and verification', async () => {
     // ripple secp256k1
-    const rippleCwt_secp256k1 = ChainToken.quickSign(rippleWallet_secp256k1.privateKey, "jc_ripple", "ripple");
+    const rippleCwt_secp256k1 = ChainToken.quickSign(rippleWallet_secp256k1.privateKey, "ripple_secp256k1", "ripple");
     expect(rippleCwt_secp256k1).toBeTruthy();
     const chainToken_secp256k1 = new ChainToken("ripple", rippleWallet_secp256k1.publicKey, "public");
     const result_secp256k1 = chainToken_secp256k1.verify(rippleCwt_secp256k1);
     expect(result_secp256k1).toBe(true);
     // ripple ed25519
-    const rippleCwt_ed25519 = ChainToken.quickSign(rippleWallet_ed25519.secret, "jc_ripple", "ripple");
+    const rippleCwt_ed25519 = ChainToken.quickSign(rippleWallet_ed25519.secret, "ripple_ed25519", "ripple");
     expect(rippleCwt_ed25519).toBeTruthy();
     const chainToken_ed25519 = new ChainToken("ripple", rippleWallet_ed25519.publicKey, "public");
     const result_ed25519 = chainToken_ed25519.verify(rippleCwt_ed25519);
+    expect(result_ed25519).toBe(true);
+  });
+  it('In jingtum, fast cwt signature and verification', async () => {
+    // jingtum secp256k1
+    const jingtumCwt_secp256k1 = ChainToken.quickSign(jingtumWallet_secp256k1.privateKey, "jingtum_secp256k1", "ripple");
+    expect(jingtumCwt_secp256k1).toBeTruthy();
+    const chainToken_secp256k1 = new ChainToken("ripple", jingtumWallet_secp256k1.publicKey, "public");
+    const result_secp256k1 = chainToken_secp256k1.verify(jingtumCwt_secp256k1);
+    expect(result_secp256k1).toBe(true);
+    // jingtum ed25519
+    const jingtumCwt_ed25519 = ChainToken.quickSign(jingtumWallet_ed25519.secret, "jingtum_ed25519", "ripple");
+    expect(jingtumCwt_ed25519).toBeTruthy();
+    const chainToken_ed25519 = new ChainToken("ripple", jingtumWallet_ed25519.publicKey, "public");
+    const result_ed25519 = chainToken_ed25519.verify(jingtumCwt_ed25519);
     expect(result_ed25519).toBe(true);
   });
   it("Error testing", async () => {
