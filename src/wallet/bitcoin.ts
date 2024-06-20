@@ -1,8 +1,8 @@
 import * as bitcoin from 'bitcoinjs-lib';
 import ECPairFactory from 'ecpair';
-import * as ecc from 'tiny-secp256k1';
+import ecc from '@bitcoinerlab/secp256k1';
 import WalletInterface from './interface/WalletInterface';
-import { eddsa as EdDSA, ec as EC } from "elliptic";
+import { ec as EC } from "elliptic";
 
 const network = bitcoin.networks.bitcoin;
 const ECPair = ECPairFactory(ecc);
