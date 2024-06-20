@@ -1,6 +1,5 @@
 import KeyEncoder from "key-encoder";
 import * as crypto from 'crypto';
-import { eddsa as EdDSA } from 'elliptic'
 
 function getPrivatePem(priv: string, alg: string) {
   switch(alg){
