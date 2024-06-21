@@ -1,6 +1,12 @@
 import { Wallet } from '@ethereumjs/wallet'
-import { stripHexPrefix } from '@ethereumjs/util'
 import WalletInterface from './interface/WalletInterface';
+
+const stripHexPrefix = (str: string): string => {
+  if (typeof str !== 'string')
+    throw new Error(`[stripHexPrefix] input must be type 'string', received ${typeof str}`)
+
+  return str.match(/^0x[0-9A-Fa-f]*$/) ? str.slice(2) : str
+}
 
 export default class EthWallet extends Wallet implements WalletInterface{
   hexPrivatekey: string | undefined;
