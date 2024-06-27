@@ -9,7 +9,7 @@ const config = {
   output: {
     filename: "cwt-lib.min.js",
     path: path.resolve(__dirname, "./dist"),
-    library: "CWTLib",
+    library: "ChainWebToken",
     libraryTarget: "umd"
   },
   target: "web",
