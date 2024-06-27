@@ -1,5 +1,5 @@
 import KeyPair from "./keypair";
-import KeyEncoder from "key-encoder";
+import KeyEncoder from "../key-encoder";
 import { fromByteArray } from "base64-js";
 import * as formatter from "ecdsa-sig-formatter";
 import { TokenSigner, TokenVerifier } from "jsontokens";
@@ -7,8 +7,12 @@ import { escape } from "jsontokens/lib/base64Url";
 import { IKeyPair } from "../type";
 
 export default class Secp256k1KeyPair extends KeyPair {
+  private keyEncoder: KeyEncoder;
+  private tokenSigner: TokenSigner;
   constructor(keypair: IKeyPair) {
     super(keypair);
+    this.keyEncoder = new KeyEncoder("secp256k1");
+    this.tokenSigner = new TokenSigner("ES256k", this.privateKey);
   }
 
   public sign(data, format: string): string {
@@ -19,7 +23,7 @@ export default class Secp256k1KeyPair extends KeyPair {
       ...header
     };
 
-    const token = new TokenSigner("ES256k", this.privateKey).sign(payload, false, customHeader);
+    const token = this.tokenSigner.sign(payload, false, customHeader);
     if (format === "der") {
       const [header, payload, signature] = token.split(".");
       return header + "." + payload + "." + escape(fromByteArray(formatter.joseToDer(signature, "ES256")));
@@ -30,13 +34,11 @@ export default class Secp256k1KeyPair extends KeyPair {
   }
 
   public getPublicPem(): string {
-    const keyEncode = new KeyEncoder("secp256k1");
-    return keyEncode.encodePublic(this.publicKey, "raw", "pem");
+    return this.keyEncoder.encodePublic(this.publicKey);
   }
 
   public getPrivatePem(): string | Buffer {
-    const keyEncode = new KeyEncoder("secp256k1");
-    return keyEncode.encodePrivate(this.privateKey, "raw", "pem");
+    return this.keyEncoder.encodePrivate(this.privateKey);
   }
 
   public verify(token: string, format = "der"): boolean {

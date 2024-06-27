@@ -24,7 +24,10 @@
   "author": "JCCDex",
   "license": "MIT",
   "resolutions": {
-    "@noble/secp256k1": "^1.7.1"
+    "@noble/secp256k1": "^1.7.1",
+    "readable-stream": "^3.6.2",
+    "bn.js": "^5.2.0",
+    "asn1.js": "^5.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.24.6",
@@ -61,8 +64,7 @@
     "@swtc/keypairs": "^1.1.4",
     "base64-js": "^1.5.1",
     "ecdsa-sig-formatter": "^1.0.11",
-    "jsontokens": "^4.0.1",
-    "key-encoder": "^2.0.3"
+    "jsontokens": "^4.0.1"
   },
   "packageManager": "yarn@3.6.3",
   "files": [
