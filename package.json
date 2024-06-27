@@ -62,8 +62,7 @@
     "ecdsa-sig-formatter": "^1.0.11",
     "ecpair": "^2.1.0",
     "elliptic": "^6.5.5",
-    "jsontokens": "^4.0.1",
-    "key-encoder": "^2.0.3"
+    "jsontokens": "^4.0.1"
   },
   "packageManager": "yarn@3.6.3",
   "files": [

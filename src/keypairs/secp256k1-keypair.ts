@@ -1,5 +1,5 @@
 import KeyPair from "./keypair";
-import KeyEncoder from "key-encoder";
+import KeyEncoder from "../KeyEncoder";
 import { fromByteArray } from "base64-js";
 import * as formatter from "ecdsa-sig-formatter";
 import { TokenSigner, TokenVerifier } from "jsontokens";
@@ -31,12 +31,12 @@ export default class Secp256k1KeyPair extends KeyPair {
 
   public getPublicPem(): string {
     const keyEncode = new KeyEncoder("secp256k1");
-    return keyEncode.encodePublic(this.publicKey, "raw", "pem");
+    return keyEncode.encodePublic(this.publicKey);
   }
 
   public getPrivatePem(): string | Buffer {
     const keyEncode = new KeyEncoder("secp256k1");
-    return keyEncode.encodePrivate(this.privateKey, "raw", "pem");
+    return keyEncode.encodePrivate(this.privateKey);
   }
 
   public verify(token: string, format = "der"): boolean {
