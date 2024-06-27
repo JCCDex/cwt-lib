@@ -17,7 +17,9 @@
     "compile": "tsc",
     "prepublishOnly": "npm run compile",
     "pretty": "pretty-quick --staged",
-    "build": "webpack"
+    "build": "webpack",
+    "testnet": "npx ts-node test/testnet.spec.ts",
+    "analyzer": "cross-env REPORT=true webpack"
   },
   "author": "JCCDex",
   "license": "MIT",
