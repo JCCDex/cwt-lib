@@ -1,12 +1,12 @@
 import { Alg, Chain, ISignData } from "../type";
 import Secp256k1KeyPair from "../keypairs/secp256k1-keypair";
 import { WebToken } from "./webtoken";
-import * as bitcoin from "bitcoinjs-lib";
+import { bitcoin } from "bitcoinjs-lib/src/networks";
 import ECPairFactory from "ecpair";
 import * as ecc from "@bitcoinerlab/secp256k1";
 import { ec as EC } from "elliptic";
 
-const network = bitcoin.networks.bitcoin;
+const network = bitcoin;
 const ECPair = ECPairFactory(ecc);
 const ec = new EC("secp256k1");
 
