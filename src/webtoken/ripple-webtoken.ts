@@ -5,8 +5,8 @@ import { WebToken } from "./webtoken";
 import { RippleKeyPair } from "../keypairs/x-ripple-factory";
 
 export class RippleWebToken extends WebToken {
-  constructor(priv: string) {
-    const { privateKey, publicKey } = RippleKeyPair.deriveKeyPair(priv);
+  constructor(priv: string, algorithm?: string) {
+    const { privateKey, publicKey } = RippleKeyPair.deriveKeyPair(priv, algorithm);
     const flag = privateKey.substring(0, 2);
     let keypair: KeyPair;
     let alg: Alg;

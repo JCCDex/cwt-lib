@@ -4,12 +4,12 @@ describe("WebToken", () => {
   describe("JingtumWebToken", () => {
     it("should sign and verify when is secp256k1", () => {
       const seeds = [
-        "sajoigynKobrB8U59g1puxu8GM7Hg",
-        "00469cfdd66844f8268eddf3123f5c0e05af24166ce083225f3306e5a10d630dc1",
-        "469cfdd66844f8268eddf3123f5c0e05af24166ce083225f3306e5a10d630dc1"
+        ["sajoigynKobrB8U59g1puxu8GM7Hg"],
+        ["00469cfdd66844f8268eddf3123f5c0e05af24166ce083225f3306e5a10d630dc1"],
+        ["469cfdd66844f8268eddf3123f5c0e05af24166ce083225f3306e5a10d630dc1"]
       ];
       for (const seed of seeds) {
-        const webToken = new JingtumWebToken(seed);
+        const webToken = new JingtumWebToken(seed[0]);
         const token = webToken.sign({
           usr: "jingtum_secp256k1",
           time: 123456
@@ -24,11 +24,12 @@ describe("WebToken", () => {
 
     it("should sign and verify when is ed25519", () => {
       const seeds = [
-        "sEdVrj9hBjNTPGnm4qN4iVXSQv7KMzB",
-        "ED8158dad1de9d8e5ea0e71f63460fdee008f98ec0e68e2390b9b76d34340d87f0"
+        ["sEdVrj9hBjNTPGnm4qN4iVXSQv7KMzB"],
+        ["ED8158dad1de9d8e5ea0e71f63460fdee008f98ec0e68e2390b9b76d34340d87f0"],
+        ["8158dad1de9d8e5ea0e71f63460fdee008f98ec0e68e2390b9b76d34340d87f0", "ed25519"]
       ];
       for (const seed of seeds) {
-        const webToken = new JingtumWebToken(seed);
+        const webToken = new JingtumWebToken(seed[0], seed[1]);
         const token = webToken.sign({
           usr: "jingtum_ed25519",
           time: 123456
