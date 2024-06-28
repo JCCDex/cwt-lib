@@ -3,7 +3,7 @@
     "target": "ES2018",
     "lib": ["ES2018"],
     "outDir": "lib",
-    "rootDir": "src",
+    "rootDir": "./",
     "moduleResolution": "node",
     "module": "commonjs",
     "noUnusedLocals": true,
