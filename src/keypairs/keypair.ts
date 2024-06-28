@@ -13,7 +13,5 @@ export default abstract class KeyPair {
 
   public abstract getPublicPem(): string | Buffer;
 
-  public abstract getPrivatePem(): string | Buffer;
-
   public abstract verify(token: string, format: string): boolean;
 }

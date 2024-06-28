@@ -1545,6 +1545,7 @@ __metadata:
     "@babel/eslint-parser": ^7.24.6
     "@babel/preset-env": ^7.24.6
     "@babel/preset-typescript": ^7.24.6
+    "@noble/ed25519": ^1.7.3
     "@noble/secp256k1": ^1.7.1
     "@swtc/keypairs": ^1.1.4
     "@types/jest": ^29.5.12
@@ -1865,6 +1866,13 @@ __metadata:
   dependencies:
     eslint-scope: 5.1.1
   checksum: f2e3b2d6a6e2d9f163ca22105910c9f850dc4897af0aea3ef0a5886b63d8e1ba6505b71c99cb78a3bba24a09557d601eb21c8dede3f3213753fcfef364eb0e57
+  languageName: node
+  linkType: hard
+
+"@noble/ed25519@npm:^1.7.3":
+  version: 1.7.3
+  resolution: "@noble/ed25519@npm:1.7.3"
+  checksum: 45169927d51de513e47bbeebff3a603433c4ac7579e1b8c5034c380a0afedbe85e6959be3d69584a7a5ed6828d638f8f28879003b9bb2fb5f22d8aa2d88fd5fe
   languageName: node
   linkType: hard
 

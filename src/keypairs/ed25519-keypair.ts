@@ -26,10 +26,6 @@ export default class Ed25519KeyPair extends KeyPair {
     return this.keyEncoder.encodePublic(this.publicKey) + "\n";
   }
 
-  public getPrivatePem(): string | Buffer {
-    return this.keyEncoder.encodePrivate(this.privateKey) + "\n";
-  }
-
   public verify(token: string): boolean {
     const [header, payload, signature] = token.split(".");
     const signData = header + "." + payload;

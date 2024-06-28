@@ -1,37 +1,37 @@
 import * as asn1 from "asn1.js";
-import { ec as EC } from "elliptic";
-const BN = require("bn.js");
+// import { ec as EC } from "elliptic";
+// const BN = require("bn.js");
 
-const octstrASN = asn1.define("octstrASN", function () {
-  this.octstr();
-});
+// const octstrASN = asn1.define("octstrASN", function () {
+//   this.octstr();
+// });
 
-const EDPrivateKey8ASN = asn1.define("EDPrivateKey8ASN", function () {
-  this.seq().obj(
-    this.key("version").int(),
-    this.key("privateKeyAlgorithm").seq().obj(this.key("curve").objid()),
-    this.key("privateKey").use(octstrASN),
-    this.key("attributes").explicit(0).bitstr().optional()
-  );
-});
+// const EDPrivateKey8ASN = asn1.define("EDPrivateKey8ASN", function () {
+//   this.seq().obj(
+//     this.key("version").int(),
+//     this.key("privateKeyAlgorithm").seq().obj(this.key("curve").objid()),
+//     this.key("privateKey").use(octstrASN),
+//     this.key("attributes").explicit(0).bitstr().optional()
+//   );
+// });
 
-const ECPrivateKeyASN = asn1.define("ECPrivateKey", function () {
-  this.seq().obj(
-    this.key("version").int(),
-    this.key("privateKey").octstr(),
-    this.key("parameters").explicit(0).objid().optional(),
-    this.key("publicKey").explicit(1).bitstr().optional()
-  );
-});
+// const ECPrivateKeyASN = asn1.define("ECPrivateKey", function () {
+//   this.seq().obj(
+//     this.key("version").int(),
+//     this.key("privateKey").octstr(),
+//     this.key("parameters").explicit(0).objid().optional(),
+//     this.key("publicKey").explicit(1).bitstr().optional()
+//   );
+// });
 
-const ECPrivateKey8ASN = asn1.define("ECPrivateKey", function () {
-  this.seq().obj(
-    this.key("version").int(),
-    this.key("privateKeyAlgorithm").seq().obj(this.key("ecPublicKey").objid(), this.key("curve").objid()),
-    this.key("privateKey").octstr().contains(ECPrivateKeyASN),
-    this.key("attributes").explicit(0).bitstr().optional()
-  );
-});
+// const ECPrivateKey8ASN = asn1.define("ECPrivateKey", function () {
+//   this.seq().obj(
+//     this.key("version").int(),
+//     this.key("privateKeyAlgorithm").seq().obj(this.key("ecPublicKey").objid(), this.key("curve").objid()),
+//     this.key("privateKey").octstr().contains(ECPrivateKeyASN),
+//     this.key("attributes").explicit(0).bitstr().optional()
+//   );
+// });
 
 const ECSubjectPublicKeyInfoASN = asn1.define("ECSubjectPublicKeyInfo", function () {
   this.seq().obj(
@@ -50,27 +50,27 @@ interface CurveOptions {
   publicPEMOptions: { label: string };
 }
 
-interface EDPrivateKeyPKCS8 {
-  version;
-  privateKey: Buffer;
-  privateKeyAlgorithm: { curve: number[] };
-}
+// interface EDPrivateKeyPKCS8 {
+//   version;
+//   privateKey: Buffer;
+//   privateKeyAlgorithm: { curve: number[] };
+// }
 
-interface PrivateKeyPKCS1 {
-  version;
-  privateKey: Buffer;
-  parameters: number[];
-  publicKey?: {
-    unused: number;
-    data: Buffer;
-  };
-}
+// interface PrivateKeyPKCS1 {
+//   version;
+//   privateKey: Buffer;
+//   parameters: number[];
+//   publicKey?: {
+//     unused: number;
+//     data: Buffer;
+//   };
+// }
 
-interface ECPrivateKeyPKCS8 {
-  version;
-  privateKey: PrivateKeyPKCS1;
-  privateKeyAlgorithm: { ecPublicKey: number[]; curve: number[] };
-}
+// interface ECPrivateKeyPKCS8 {
+//   version;
+//   privateKey: PrivateKeyPKCS1;
+//   privateKeyAlgorithm: { ecPublicKey: number[]; curve: number[] };
+// }
 
 const curves: { [index: string]: CurveOptions } = {
   secp256k1: {
@@ -98,40 +98,40 @@ export default class KeyEncoder {
     this.algName = algName;
   }
 
-  edPrivateKeyObject(rawPrivateKey: string) {
-    const privateKeyObject: EDPrivateKeyPKCS8 = {
-      version: new BN(0),
-      privateKey: octstrASN.encode(Buffer.from(rawPrivateKey, "hex"), "der"),
-      privateKeyAlgorithm: {
-        curve: this.options.curveParameters
-      }
-    };
-    return privateKeyObject;
-  }
+  // edPrivateKeyObject(rawPrivateKey: string) {
+  //   const privateKeyObject: EDPrivateKeyPKCS8 = {
+  //     version: new BN(0),
+  //     privateKey: octstrASN.encode(Buffer.from(rawPrivateKey, "hex"), "der"),
+  //     privateKeyAlgorithm: {
+  //       curve: this.options.curveParameters
+  //     }
+  //   };
+  //   return privateKeyObject;
+  // }
 
-  ecPrivateKeyObject(rawPrivateKey: string, rawPublicKey: string) {
-    const privateKeyObject: ECPrivateKeyPKCS8 = {
-      version: new BN(0),
-      privateKey: {
-        version: new BN(1),
-        privateKey: Buffer.from(rawPrivateKey, "hex"),
-        parameters: this.options.curveParameters
-      },
-      privateKeyAlgorithm: {
-        ecPublicKey: this.algID,
-        curve: this.options.curveParameters
-      }
-    };
+  // ecPrivateKeyObject(rawPrivateKey: string, rawPublicKey: string) {
+  //   const privateKeyObject: ECPrivateKeyPKCS8 = {
+  //     version: new BN(0),
+  //     privateKey: {
+  //       version: new BN(1),
+  //       privateKey: Buffer.from(rawPrivateKey, "hex"),
+  //       parameters: this.options.curveParameters
+  //     },
+  //     privateKeyAlgorithm: {
+  //       ecPublicKey: this.algID,
+  //       curve: this.options.curveParameters
+  //     }
+  //   };
 
-    if (rawPublicKey) {
-      privateKeyObject.privateKey.publicKey = {
-        unused: 0,
-        data: Buffer.from(rawPublicKey, "hex")
-      };
-    }
+  //   if (rawPublicKey) {
+  //     privateKeyObject.privateKey.publicKey = {
+  //       unused: 0,
+  //       data: Buffer.from(rawPublicKey, "hex")
+  //     };
+  //   }
 
-    return privateKeyObject;
-  }
+  //   return privateKeyObject;
+  // }
 
   ecPublicKeyObject(rawPublicKey: string) {
     return {
@@ -157,30 +157,30 @@ export default class KeyEncoder {
     };
   }
 
-  encodePrivate(privateKey: string) {
-    let publicKey: string = "";
-    if (this.algName == "secp256k1") {
-      const ec = new EC("secp256k1");
-      const keypair = ec.keyFromPrivate(privateKey);
-      publicKey = keypair.getPublic("hex");
-    }
-    const privateKeyObject =
-      this.algName == "secp256k1"
-        ? this.ecPrivateKeyObject(privateKey, publicKey)
-        : this.edPrivateKeyObject(privateKey);
+  // encodePrivate(privateKey: string) {
+  //   let publicKey: string = "";
+  //   if (this.algName == "secp256k1") {
+  //     const ec = new EC("secp256k1");
+  //     const keypair = ec.keyFromPrivate(privateKey);
+  //     publicKey = keypair.getPublic("hex");
+  //   }
+  //   const privateKeyObject =
+  //     this.algName == "secp256k1"
+  //       ? this.ecPrivateKeyObject(privateKey, publicKey)
+  //       : this.edPrivateKeyObject(privateKey);
 
-    if (this.algName == "secp256k1") {
-      return ECPrivateKey8ASN.encode(privateKeyObject, "pem", {
-        ...this.options.privatePEMOptions,
-        label: "PRIVATE KEY"
-      });
-    } else {
-      return EDPrivateKey8ASN.encode(privateKeyObject, "pem", {
-        ...this.options.privatePEMOptions,
-        label: "PRIVATE KEY"
-      });
-    }
-  }
+  //   if (this.algName == "secp256k1") {
+  //     return ECPrivateKey8ASN.encode(privateKeyObject, "pem", {
+  //       ...this.options.privatePEMOptions,
+  //       label: "PRIVATE KEY"
+  //     });
+  //   } else {
+  //     return EDPrivateKey8ASN.encode(privateKeyObject, "pem", {
+  //       ...this.options.privatePEMOptions,
+  //       label: "PRIVATE KEY"
+  //     });
+  //   }
+  // }
 
   encodePublic(publicKey: string): string {
     /* Parse the incoming public key and convert it to a public key object */

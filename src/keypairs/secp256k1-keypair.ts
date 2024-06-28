@@ -37,10 +37,6 @@ export default class Secp256k1KeyPair extends KeyPair {
     return this.keyEncoder.encodePublic(this.publicKey);
   }
 
-  public getPrivatePem(): string | Buffer {
-    return this.keyEncoder.encodePrivate(this.privateKey);
-  }
-
   public verify(token: string, format = "der"): boolean {
     if (format === "der") {
       try {
