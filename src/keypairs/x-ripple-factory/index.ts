@@ -1,4 +1,4 @@
-import { Factory as AddressCodecFactory } from "@swtc/address-codec";
+import { Factory as AddressCodecFactory, Alphabet } from "./address-codec";
 import { IKeyPair } from "../../type";
 import { derivePrivateKey } from "./utils";
 import { Point } from "@noble/secp256k1";
@@ -13,8 +13,8 @@ const hash = (message) => {
 const SECP256K1_PREFIX = "00";
 const ED25519_PREFIX = "ED";
 
-const Factory = (chain) => {
-  const addressCodec = AddressCodecFactory(chain);
+const Factory = (alphabet) => {
+  const addressCodec = AddressCodecFactory(alphabet);
   const secp256k1 = {
     deriveKeypair: (entropy, options?): IKeyPair => {
       const derived = derivePrivateKey(entropy, options);
@@ -78,5 +78,5 @@ const Factory = (chain) => {
   };
 };
 
-export const JingtumKeyPair = Factory("jingtum");
-export const RippleKeyPair = Factory("ripple");
+export const JingtumKeyPair = Factory(Alphabet.Jingtum);
+export const RippleKeyPair = Factory(Alphabet.Ripple);
