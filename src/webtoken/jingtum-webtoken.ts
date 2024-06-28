@@ -5,8 +5,8 @@ import { WebToken } from "./webtoken";
 import { JingtumKeyPair } from "../keypairs/x-ripple-factory";
 
 export class JingtumWebToken extends WebToken {
-  constructor(priv: string) {
-    const { privateKey, publicKey } = JingtumKeyPair.deriveKeyPair(priv);
+  constructor(priv: string, algorithm?: string) {
+    const { privateKey, publicKey } = JingtumKeyPair.deriveKeyPair(priv, algorithm);
     const flag = privateKey.substring(0, 2);
     let keypair: KeyPair;
     let alg: Alg;
