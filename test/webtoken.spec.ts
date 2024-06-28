@@ -5,7 +5,8 @@ describe("WebToken", () => {
     it("should sign and verify when is secp256k1", () => {
       const seeds = [
         "sajoigynKobrB8U59g1puxu8GM7Hg",
-        "00469cfdd66844f8268eddf3123f5c0e05af24166ce083225f3306e5a10d630dc1"
+        "00469cfdd66844f8268eddf3123f5c0e05af24166ce083225f3306e5a10d630dc1",
+        "469cfdd66844f8268eddf3123f5c0e05af24166ce083225f3306e5a10d630dc1"
       ];
       for (const seed of seeds) {
         const webToken = new JingtumWebToken(seed);
