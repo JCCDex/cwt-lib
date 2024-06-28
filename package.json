@@ -25,10 +25,7 @@
   "author": "JCCDex",
   "license": "MIT",
   "resolutions": {
-    "@noble/secp256k1": "^1.7.1",
-    "readable-stream": "^3.6.2",
-    "bn.js": "^5.2.0",
-    "asn1.js": "^5.4.1"
+    "@noble/secp256k1": "^1.7.1"
   },
   "devDependencies": {
     "@babel/core": "^7.24.6",
@@ -73,6 +70,7 @@
   "dependencies": {
     "@noble/curves": "^1.4.0",
     "@noble/secp256k1": "^1.7.1",
+    "asn1.js": "^5.4.1",
     "base-x": "^5.0.0",
     "base64-js": "^1.5.1",
     "ecdsa-sig-formatter": "^1.0.11",

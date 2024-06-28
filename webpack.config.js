@@ -15,6 +15,9 @@ const config = {
   target: "web",
   resolve: {
     extensions: [".js", ".ts"],
+    alias: {
+      "bn.js": path.resolve(__dirname, "src/bigint")
+    },
     fallback: {
       tls: false,
       net: false,
