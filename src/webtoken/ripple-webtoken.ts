@@ -1,13 +1,12 @@
-import { Factory } from "@swtc/keypairs";
 import { Alg, Chain, ISignData, PrivateKeyFlag } from "../type";
 import { KeyPair, Secp256k1KeyPair, Ed25519KeyPair } from "../keypairs";
 import { Point } from "@noble/secp256k1";
 import { WebToken } from "./webtoken";
-const wallet = Factory(Chain.Ripple);
+import { RippleKeyPair } from "../keypairs/x-ripple-factory";
 
 export class RippleWebToken extends WebToken {
   constructor(priv: string) {
-    const { privateKey, publicKey } = wallet.deriveKeyPair(priv);
+    const { privateKey, publicKey } = RippleKeyPair.deriveKeyPair(priv);
     const flag = privateKey.substring(0, 2);
     let keypair: KeyPair;
     let alg: Alg;

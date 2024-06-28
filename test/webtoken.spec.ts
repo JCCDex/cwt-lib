@@ -3,29 +3,41 @@ import { EthereumWebToken, BitcoinWebToken, JingtumWebToken, RippleWebToken } fr
 describe("WebToken", () => {
   describe("JingtumWebToken", () => {
     it("should sign and verify when is secp256k1", () => {
-      const webToken = new JingtumWebToken("sajoigynKobrB8U59g1puxu8GM7Hg");
-      const token = webToken.sign({
-        usr: "jingtum_secp256k1",
-        time: 123456
-      });
-      expect(token).toEqual(
-        "eyJhbGciOiJzZWNwMjU2azEiLCJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1GWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RRZ0FFTVRxOXVhdENOQVhXSFV2U2tPYm0wOTd0cDFJVVAyZVJcbjFyKzU4T3ljNHoyeTNaSFBobFN3K01JUTBHczRkSVZDcHFiMmJjcE9aTkpvUEY5TzYxSEJiQT09XG4tLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0iXSwidHlwZSI6IkNXVCIsImNoYWluIjoiamluZ3R1bSJ9.eyJ1c3IiOiJqaW5ndHVtX3NlY3AyNTZrMSIsInRpbWUiOjEyMzQ1Nn0.MEUCIH546Iz3wqdTgTLHJg3czMbQqLVJHj9iddqXPIr6MnG9AiEAkvKelTLl-ZWvCNJ9O8rWHhksuggz_jgg8wEM44mf9xk"
-      );
-      const result = webToken.verify(token);
-      expect(result).toEqual(true);
+      const seeds = [
+        "sajoigynKobrB8U59g1puxu8GM7Hg",
+        "00469cfdd66844f8268eddf3123f5c0e05af24166ce083225f3306e5a10d630dc1"
+      ];
+      for (const seed of seeds) {
+        const webToken = new JingtumWebToken(seed);
+        const token = webToken.sign({
+          usr: "jingtum_secp256k1",
+          time: 123456
+        });
+        expect(token).toEqual(
+          "eyJhbGciOiJzZWNwMjU2azEiLCJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1GWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RRZ0FFTVRxOXVhdENOQVhXSFV2U2tPYm0wOTd0cDFJVVAyZVJcbjFyKzU4T3ljNHoyeTNaSFBobFN3K01JUTBHczRkSVZDcHFiMmJjcE9aTkpvUEY5TzYxSEJiQT09XG4tLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0iXSwidHlwZSI6IkNXVCIsImNoYWluIjoiamluZ3R1bSJ9.eyJ1c3IiOiJqaW5ndHVtX3NlY3AyNTZrMSIsInRpbWUiOjEyMzQ1Nn0.MEUCIH546Iz3wqdTgTLHJg3czMbQqLVJHj9iddqXPIr6MnG9AiEAkvKelTLl-ZWvCNJ9O8rWHhksuggz_jgg8wEM44mf9xk"
+        );
+        const result = webToken.verify(token);
+        expect(result).toEqual(true);
+      }
     });
 
     it("should sign and verify when is ed25519", () => {
-      const webToken = new JingtumWebToken("sEdVrj9hBjNTPGnm4qN4iVXSQv7KMzB");
-      const token = webToken.sign({
-        usr: "jingtum_ed25519",
-        time: 123456
-      });
-      expect(token).toEqual(
-        "eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1Db3dCUVlESzJWd0F5RUFPREVoam8rdzlDN2JmaUZueUl1UnE1RDQ5VjBjZ1hxUE9hVllWclFDMTVzPVxuLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tXG4iXSwidHlwZSI6IkNXVCIsImNoYWluIjoiamluZ3R1bSIsImFsZyI6ImVkMjU1MTkifQ.eyJ1c3IiOiJqaW5ndHVtX2VkMjU1MTkiLCJ0aW1lIjoxMjM0NTZ9.LWbHcA6KzFlhVeBGGo49R5kkQm4MvszKhNUBvH-mRo8YADqx9uBPdByUPYihtNBtQOtzFj4H-jQReMfWggRTCw"
-      );
-      const result = webToken.verify(token);
-      expect(result).toEqual(true);
+      const seeds = [
+        "sEdVrj9hBjNTPGnm4qN4iVXSQv7KMzB",
+        "ED8158dad1de9d8e5ea0e71f63460fdee008f98ec0e68e2390b9b76d34340d87f0"
+      ];
+      for (const seed of seeds) {
+        const webToken = new JingtumWebToken(seed);
+        const token = webToken.sign({
+          usr: "jingtum_ed25519",
+          time: 123456
+        });
+        expect(token).toEqual(
+          "eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1Db3dCUVlESzJWd0F5RUFPREVoam8rdzlDN2JmaUZueUl1UnE1RDQ5VjBjZ1hxUE9hVllWclFDMTVzPVxuLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tXG4iXSwidHlwZSI6IkNXVCIsImNoYWluIjoiamluZ3R1bSIsImFsZyI6ImVkMjU1MTkifQ.eyJ1c3IiOiJqaW5ndHVtX2VkMjU1MTkiLCJ0aW1lIjoxMjM0NTZ9.LWbHcA6KzFlhVeBGGo49R5kkQm4MvszKhNUBvH-mRo8YADqx9uBPdByUPYihtNBtQOtzFj4H-jQReMfWggRTCw"
+        );
+        const result = webToken.verify(token);
+        expect(result).toEqual(true);
+      }
     });
   });
 

@@ -15,9 +15,6 @@ const config = {
   target: "web",
   resolve: {
     extensions: [".js", ".ts"],
-    alias: {
-      "@swtc/sm.js": false
-    },
     fallback: {
       tls: false,
       net: false,

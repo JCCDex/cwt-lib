@@ -2,15 +2,13 @@ import KeyPair from "./keypair";
 import { escape, encode, unescape } from "jsontokens/lib/base64Url.js";
 import { IKeyPair } from "../type";
 import KeyEncoder from "../key-encoder";
-import { eddsa as EdDSA } from "elliptic";
+import { ed25519 } from "@noble/curves/ed25519";
 
 export default class Ed25519KeyPair extends KeyPair {
-  private ED: EdDSA;
   private keyEncoder: KeyEncoder;
 
   constructor(keypair: IKeyPair) {
     super(keypair);
-    this.ED = EdDSA("ed25519");
     this.keyEncoder = new KeyEncoder("ed25519");
   }
 
@@ -18,7 +16,7 @@ export default class Ed25519KeyPair extends KeyPair {
     const { header, payload } = data;
     const signHeader = encode(JSON.stringify(header));
     const signPayload = encode(JSON.stringify(payload));
-    const signatureBytes = this.ED.sign(Buffer.from(signHeader + "." + signPayload), this.privateKey).toBytes();
+    const signatureBytes = ed25519.sign(Buffer.from(signHeader + "." + signPayload), this.privateKey);
     return signHeader + "." + signPayload + "." + escape(Buffer.from(signatureBytes).toString("base64"));
   }
 
@@ -29,9 +27,9 @@ export default class Ed25519KeyPair extends KeyPair {
   public verify(token: string): boolean {
     const [header, payload, signature] = token.split(".");
     const signData = header + "." + payload;
-    return this.ED.verify(
-      Buffer.from(signData),
+    return ed25519.verify(
       Buffer.from(unescape(signature), "base64").toString("hex"),
+      Buffer.from(signData),
       this.publicKey
     );
   }

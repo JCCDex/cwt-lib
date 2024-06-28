@@ -1,13 +1,12 @@
-import { Factory } from "@swtc/keypairs";
 import { Alg, Chain, ISignData, PrivateKeyFlag } from "../type";
 import { KeyPair, Secp256k1KeyPair, Ed25519KeyPair } from "../keypairs";
 import { Point } from "@noble/secp256k1";
 import { WebToken } from "./webtoken";
-const wallet = Factory(Chain.Jingtum);
+import { JingtumKeyPair } from "../keypairs/x-ripple-factory";
 
 export class JingtumWebToken extends WebToken {
   constructor(priv: string) {
-    const { privateKey, publicKey } = wallet.deriveKeyPair(priv);
+    const { privateKey, publicKey } = JingtumKeyPair.deriveKeyPair(priv);
     const flag = privateKey.substring(0, 2);
     let keypair: KeyPair;
     let alg: Alg;
