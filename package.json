@@ -13,7 +13,7 @@
   "scripts": {
     "prepare": "husky install",
     "test": "jest --coverage",
-    "test:browser": "npm run compile && karma start karma.conf.js",
+    "test:browser": "karma start karma.conf.js",
     "lint": "npx eslint",
     "compile": "tsc",
     "prepublishOnly": "npm run compile",
