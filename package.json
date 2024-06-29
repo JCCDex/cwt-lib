@@ -20,7 +20,8 @@
     "pretty": "pretty-quick --staged",
     "build": "webpack",
     "testnet": "npx ts-node test/testnet.spec.ts",
-    "analyzer": "cross-env REPORT=true webpack"
+    "analyzer": "cross-env REPORT=true webpack",
+    "deploy": "./publish.sh"
   },
   "author": "JCCDex",
   "license": "MIT",

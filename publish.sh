@@ -14,6 +14,7 @@ if test "$username" = "jccdex"; then
         rm -r lib
     fi
     npm run compile
+    npm run build
     npm publish --access public
 else
     echo "please login with jccdex account"
