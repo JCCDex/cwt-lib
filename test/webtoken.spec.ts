@@ -1,6 +1,6 @@
 import * as chai from "chai";
 const expect = chai.expect;
-import { EthereumWebToken, BitcoinWebToken, JingtumWebToken, RippleWebToken } from "../src";
+import { EthereumWebToken, BitcoinWebToken, JingtumWebToken, RippleWebToken, chainWebTokenSign } from "../src";
 
 describe("WebToken", () => {
   describe("JingtumWebToken", () => {
@@ -16,6 +16,8 @@ describe("WebToken", () => {
           usr: "jingtum_secp256k1",
           time: 123456
         });
+        const quickToken = chainWebTokenSign("jingtum", seed[0], 'jingtum_secp256k1', 123456);
+        expect(token).to.equal(quickToken);
         expect(token).to.equal(
           "eyJhbGciOiJzZWNwMjU2azEiLCJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1GWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RRZ0FFTVRxOXVhdENOQVhXSFV2U2tPYm0wOTd0cDFJVVAyZVJcbjFyKzU4T3ljNHoyeTNaSFBobFN3K01JUTBHczRkSVZDcHFiMmJjcE9aTkpvUEY5TzYxSEJiQT09XG4tLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0iXSwidHlwZSI6IkNXVCIsImNoYWluIjoiamluZ3R1bSJ9.eyJ1c3IiOiJqaW5ndHVtX3NlY3AyNTZrMSIsInRpbWUiOjEyMzQ1Nn0.MEUCIH546Iz3wqdTgTLHJg3czMbQqLVJHj9iddqXPIr6MnG9AiEAkvKelTLl-ZWvCNJ9O8rWHhksuggz_jgg8wEM44mf9xk"
         );
@@ -36,6 +38,8 @@ describe("WebToken", () => {
           usr: "jingtum_ed25519",
           time: 123456
         });
+        const quickToken = chainWebTokenSign("jingtum", seed[0], 'jingtum_ed25519', 123456, seed[1]);
+        expect(token).to.equal(quickToken);
         expect(token).to.equal(
           "eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1Db3dCUVlESzJWd0F5RUFPREVoam8rdzlDN2JmaUZueUl1UnE1RDQ5VjBjZ1hxUE9hVllWclFDMTVzPVxuLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tXG4iXSwidHlwZSI6IkNXVCIsImNoYWluIjoiamluZ3R1bSIsImFsZyI6ImVkMjU1MTkifQ.eyJ1c3IiOiJqaW5ndHVtX2VkMjU1MTkiLCJ0aW1lIjoxMjM0NTZ9.LWbHcA6KzFlhVeBGGo49R5kkQm4MvszKhNUBvH-mRo8YADqx9uBPdByUPYihtNBtQOtzFj4H-jQReMfWggRTCw"
         );
@@ -52,6 +56,8 @@ describe("WebToken", () => {
         usr: "ripple_secp256k1",
         time: 123456
       });
+      const quickToken = chainWebTokenSign("ripple", "snhfP8ByWeWKWYNWBnr2avbxGCZwt", 'ripple_secp256k1', 123456);
+      expect(token).to.equal(quickToken);
       expect(token).to.equal(
         "eyJhbGciOiJzZWNwMjU2azEiLCJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1GWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RRZ0FFRVBqa0hyNzhkL0hLWStydEJKeUIzUmJ0Z2kzRkFDbEFcbmVLSkFjcmNrdTlQem4yZ2JYdWtxZFBDY1piNWE5WTd4MGNIUXlGNTdWZVZ3NHFST0dVWEZ5QT09XG4tLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0iXSwidHlwZSI6IkNXVCIsImNoYWluIjoicmlwcGxlIn0.eyJ1c3IiOiJyaXBwbGVfc2VjcDI1NmsxIiwidGltZSI6MTIzNDU2fQ.MEYCIQC3eDWgR4x1CloEpwXleU_78mSxeInkkitIoUqLXj5QsgIhAORpP_e3_EgJsN2SoGLlFVxPYvbpXxM0xstIa3H7uyZN"
       );
@@ -65,6 +71,8 @@ describe("WebToken", () => {
         usr: "ripple_ed25519",
         time: 123456
       });
+      const quickToken = chainWebTokenSign("ripple", "sEdTSMh6UwzwexTFEkyvXc5bxWzTs2n", 'ripple_ed25519', 123456);
+      expect(token).to.equal(quickToken);
       expect(token).to.equal(
         "eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1Db3dCUVlESzJWd0F5RUFZSkQ4T1NTdWpYd0hienhBZFFNYUcvZXJkQVRtYllndTVmZVdmRjhRdWJZPVxuLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tXG4iXSwidHlwZSI6IkNXVCIsImNoYWluIjoicmlwcGxlIiwiYWxnIjoiZWQyNTUxOSJ9.eyJ1c3IiOiJyaXBwbGVfZWQyNTUxOSIsInRpbWUiOjEyMzQ1Nn0.6OIV2UMf5XljJufU85SEBkQxXH_OoalViw4RLpDwa-wt9T7hUCT3FyEKDm_cB63YuyUVFrBxnxuuMzthBHUIDA"
       );
@@ -80,6 +88,8 @@ describe("WebToken", () => {
         usr: "zhye",
         time: 123456
       });
+      const quickToken = chainWebTokenSign("ethereum", "105d31c6d6b19fdac7e3873572f5e1cd787afe912344a4bf3984d94b0cbb8876", 'zhye', 123456);
+      expect(token).to.equal(quickToken);
       expect(token).to.equal(
         "eyJhbGciOiJzZWNwMjU2azEiLCJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1GWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RRZ0FFaWJpcmx6eEtnZ0EzNWp1TUNtSmRhbUNDZ0hhOE9ZSkdcbk9HMFlIRzYxMUk5UDdrTEFBYlNqNGg0SFJHeUNSZnA0Ky9ndkxtcGU1Uis3UFV2bDNHU0NvZz09XG4tLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0iXSwidHlwZSI6IkNXVCIsImNoYWluIjoiZXRoZXJldW0ifQ.eyJ1c3IiOiJ6aHllIiwidGltZSI6MTIzNDU2fQ.MEUCIE3axEM6gUxa241Zh34qxRgdK6xvb0XIfhYb3iDdhF6eAiEApW_VSSQD0SywwWkgTir9zJSqi1gyV9jlsSrpruuHxd8"
       );
@@ -95,6 +105,8 @@ describe("WebToken", () => {
         usr: "bitcoin_secp256k1",
         time: 123456
       });
+      const quickToken = chainWebTokenSign("bitcoin", "b9d70b775092fc32eea9868c719eda3dbc8e11fae28be95e0a5bd6bf432d3732", 'bitcoin_secp256k1', 123456);
+      expect(token).to.equal(quickToken);
       expect(token).to.equal(
         "eyJhbGciOiJzZWNwMjU2azEiLCJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1GWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RRZ0FFS1duUnc4K3V5SXhYZkxEbXFKbGR3WUlzRlpMTWcrdG5cbmdZd3NxZWZpMGVBNjZRdUJuMTNVcG96cHJrdGIvb2pCNlBKYm1YRi8ydUJuK1d6SlUvVVpRQT09XG4tLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0iXSwidHlwZSI6IkNXVCIsImNoYWluIjoiYml0Y29pbiJ9.eyJ1c3IiOiJiaXRjb2luX3NlY3AyNTZrMSIsInRpbWUiOjEyMzQ1Nn0.MEUCIQDOzoyh20XQIF5fejukzAliBOvBXgxUYCzROEMxapFaDQIgZ5ou9whhrTSCZeuoa8UijA5fMh-tjZx4QAteHXzx5Jg"
       );
