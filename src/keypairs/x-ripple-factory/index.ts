@@ -21,12 +21,12 @@ const Factory = (alphabet) => {
       const privateKey = bytesToHex(numberToBytesBE(derived, 32));
       return {
         privateKey: SECP256K1_PREFIX + privateKey,
-        publicKey: Point.fromPrivateKey(privateKey).toHex(true)
+        publicKey: Point.fromPrivateKey(privateKey).toHex()
       };
     },
     deriveKeypairWithPrivateKey: (rawPrivateKey: string): IKeyPair => {
       const privateKey = rawPrivateKey.toUpperCase();
-      const publicKey = Point.fromPrivateKey(privateKey).toHex(true);
+      const publicKey = Point.fromPrivateKey(privateKey).toHex();
       return { privateKey: SECP256K1_PREFIX + privateKey, publicKey };
     }
   };

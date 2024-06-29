@@ -3,25 +3,28 @@
 ## Usage
 
 ```javascript
-const RippleWebToken = require('@jccdex/cwt-lib').ethWallet
+const RippleWebToken = require("@jccdex/cwt-lib").RippleWebToken;
 // import { RippleWebToken } from '@jccdex/cwt-lib'
 ```
 
 ### constructor
 
-**syntax:** new RippleWebToken(priv: string, algorithm?: string)
+**syntax:** new RippleWebToken(priv: string, alg?: string)
 
-**priv:** privateKey  
+**priv:** Private key
 
-**priv:** algorithm *Non-essential* If the private key you entered does not have an identifier, please do not ignore it and enter the corresponding algorithm.  
+**alg:** Algorithm _Non-essential_
+
+If the private key's length is 64 and algorithm is `ed25519`, alg is `ed25519`.
 
 ### sign
 
 **syntax:** new RippleWebToken(priv: string).sign({ usr: string, time?: string })
 
-**usr:** userName
+**usr:** User name
 
-**time:** timestamp `unit:s` *Non-essential* If you want to generate cwt for a specific time, please do not ignore it, otherwise cwt for the current time will be generated. 
+**time:** Timestamp `unit:s` _Non-essential_
+If you want to generate cwt for a specific time, please do not ignore it, otherwise is current time.
 
 ### verify
 
@@ -30,6 +33,7 @@ const RippleWebToken = require('@jccdex/cwt-lib').ethWallet
 **token:** chain web token
 
 ### Code Examples
+
 ```javascript
 const webToken = new RippleWebToken("snhfP8ByWeWKWYNWBnr2avbxGCZwt");
 const token = webToken.sign({
@@ -37,6 +41,4 @@ const token = webToken.sign({
   time: 123456
 });
 const result = webToken.verify(token);
-
 ```
-

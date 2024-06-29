@@ -23,3 +23,11 @@ export interface IKeyPair {
   privateKey: string;
   publicKey: string;
 }
+
+export interface IQuickSignData {
+  chain: string;
+  privateKey: string;
+  usr: string;
+  time?: number;
+  alg?: string;
+}

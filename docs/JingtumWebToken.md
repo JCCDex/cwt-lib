@@ -3,7 +3,7 @@
 ## Usage
 
 ```javascript
-const JingtumWebToken = require('@jccdex/cwt-lib').ethWallet
+const JingtumWebToken = require("@jccdex/cwt-lib").JingtumWebToken;
 // import { JingtumWebToken } from '@jccdex/cwt-lib'
 ```
 
@@ -11,17 +11,20 @@ const JingtumWebToken = require('@jccdex/cwt-lib').ethWallet
 
 **syntax:** new JingtumWebToken(priv: string, algorithm?: string)
 
-**priv:** privateKey  
+**priv:** Private key
 
-**priv:** algorithm *Non-essential* If the private key you entered does not have an identifier, please do not ignore it and enter the corresponding algorithm.  
+**alg:** Algorithm _Non-essential_
+
+If the private key's length is 64 and algorithm is `ed25519`, alg is `ed25519`.
 
 ### sign
 
 **syntax:** new JingtumWebToken(priv: string).sign({ usr: string, time?: string })
 
-**usr:** userName
+**usr:** User name
 
-**time:** timestamp `unit:s` *Non-essential* If you want to generate cwt for a specific time, please do not ignore it, otherwise cwt for the current time will be generated. 
+**time:** Timestamp `unit:s` _Non-essential_
+If you want to generate cwt for a specific time, please do not ignore it, otherwise is current time.
 
 ### verify
 
@@ -30,6 +33,7 @@ const JingtumWebToken = require('@jccdex/cwt-lib').ethWallet
 **token:** chain web token
 
 ### Code Examples
+
 ```javascript
 const webToken = new JingtumWebToken("sajoigynKobrB8U59g1puxu8GM7Hg");
 const token = webToken.sign({
@@ -37,6 +41,4 @@ const token = webToken.sign({
   time: 123456
 });
 const result = webToken.verify(token);
-
 ```
-
