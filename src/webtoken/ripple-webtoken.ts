@@ -1,6 +1,5 @@
 import { Alg, Chain, ISignData, PrivateKeyFlag } from "../type";
 import { KeyPair, Secp256k1KeyPair, Ed25519KeyPair } from "../keypairs";
-import { Point } from "@noble/secp256k1";
 import { WebToken } from "./webtoken";
 import { RippleKeyPair } from "../keypairs/x-ripple-factory";
 
@@ -17,10 +16,9 @@ export class RippleWebToken extends WebToken {
       });
       alg = Alg.Ed25519;
     } else {
-      const point = Point.fromPrivateKey(privateKey.substring(2));
       keypair = new Secp256k1KeyPair({
         privateKey: privateKey.substring(2),
-        publicKey: point.toHex()
+        publicKey
       });
       alg = Alg.Secp256k1;
     }

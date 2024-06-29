@@ -1,92 +1,96 @@
 # cwt-lib (chain-web-token)
 
 用于区块链身份认证的js库；  
-js library for blockchain identity authentication;  
+js library for blockchain identity authentication;
 
 使用区块链的私钥对数据结构（{header: ... , payload: ...}）进行签名，生成cwt;  
-Using the private key data structure of the blockchain ({header:... , payload: ... }) sign and generate cwt;  
+Using the private key data structure of the blockchain ({header:... , payload: ... }) sign and generate cwt;
 
 使用区块链的公钥对cwt进行验证，证明其身份；  
-Verify the cwt using the blockchain's public key to prove its identity;  
+Verify the cwt using the blockchain's public key to prove its identity;
 
-Synopsis
-=========
-`chain web token （缩写cwt)` 是有三部分组成 ` header.payload.Signature `,其中的 `Signature` 是对 ` header.payload `进行签名。  
-`chain web token (abbreviated cwt)` is composed of three parts` header.payload.Signature `, where ` Signature ` is the signature of `header.payload`.
+## Synopsis
 
-` cwt-lib ` 是基于 `jsontokens、crypto` 库进行扩展。  
-` cwt-lib ` is based on the ` jsontokens, crypto ` library extension.
+`chain web token （缩写cwt)` 是有三部分组成 `header.payload.Signature`,其中的 `Signature` 是对 `header.payload`进行签名。  
+`chain web token (abbreviated cwt)` is composed of three parts`header.payload.Signature`, where `Signature` is the signature of `header.payload`.
 
-目前支持`ethereum`、`ripple`、`bitcoin`、`jingtum`。  
-Currently support `ethereum`, `ripple`, `bitcoin`, `jingtum`.
+目前支持**ethereum**、**ripple**、**bitcoin**、**jingtum**。  
+Currently support **ethereum**, **ripple**, **bitcoin**, **jingtum**.
 
-Installation_&&_Import
-======================
-**Installation**
+## Install
 
 ```shell
-npm install @maincc/cwt-lib
+npm install @jccdex/cwt-lib
 ```
 
-**Import**
+## CDN
 
-```js
-import { ChainToken } from "@maincc/cwt-lib"
+`ChainWebToken` as a global variable. Size is 144k.
+
+```javascript
+<script src="https://unpkg.com/@jccdex/cwt-lib/dist/cwt-lib.min.js"></script>
 ```
 
-Quick_Sign（cwt生成）
-==========
-` quickSign(key: string, usr: string, chain: string) `  
+## Table of Contents
 
-**syntax:** *const cwt = ChainToken.quickSign(key, usr, chain)*  
+- [sign](#api)
 
-`key:` 用于签名的私钥或密钥；`usr:` 用于验证身份的用户名；  
+- [EthereumWebToken](https://github.com/JCCDex/cwt-lib/blob/master/docs/EthereumWebToken.md)
 
-`chain:` 支持的链类型；
+- [BitcoinWebToken](https://github.com/JCCDex/cwt-lib/blob/master/docs/BitcoinWebToken.md)
 
-#### CODE
-```js
-const cwt = ChainToken.quickSign('sh3BFjgUiiN3MQvj9toyTZty3RepE', 'jc_ripple', 'ripple');
+- [JingtumWebToken](https://github.com/JCCDex/cwt-lib/blob/master/docs/JingtumWebToken.md)
+
+- [RippleWebToken](https://github.com/JCCDex/cwt-lib/blob/master/docs/RippleWebToken.md)
+
+## API
+
+### sign
+
+```javascript
+import { sign } form "@jccdex/cwt-lib"
+
+const cwt = sign({
+    chain: "",
+    privateKey: "",
+    usr: "",
+    time: "",
+    alg: ""
+});
+
+// Result example:
+// eyJhbGciOiJzZWNwMjU2azEiLCJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1GWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RRZ0FFTVRxOXVhdENOQVhXSFV2U2tPYm0wOTd0cDFJVVAyZVJcbjFyKzU4T3ljNHoyeTNaSFBobFN3K01JUTBHczRkSVZDcHFiMmJjcE9aTkpvUEY5TzYxSEJiQT09XG4tLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0iXSwidHlwZSI6IkNXVCIsImNoYWluIjoiamluZ3R1bSJ9.eyJ1c3IiOiJqaW5ndHVtX3NlY3AyNTZrMSIsInRpbWUiOjEyMzQ1Nn0.MEUCIH546Iz3wqdTgTLHJg3czMbQqLVJHj9iddqXPIr6MnG9AiEAkvKelTLl-ZWvCNJ9O8rWHhksuggz_jgg8wEM44mf9xk
+
+// cwt decode:
+//   {
+//   header: {
+//     alg: 'secp256k1',
+//     x5c: [
+//       '-----BEGIN PUBLIC KEY-----\n' +
+//         'MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEMTq9uatCNAXWHUvSkObm097tp1IUP2eR\n' +
+//         '1r+58Oyc4z2y3ZHPhlSw+MIQ0Gs4dIVCpqb2bcpOZNJoPF9O61HBbA==\n' +
+//         '-----END PUBLIC KEY-----'
+//     ],// Public key in pem format
+//     type: 'CWT',
+//     chain: 'jingtum'
+//   },
+//   payload: { usr: '...usr...', time: Timestamp(unit:s) },
+//   signature: 'MEUCIH546Iz3wqdTgTLHJg3czMbQqLVJHj9iddqXPIr6MnG9AiEAkvKelTLl-ZWvCNJ9O8rWHhksuggz_jgg8wEM44mf9xk'
+// }
+
 ```
 
-生成的cwt可用于身份认证。  
-**注意**： header和payload在代码中已经自动生成，认证程序须根据生成的header和payload进行操作。
+#### arguments
 
-decode (解码cwt)
-======
-` decode(token: string) `
+**chain:** Support chain
 
-**syntax:** *const decode = ChainToken.decode(cwt)*  
+**privateKey:** Private key or secret
 
-`token:` 生成的cwt；
+**usr:** User name
 
-#### CODE
-```js
-const decode = ChainToken.decode(cwt)
+**time:** Timestamp `unit:s` _Non-essential_
+If you want to generate cwt for a specific time, please do not ignore it, otherwise is current time.
 
-// {
-//     header: {
-//       alg: 'secp256k1',  // 生成公私钥所使用的算法，根据chain和key自动生成。
-//       x5c: [
-//         '-----BEGIN PUBLIC KEY-----\n' +
-//           'MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEXfBy3Rhxd5ibR9Wl8a9UXP45H353cN6G\n' +
-//           'JRrKuU3klNkXSb4Rb4VT2M+5OYkwLWKLYq60BrfAs/wwbD3NiFlSeg==\n' +
-//           '-----END PUBLIC KEY-----'
-//       ],  // PEM格式的公钥，根据key（私钥或密钥）自动生成。
-//       type: 'CWT',  // cwt
-//       chain: 'ripple'  // 区块链类型
-//     },
-//     payload: {
-//       usr: 'jc_ripple', // usr=>在后端注册的用户名
-//       time: 1718270000  // time=>生成cwt的时间戳（单位：秒）
-//     }, 
-//     signature: 'MEUCIQD1BInytqKAMWACLLZf6hNyLW4GotcJBC18_uW_jPNVawIgDKH1iY-DyVTB845YQAz9X0QgN0cIb84sZnJSugeJM2M'
-//   }
-```
+**alg:** Algorithm _Non-essential_
 
-verify (认证cwt)
-=================
-如果想使用这个库进行认证，请查看 [CLASS_README](/CLASS_README)
-
-
-<br>
+If the private key is ripple or jingtum chain, length is 64 and algorithm is `ed25519`, alg is `ed25519`.
