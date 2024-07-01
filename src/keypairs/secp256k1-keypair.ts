@@ -15,36 +15,28 @@ export default class Secp256k1KeyPair extends KeyPair {
     this.tokenSigner = new TokenSigner("ES256k", this.privateKey);
   }
 
-  public sign(data, format: string): string {
-    const { header, payload } = data;
+  public sign(data): string {
     const customHeader = {
       typ: undefined,
       alg: undefined,
-      ...header
+      ...data.header
     };
 
-    const token = this.tokenSigner.sign(payload, false, customHeader);
-    if (format === "der") {
-      const [header, payload, signature] = token.split(".");
-      return header + "." + payload + "." + escape(fromByteArray(formatter.joseToDer(signature, "ES256")));
-    }
-    if (format === "jose") {
-      return token;
-    }
+    const token = this.tokenSigner.sign(data.payload, false, customHeader);
+    const [header, payload, signature] = token.split(".");
+    return header + "." + payload + "." + escape(fromByteArray(formatter.joseToDer(signature, "ES256")));
   }
 
   public getPublicPem(): string {
     return this.keyEncoder.encodePublic(this.publicKey);
   }
 
-  public verify(token: string, format = "der"): boolean {
-    if (format === "der") {
-      try {
-        const [header, payload, signature] = token.split(".");
-        token = header + "." + payload + "." + formatter.derToJose(signature, "ES256");
-      } catch (_) {
-        return false;
-      }
+  public verify(token: string): boolean {
+    try {
+      const [header, payload, signature] = token.split(".");
+      token = header + "." + payload + "." + formatter.derToJose(signature, "ES256");
+    } catch (_) {
+      return false;
     }
     return new TokenVerifier("ES256k", this.publicKey).verify(token);
   }

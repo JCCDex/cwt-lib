@@ -9,9 +9,9 @@ export default abstract class KeyPair {
     this.publicKey = keypair.publicKey;
   }
 
-  public abstract sign(data: Record<string, unknown>, format: string): string;
+  public abstract sign(data: Record<string, unknown>): string;
 
   public abstract getPublicPem(): string | Buffer;
 
-  public abstract verify(token: string, format: string): boolean;
+  public abstract verify(token: string): boolean;
 }

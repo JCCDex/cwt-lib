@@ -32,9 +32,9 @@ export class JingtumWebToken extends WebToken {
       usr,
       time: time || Math.floor(new Date().getTime() / 1000)
     });
-    return this.keypair.sign(data, "der");
+    return this.keypair.sign(data);
   }
-  public verify(token: string) {
-    return this.keypair.verify(token, "der");
+  public verify(token: string): boolean {
+    return this.keypair.verify(token);
   }
 }

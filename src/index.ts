@@ -5,7 +5,7 @@ import { WebToken } from "./webtoken/webtoken";
 import { RippleWebToken } from "./webtoken/ripple-webtoken";
 import { Chain, IQuickSignData } from "./type";
 
-const Map = {
+const WebTokenMap = {
   [Chain.Bitcoin]: BitcoinWebToken,
   [Chain.Ethereum]: EthereumWebToken,
   [Chain.Jingtum]: JingtumWebToken,
@@ -14,7 +14,7 @@ const Map = {
 
 const sign = (data: IQuickSignData): string => {
   const { chain, usr, privateKey, time, alg } = data;
-  const WebToken = Map[chain];
+  const WebToken = WebTokenMap[chain];
   if (!WebToken) {
     throw new Error("Unsupported chain");
   }
