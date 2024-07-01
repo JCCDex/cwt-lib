@@ -89,6 +89,7 @@ const cwt = sign({
 **usr:** User name
 
 **time:** Timestamp `unit:s` _Non-essential_
+
 If you want to generate cwt for a specific time, please do not ignore it, otherwise is current time.
 
 **alg:** Algorithm _Non-essential_
