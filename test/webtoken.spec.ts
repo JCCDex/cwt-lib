@@ -127,23 +127,30 @@ describe("WebToken", () => {
 
   describe("BitcoinWebToken", () => {
     it("should sign and verify when", () => {
-      const webToken = new BitcoinWebToken("b9d70b775092fc32eea9868c719eda3dbc8e11fae28be95e0a5bd6bf432d3732");
-      const token = webToken.sign({
-        usr: "bitcoin_secp256k1",
-        time: 123456
-      });
-      const quickToken = sign({
-        usr: "bitcoin_secp256k1",
-        privateKey: "b9d70b775092fc32eea9868c719eda3dbc8e11fae28be95e0a5bd6bf432d3732",
-        time: 123456,
-        chain: "bitcoin"
-      });
-      expect(token).to.equal(quickToken);
-      expect(token).to.equal(
-        "eyJhbGciOiJzZWNwMjU2azEiLCJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1GWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RRZ0FFS1duUnc4K3V5SXhYZkxEbXFKbGR3WUlzRlpMTWcrdG5cbmdZd3NxZWZpMGVBNjZRdUJuMTNVcG96cHJrdGIvb2pCNlBKYm1YRi8ydUJuK1d6SlUvVVpRQT09XG4tLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0iXSwidHlwZSI6IkNXVCIsImNoYWluIjoiYml0Y29pbiJ9.eyJ1c3IiOiJiaXRjb2luX3NlY3AyNTZrMSIsInRpbWUiOjEyMzQ1Nn0.MEUCIQDOzoyh20XQIF5fejukzAliBOvBXgxUYCzROEMxapFaDQIgZ5ou9whhrTSCZeuoa8UijA5fMh-tjZx4QAteHXzx5Jg"
-      );
-      const result = webToken.verify(token);
-      expect(result).to.equal(true);
+      const seeds = [
+        ["b9d70b775092fc32eea9868c719eda3dbc8e11fae28be95e0a5bd6bf432d3732"],
+        ["L3SxcKnrmqb52mLyNAecFw7mAsuFob4ooSxnK7g5fVxRWogphRxK"]
+      ];
+      for(const seed of seeds){
+        const webToken = new BitcoinWebToken(seed[0]);
+        const token = webToken.sign({
+          usr: "bitcoin_secp256k1",
+          time: 123456
+        });
+        const quickToken = sign({
+          usr: "bitcoin_secp256k1",
+          privateKey: seed[0],
+          time: 123456,
+          chain: "bitcoin"
+        });
+        expect(token).to.equal(quickToken);
+        expect(token).to.equal(
+          "eyJhbGciOiJzZWNwMjU2azEiLCJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1GWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RRZ0FFS1duUnc4K3V5SXhYZkxEbXFKbGR3WUlzRlpMTWcrdG5cbmdZd3NxZWZpMGVBNjZRdUJuMTNVcG96cHJrdGIvb2pCNlBKYm1YRi8ydUJuK1d6SlUvVVpRQT09XG4tLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0iXSwidHlwZSI6IkNXVCIsImNoYWluIjoiYml0Y29pbiJ9.eyJ1c3IiOiJiaXRjb2luX3NlY3AyNTZrMSIsInRpbWUiOjEyMzQ1Nn0.MEUCIQDOzoyh20XQIF5fejukzAliBOvBXgxUYCzROEMxapFaDQIgZ5ou9whhrTSCZeuoa8UijA5fMh-tjZx4QAteHXzx5Jg"
+        );
+        const result = webToken.verify(token);
+        expect(result).to.equal(true);
+      }
+
     });
   });
 });
