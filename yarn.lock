@@ -1593,6 +1593,7 @@ __metadata:
     webpack: ^5.89.0
     webpack-bundle-analyzer: ^4.10.1
     webpack-cli: ^5.1.4
+    wif: ^5.0.0
   languageName: unknown
   linkType: soft
 
@@ -1896,7 +1897,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@noble/hashes@npm:1.4.0, @noble/hashes@npm:^1.1.2":
+"@noble/hashes@npm:1.4.0, @noble/hashes@npm:^1.1.2, @noble/hashes@npm:^1.2.0":
   version: 1.4.0
   resolution: "@noble/hashes@npm:1.4.0"
   checksum: 8ba816ae26c90764b8c42493eea383716396096c5f7ba6bea559993194f49d80a73c081f315f4c367e51bd2d5891700bcdfa816b421d24ab45b41cb03e4f3342
@@ -3156,6 +3157,25 @@ __metadata:
   bin:
     browserslist: cli.js
   checksum: 06189e2d6666a203ce097cc0e713a40477d08420927b79af139211e5712f3cf676fdc4dd6af3aa493d47c09206a344b3420a8315577dbe88c58903132de9b0f5
+  languageName: node
+  linkType: hard
+
+"bs58@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "bs58@npm:6.0.0"
+  dependencies:
+    base-x: ^5.0.0
+  checksum: 820334f9513bba6195136dfc9dfbd1f5aded6c7864639f3ee7b63c2d9d6f9f2813b9949b1f6beb9c161237be2a461097444c2ff587c8c3b824fe18878fa22448
+  languageName: node
+  linkType: hard
+
+"bs58check@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "bs58check@npm:4.0.0"
+  dependencies:
+    "@noble/hashes": ^1.2.0
+    bs58: ^6.0.0
+  checksum: 416131b647563e9c7daf5d18222862b40dfd39110f8635e9e1d19805d624e96cc12ba03c8e6fdc1f9c0e364dd2918877fb8a02671caeef0de9beeb33c1fb0ed4
   languageName: node
   linkType: hard
 
@@ -8650,6 +8670,15 @@ __metadata:
   bin:
     node-which: bin/which.js
   checksum: f17e84c042592c21e23c8195108cff18c64050b9efb8459589116999ea9da6dd1509e6a1bac3aeebefd137be00fabbb61b5c2bc0aa0f8526f32b58ee2f545651
+  languageName: node
+  linkType: hard
+
+"wif@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "wif@npm:5.0.0"
+  dependencies:
+    bs58check: ^4.0.0
+  checksum: 3af0d4e9f1d1b35672b860470b6545f34f77b4a804e06ccae2f06f43c96a31fba859cf64889344eded621433eb609fc4c95aa28d62c02057372232b85231e414
   languageName: node
   linkType: hard
 

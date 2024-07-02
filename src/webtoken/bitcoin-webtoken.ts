@@ -2,9 +2,14 @@ import { Alg, Chain, ISignData } from "../type";
 import Secp256k1KeyPair from "../keypairs/secp256k1-keypair";
 import { WebToken } from "./webtoken";
 import { Point } from "@noble/secp256k1";
+import * as wif from "wif"
 
 export class BitcoinWebToken extends WebToken {
   constructor(priv: string) {
+    try {
+      const privOfWif = wif.decode(priv);
+      priv = Buffer.from(privOfWif.privateKey).toString('hex');
+    } catch (_) {}
     const point = Point.fromPrivateKey(Buffer.from(priv, "hex"));
     const keypair = new Secp256k1KeyPair({
       privateKey: priv,

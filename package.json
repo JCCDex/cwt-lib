@@ -74,7 +74,8 @@
     "base-x": "^5.0.0",
     "base64-js": "^1.5.1",
     "ecdsa-sig-formatter": "^1.0.11",
-    "jsontokens": "^4.0.1"
+    "jsontokens": "^4.0.1",
+    "wif": "^5.0.0"
   },
   "packageManager": "yarn@3.6.3",
   "files": [
