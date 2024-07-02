@@ -57,8 +57,8 @@ class Codec {
     }
     const versionLengthGuess = typeof versions[0] === "number" ? 1 : (versions[0] as number[]).length;
     const payloadLength = opts.expectedLength || withoutSum.length - versionLengthGuess;
-    const versionBytes = withoutSum.slice(0, -payloadLength);
-    const payload = withoutSum.slice(-payloadLength);
+    const versionBytes = withoutSum.subarray(0, -payloadLength);
+    const payload = withoutSum.subarray(-payloadLength);
 
     for (let i = 0; i < versions.length; i++) {
       const version: number[] = Array.isArray(versions[i]) ? (versions[i] as number[]) : [versions[i] as number];
@@ -82,7 +82,7 @@ class Codec {
     if (!this.verifyCheckSum(buffer)) {
       throw new Error("checksum_invalid");
     }
-    return buffer.slice(0, -4);
+    return buffer.subarray(0, -4);
   }
 
   public decodeRaw(base58string: string): Buffer {
@@ -90,8 +90,8 @@ class Codec {
   }
 
   public verifyCheckSum(bytes: Buffer): boolean {
-    const computed = this.sha256(this.sha256(bytes.slice(0, -4))).slice(0, 4);
-    const checksum = bytes.slice(-4);
+    const computed = this.sha256(this.sha256(bytes.subarray(0, -4))).subarray(0, 4);
+    const checksum = bytes.subarray(-4);
     return seqEqual(computed, checksum);
   }
 }
