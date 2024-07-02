@@ -25,7 +25,7 @@ npm install @jccdex/cwt-lib
 
 ## CDN
 
-`ChainWebToken` as a global variable. Size is 144k.
+`ChainWebToken` as a global variable. Size is 146k.
 
 ```javascript
 <script src="https://unpkg.com/@jccdex/cwt-lib/dist/cwt-lib.min.js"></script>
