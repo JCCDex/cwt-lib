@@ -25,7 +25,7 @@ describe("WebToken", () => {
         });
         expect(token).to.equal(quickToken);
         expect(token).to.equal(
-          "eyJhbGciOiJzZWNwMjU2azEiLCJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1EWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RJZ0FDTVRxOXVhdENOQVhXSFV2U2tPYm0wOTd0cDFJVVAyZVJcbjFyKzU4T3ljNHowPVxuLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tIl0sInR5cGUiOiJDV1QiLCJjaGFpbiI6Imppbmd0dW0ifQ.eyJ1c3IiOiJqaW5ndHVtX3NlY3AyNTZrMSIsInRpbWUiOjEyMzQ1Nn0.MEUCIQDbMtn50c45oiHl952B7XXJ4h8LXVrUj8GGFBBnFpsLhgIgAOYxTktJLlRhUs71N2SJQgw-G7WFuhy76LJi-DbFRPU"
+          "eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1EWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RJZ0FDTVRxOXVhdENOQVhXSFV2U2tPYm0wOTd0cDFJVVAyZVJcbjFyKzU4T3ljNHowPVxuLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tIl0sInR5cGUiOiJDV1QiLCJjaGFpbiI6Imppbmd0dW0iLCJhbGciOiJzZWNwMjU2azEifQ.eyJ1c3IiOiJqaW5ndHVtX3NlY3AyNTZrMSIsInRpbWUiOjEyMzQ1Nn0.MEYCIQC_UT0sz_AQN3kmgXgz4Y7OEhHMGhr2MhTgkrlu4WoAgQIhAMIiy7MmCd2MWn18Vbbw0OQndMBw4rqpLw5mBskCxAWz"
         );
         const result = webToken.verify(token);
         expect(result).to.equal(true);
@@ -76,7 +76,7 @@ describe("WebToken", () => {
       });
       expect(token).to.equal(quickToken);
       expect(token).to.equal(
-        "eyJhbGciOiJzZWNwMjU2azEiLCJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1EWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RJZ0FDRVBqa0hyNzhkL0hLWStydEJKeUIzUmJ0Z2kzRkFDbEFcbmVLSkFjcmNrdTlNPVxuLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tIl0sInR5cGUiOiJDV1QiLCJjaGFpbiI6InJpcHBsZSJ9.eyJ1c3IiOiJyaXBwbGVfc2VjcDI1NmsxIiwidGltZSI6MTIzNDU2fQ.MEYCIQDs-gnWpdShRaAQx0uVMyJPhm-nSRvk6JgW5f8gXpxjvQIhAIo3ryvGM6hZRT2SLkO-p4AXnq5_G7tWQJmlscN4Aawr"
+        "eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1EWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RJZ0FDRVBqa0hyNzhkL0hLWStydEJKeUIzUmJ0Z2kzRkFDbEFcbmVLSkFjcmNrdTlNPVxuLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tIl0sInR5cGUiOiJDV1QiLCJjaGFpbiI6InJpcHBsZSIsImFsZyI6InNlY3AyNTZrMSJ9.eyJ1c3IiOiJyaXBwbGVfc2VjcDI1NmsxIiwidGltZSI6MTIzNDU2fQ.MEUCIQC19BgTC8l7D7vdgVKNktQAM8oihqZtl8wlphDwWyHHDwIgdCNVFRHoh95-WiYusItsdYxluUlnykeIFs6DZgYFgIQ"
       );
       const result = webToken.verify(token);
       expect(result).to.equal(true);
@@ -118,7 +118,7 @@ describe("WebToken", () => {
       });
       expect(token).to.equal(quickToken);
       expect(token).to.equal(
-        "eyJhbGciOiJzZWNwMjU2azEiLCJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1GWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RRZ0FFaWJpcmx6eEtnZ0EzNWp1TUNtSmRhbUNDZ0hhOE9ZSkdcbk9HMFlIRzYxMUk5UDdrTEFBYlNqNGg0SFJHeUNSZnA0Ky9ndkxtcGU1Uis3UFV2bDNHU0NvZz09XG4tLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0iXSwidHlwZSI6IkNXVCIsImNoYWluIjoiZXRoZXJldW0ifQ.eyJ1c3IiOiJ6aHllIiwidGltZSI6MTIzNDU2fQ.MEUCIE3axEM6gUxa241Zh34qxRgdK6xvb0XIfhYb3iDdhF6eAiEApW_VSSQD0SywwWkgTir9zJSqi1gyV9jlsSrpruuHxd8"
+        "eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1GWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RRZ0FFaWJpcmx6eEtnZ0EzNWp1TUNtSmRhbUNDZ0hhOE9ZSkdcbk9HMFlIRzYxMUk5UDdrTEFBYlNqNGg0SFJHeUNSZnA0Ky9ndkxtcGU1Uis3UFV2bDNHU0NvZz09XG4tLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0iXSwidHlwZSI6IkNXVCIsImNoYWluIjoiZXRoZXJldW0iLCJhbGciOiJzZWNwMjU2azEifQ.eyJ1c3IiOiJ6aHllIiwidGltZSI6MTIzNDU2fQ.MEQCIGxzWnR5lNw05bF_vrODHmqf7UrPyBD3UyU4nG5_WuOqAiAbsJIx_VHJ5IoPkXMf1iKIQ7BlsSLJe-INY7FDVPLLFw"
       );
       const result = webToken.verify(token);
       expect(result).to.equal(true);
@@ -131,7 +131,7 @@ describe("WebToken", () => {
         ["b9d70b775092fc32eea9868c719eda3dbc8e11fae28be95e0a5bd6bf432d3732"],
         ["L3SxcKnrmqb52mLyNAecFw7mAsuFob4ooSxnK7g5fVxRWogphRxK"]
       ];
-      for(const seed of seeds){
+      for (const seed of seeds) {
         const webToken = new BitcoinWebToken(seed[0]);
         const token = webToken.sign({
           usr: "bitcoin_secp256k1",
@@ -145,12 +145,11 @@ describe("WebToken", () => {
         });
         expect(token).to.equal(quickToken);
         expect(token).to.equal(
-          "eyJhbGciOiJzZWNwMjU2azEiLCJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1GWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RRZ0FFS1duUnc4K3V5SXhYZkxEbXFKbGR3WUlzRlpMTWcrdG5cbmdZd3NxZWZpMGVBNjZRdUJuMTNVcG96cHJrdGIvb2pCNlBKYm1YRi8ydUJuK1d6SlUvVVpRQT09XG4tLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0iXSwidHlwZSI6IkNXVCIsImNoYWluIjoiYml0Y29pbiJ9.eyJ1c3IiOiJiaXRjb2luX3NlY3AyNTZrMSIsInRpbWUiOjEyMzQ1Nn0.MEUCIQDOzoyh20XQIF5fejukzAliBOvBXgxUYCzROEMxapFaDQIgZ5ou9whhrTSCZeuoa8UijA5fMh-tjZx4QAteHXzx5Jg"
+          "eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1GWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RRZ0FFS1duUnc4K3V5SXhYZkxEbXFKbGR3WUlzRlpMTWcrdG5cbmdZd3NxZWZpMGVBNjZRdUJuMTNVcG96cHJrdGIvb2pCNlBKYm1YRi8ydUJuK1d6SlUvVVpRQT09XG4tLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0iXSwidHlwZSI6IkNXVCIsImNoYWluIjoiYml0Y29pbiIsImFsZyI6InNlY3AyNTZrMSJ9.eyJ1c3IiOiJiaXRjb2luX3NlY3AyNTZrMSIsInRpbWUiOjEyMzQ1Nn0.MEYCIQDS0g2ttUlcUv4arqDrMUN8wYebjzrR-LmUAEWPmXAKNAIhAODygQhDV9WHL5ofbnDQmVCQk-nYrK1iv6Sgs46aRF5v"
         );
         const result = webToken.verify(token);
         expect(result).to.equal(true);
       }
-
     });
   });
 });

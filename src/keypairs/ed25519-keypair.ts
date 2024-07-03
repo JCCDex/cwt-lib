@@ -1,5 +1,5 @@
 import KeyPair from "./keypair";
-import { escape, encode, unescape } from "jsontokens/lib/base64Url.js";
+import { escape, encode, unescape } from "./base64-url";
 import { IKeyPair } from "../type";
 import KeyEncoder from "../key-encoder";
 import { ed25519 } from "@noble/curves/ed25519";

@@ -31,3 +31,5 @@ export interface IQuickSignData {
   time?: number;
   alg?: string;
 }
+
+export type Json = string | number | boolean | null | { [property: string]: Json } | Json[];

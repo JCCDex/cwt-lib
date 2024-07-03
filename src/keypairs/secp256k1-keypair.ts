@@ -1,30 +1,46 @@
+import { sha256 } from "@noble/hashes/sha256";
 import KeyPair from "./keypair";
 import KeyEncoder from "../key-encoder";
-import { fromByteArray } from "base64-js";
-import * as formatter from "ecdsa-sig-formatter";
-import { TokenSigner, TokenVerifier } from "jsontokens";
-import { escape } from "jsontokens/lib/base64Url";
-import { IKeyPair } from "../type";
+import { escape, encode } from "./base64-url";
+import * as secp from "@noble/secp256k1";
+import { hmac } from "@noble/hashes/hmac";
+
+import { IKeyPair, Json } from "../type";
+
+// required to use noble secp https://github.com/paulmillr/noble-secp256k1
+secp.utils.hmacSha256Sync = (key: Uint8Array, ...msgs: Uint8Array[]) => {
+  const h = hmac.create(sha256, key);
+  msgs.forEach((msg) => h.update(msg));
+  return h.digest();
+};
 
 export default class Secp256k1KeyPair extends KeyPair {
   private keyEncoder: KeyEncoder;
-  private tokenSigner: TokenSigner;
   constructor(keypair: IKeyPair) {
     super(keypair);
     this.keyEncoder = new KeyEncoder("secp256k1");
-    this.tokenSigner = new TokenSigner("ES256k", this.privateKey);
+  }
+
+  private createSigningInput(payload: Json, header: Json) {
+    const tokenParts = [];
+    const encodedHeader = encode(JSON.stringify(header));
+    tokenParts.push(encodedHeader);
+    const encodedPayload = encode(JSON.stringify(payload));
+    tokenParts.push(encodedPayload);
+    const signingInput = tokenParts.join(".");
+    return signingInput;
   }
 
   public sign(data): string {
-    const customHeader = {
-      typ: undefined,
-      alg: undefined,
-      ...data.header
-    };
-
-    const token = this.tokenSigner.sign(data.payload, false, customHeader);
-    const [header, payload, signature] = token.split(".");
-    return header + "." + payload + "." + escape(fromByteArray(formatter.joseToDer(signature, "ES256")));
+    const { header, payload } = data;
+    const signingInput = this.createSigningInput(payload, header);
+    const signingInputHash = sha256(signingInput);
+    const derSignature = secp.signSync(signingInputHash, Buffer.from(this.privateKey, "hex"), {
+      der: true,
+      canonical: false
+    });
+    const base64Signature = escape(Buffer.from(derSignature).toString("base64"));
+    return [signingInput, base64Signature].join(".");
   }
 
   public getPublicPem(): string {
@@ -32,12 +48,10 @@ export default class Secp256k1KeyPair extends KeyPair {
   }
 
   public verify(token: string): boolean {
-    try {
-      const [header, payload, signature] = token.split(".");
-      token = header + "." + payload + "." + formatter.derToJose(signature, "ES256");
-    } catch (_) {
-      return false;
-    }
-    return new TokenVerifier("ES256k", this.publicKey).verify(token);
+    const [header, payload, signature] = token.split(".");
+    const signingInputHash = sha256(header + "." + payload);
+    return secp.verify(Buffer.from(signature, "base64"), signingInputHash, this.publicKey, {
+      strict: false
+    });
   }
 }
