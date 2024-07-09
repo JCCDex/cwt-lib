@@ -1,4 +1,4 @@
-import { Alg, Chain, ISignData, PrivateKeyFlag } from "../type";
+import { Alg, Chain, PrivateKeyFlag } from "../type";
 import { KeyPair, Secp256k1KeyPair, Ed25519KeyPair } from "../keypairs";
 import { WebToken } from "./webtoken";
 import { RippleKeyPair } from "../keypairs/x-ripple-factory";
@@ -24,17 +24,5 @@ export class RippleWebToken extends WebToken {
     }
 
     super(keypair, Chain.Ripple, alg);
-  }
-
-  public sign(signData: ISignData): string {
-    const { usr, time } = signData;
-    const data = super.payload({
-      usr,
-      time: time || Math.floor(new Date().getTime() / 1000)
-    });
-    return this.keypair.sign(data);
-  }
-  public verify(token: string): boolean {
-    return this.keypair.verify(token);
   }
 }

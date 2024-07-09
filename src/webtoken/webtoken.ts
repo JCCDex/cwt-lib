@@ -1,4 +1,5 @@
 import { KeyPair } from "../keypairs";
+import { ISignData } from "../type";
 
 export abstract class WebToken {
   public chain: string;
@@ -11,9 +12,17 @@ export abstract class WebToken {
     this.keypair = keypair;
   }
 
-  public abstract sign(data): string;
-
-  public abstract verify(token: string): boolean;
+  public sign(signData: ISignData): string {
+    const { usr, time } = signData;
+    const data = this.payload({
+      usr,
+      time: time || Math.floor(new Date().getTime() / 1000)
+    });
+    return this.keypair.sign(data);
+  }
+  public verify(token: string): boolean {
+    return this.keypair.verify(token);
+  }
 
   public payload(payload) {
     const data = {
