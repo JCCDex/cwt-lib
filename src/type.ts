@@ -14,7 +14,7 @@ export enum PrivateKeyFlag {
   ED = "ED"
 }
 
-export interface ISignData {
+export interface IGenerateData {
   usr: string;
   time?: number;
 }

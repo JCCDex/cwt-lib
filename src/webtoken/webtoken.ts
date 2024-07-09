@@ -1,5 +1,5 @@
 import { KeyPair } from "../keypairs";
-import { ISignData } from "../type";
+import { IGenerateData } from "../type";
 
 export abstract class WebToken {
   public chain: string;
@@ -12,19 +12,14 @@ export abstract class WebToken {
     this.keypair = keypair;
   }
 
-  public sign(signData: ISignData): string {
-    const { usr, time } = signData;
-    const data = this.payload({
-      usr,
-      time: time || Math.floor(new Date().getTime() / 1000)
-    });
+  public sign(data: Record<string, unknown>): string {
     return this.keypair.sign(data);
   }
   public verify(token: string): boolean {
     return this.keypair.verify(token);
   }
 
-  public payload(payload) {
+  public generateData(signData: IGenerateData) {
     const data = {
       header: {
         x5c: [this.keypair.getPublicPem()],
@@ -32,7 +27,10 @@ export abstract class WebToken {
         chain: this.chain,
         alg: this.alg
       },
-      payload
+      payload: {
+        usr: signData.usr,
+        time: signData.time || Math.floor(new Date().getTime() / 1000)
+      }
     };
 
     return data;

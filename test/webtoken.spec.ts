@@ -12,10 +12,11 @@ describe("WebToken", () => {
       ];
       for (const seed of seeds) {
         const webToken = new JingtumWebToken(seed[0]);
-        const token = webToken.sign({
+        const signData = webToken.generateData({
           usr: "jingtum_secp256k1",
           time: 123456
         });
+        const token = webToken.sign(signData);
         const quickToken = sign({
           usr: "jingtum_secp256k1",
           privateKey: seed[0],
@@ -40,10 +41,11 @@ describe("WebToken", () => {
       ];
       for (const seed of seeds) {
         const webToken = new JingtumWebToken(seed[0], seed[1]);
-        const token = webToken.sign({
+        const signData = webToken.generateData({
           usr: "jingtum_ed25519",
           time: 123456
         });
+        const token = webToken.sign(signData);
         const quickToken = sign({
           usr: "jingtum_ed25519",
           privateKey: seed[0],
@@ -64,10 +66,11 @@ describe("WebToken", () => {
   describe("RippleWebToken", () => {
     it("should sign and verify when is secp256k1", () => {
       const webToken = new RippleWebToken("snhfP8ByWeWKWYNWBnr2avbxGCZwt");
-      const token = webToken.sign({
+      const signData = webToken.generateData({
         usr: "ripple_secp256k1",
         time: 123456
       });
+      const token = webToken.sign(signData);
       const quickToken = sign({
         usr: "ripple_secp256k1",
         privateKey: "snhfP8ByWeWKWYNWBnr2avbxGCZwt",
@@ -84,10 +87,11 @@ describe("WebToken", () => {
 
     it("should sign and verify when is ed25519", () => {
       const webToken = new RippleWebToken("sEdTSMh6UwzwexTFEkyvXc5bxWzTs2n");
-      const token = webToken.sign({
+      const signData = webToken.generateData({
         usr: "ripple_ed25519",
         time: 123456
       });
+      const token = webToken.sign(signData);
       const quickToken = sign({
         usr: "ripple_ed25519",
         privateKey: "sEdTSMh6UwzwexTFEkyvXc5bxWzTs2n",
@@ -106,10 +110,11 @@ describe("WebToken", () => {
   describe("EthereumWebToken", () => {
     it("should sign and verify when", () => {
       const webToken = new EthereumWebToken("105d31c6d6b19fdac7e3873572f5e1cd787afe912344a4bf3984d94b0cbb8876");
-      const token = webToken.sign({
+      const signData = webToken.generateData({
         usr: "zhye",
         time: 123456
       });
+      const token = webToken.sign(signData);
       const quickToken = sign({
         usr: "zhye",
         privateKey: "105d31c6d6b19fdac7e3873572f5e1cd787afe912344a4bf3984d94b0cbb8876",
@@ -133,10 +138,11 @@ describe("WebToken", () => {
       ];
       for (const seed of seeds) {
         const webToken = new BitcoinWebToken(seed[0]);
-        const token = webToken.sign({
+        const signData = webToken.generateData({
           usr: "bitcoin_secp256k1",
           time: 123456
         });
+        const token = webToken.sign(signData);
         const quickToken = sign({
           usr: "bitcoin_secp256k1",
           privateKey: seed[0],

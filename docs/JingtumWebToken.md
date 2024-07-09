@@ -17,14 +17,20 @@ const JingtumWebToken = require("@jccdex/cwt-lib").JingtumWebToken;
 
 If the private key's length is 64 and algorithm is `ed25519`, alg is `ed25519`.
 
-### sign
+### generateData
 
-**syntax:** new JingtumWebToken(priv: string).sign({ usr: string, time?: string })
+**syntax:** new JingtumWebToken(priv: string).generateData({ usr: string, time?: string })
 
 **usr:** User name
 
 **time:** Timestamp `unit:s` _Non-essential_
-If you want to generate cwt for a specific time, please do not ignore it, otherwise is current time.
+If you want to generate cwt for a specific time, please do not ignore it, it will help you generate `data` for a specific time (`data` to be signed by cwt).
+
+### sign
+
+**syntax:** new RippleWebToken(priv: string).sign(data: Record<string, unknown>)
+
+**data:** Data to be signed for cwt generation.The data must contain header and payload fields.
 
 ### verify
 
@@ -36,9 +42,10 @@ If you want to generate cwt for a specific time, please do not ignore it, otherw
 
 ```javascript
 const webToken = new JingtumWebToken("sajoigynKobrB8U59g1puxu8GM7Hg");
-const token = webToken.sign({
+const signData = webToken.generateData({
   usr: "jingtum_secp256k1",
   time: 123456
 });
+const token = webToken.sign(signData);
 const result = webToken.verify(token);
 ```

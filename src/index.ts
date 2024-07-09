@@ -19,10 +19,11 @@ const sign = (data: IQuickSignData): string => {
     throw new Error("Unsupported chain");
   }
   const webtoken = new WebToken(privateKey, alg);
-  return webtoken.sign({
+  const signData = webtoken.generateData({
     usr,
-    time
+    time: time || Math.floor(new Date().getTime() / 1000)
   });
+  return webtoken.sign(signData);
 };
 
 export * from "./type";
