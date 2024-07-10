@@ -47,15 +47,41 @@ npm install @jccdex/cwt-lib
 
 ### sign
 
+#### syntax
+
+const sign = ({
+  chain: string;
+  privateKey: string;
+  usr: string;
+  time?: number;
+  alg?: string;
+})
+
+#### arguments
+
+**chain:** Support chain ('jingtum', 'ripple', 'ethereum', 'bitcoin')
+
+**privateKey:** Private key or secret
+
+**usr:** User name
+
+**time:** Timestamp `unit:s` _Non-essential_
+
+If you want to generate cwt for a specific time, please do not ignore it, otherwise is current time.
+
+**alg:** Algorithm _Non-essential_
+
+If the private key is ripple or jingtum chain, length is 64 and algorithm is `ed25519`, alg is `ed25519`.
+
+#### Code Examples
 ```javascript
-import { sign } form "@jccdex/cwt-lib"
+import { sign } from "@jccdex/cwt-lib"
+// const sign = require("@jccdex/cwt-lib").sign
 
 const cwt = sign({
     chain: "",
     privateKey: "",
     usr: "",
-    time: "",
-    alg: ""
 });
 
 // Result example:
@@ -79,19 +105,3 @@ const cwt = sign({
 // }
 
 ```
-
-#### arguments
-
-**chain:** Support chain
-
-**privateKey:** Private key or secret
-
-**usr:** User name
-
-**time:** Timestamp `unit:s` _Non-essential_
-
-If you want to generate cwt for a specific time, please do not ignore it, otherwise is current time.
-
-**alg:** Algorithm _Non-essential_
-
-If the private key is ripple or jingtum chain, length is 64 and algorithm is `ed25519`, alg is `ed25519`.
