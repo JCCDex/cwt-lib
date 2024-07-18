@@ -13,7 +13,7 @@ const cases: ICase[] = [
   ["zhye", new EthereumWebToken("105d31c6d6b19fdac7e3873572f5e1cd787afe912344a4bf3984d94b0cbb8876")]
 ];
 
-const fetch = async (cwt) => {
+const fetch = async (cwt?: string) => {
   const config = {
     method: "post",
     url: "http://192.168.66.254:50500/",
@@ -29,6 +29,14 @@ const fetch = async (cwt) => {
   return res;
 };
 (async () => {
+  try {
+    await fetch();
+    console.log(colors.red("server doesn't verify auth"));
+    return;
+  } catch (error) {
+    console.log(colors.green("server verify auth: " + error.message));
+  }
+
   for (const c of cases) {
     const [usr, webToken] = c;
     const payload = {
