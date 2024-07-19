@@ -1,11 +1,13 @@
 const webpackConfig = require("./webpack.config");
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 const webpack = require("webpack");
-module.exports = function(config) {
+const path = require("path");
+
+module.exports = function (config) {
   config.set({
     frameworks: ["detectBrowsers", "mocha"],
     files: [
-      "test/webtoken.spec.ts",
+      "test/webtoken.spec.ts"
       // "test/testnet.spec.ts",
     ],
     preprocessors: {
@@ -34,6 +36,9 @@ module.exports = function(config) {
       resolve: webpackConfig.resolve,
       module: webpackConfig.module,
       mode: "development",
+      output: {
+        path: path.join(__dirname, "temp")
+      },
       plugins: [
         new NodePolyfillPlugin(),
         new webpack.IgnorePlugin({
@@ -51,7 +56,7 @@ module.exports = function(config) {
         }
 
         var browsers = ["Chrome", "Firefox"];
-        return browsers.filter(function(browser) {
+        return browsers.filter(function (browser) {
           return availableBrowser.indexOf(browser) !== -1;
         });
       }
