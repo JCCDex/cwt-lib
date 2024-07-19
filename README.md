@@ -1,5 +1,10 @@
 # cwt-lib (chain-web-token)
 
+![npm](https://img.shields.io/npm/v/@jccdex/cwt-lib.svg)
+[![build](https://github.com/JCCDex/cwt-lib/actions/workflows/node.js.yml/badge.svg)](https://github.com/JCCDex/cwt-lib/actions/workflows/node.js.yml)
+[![Coverage Status](https://coveralls.io/repos/github/JCCDex/cwt-lib/badge.svg?branch=main)](https://coveralls.io/github/JCCDex/cwt-lib?branch=main)
+[![npm downloads](https://img.shields.io/npm/dm/@jccdex/cwt-lib.svg)](http://npm-stat.com/charts.html?package=@jccdex/cwt-lib)
+
 用于区块链身份认证的js库；  
 js library for blockchain identity authentication;
 
@@ -50,11 +55,11 @@ npm install @jccdex/cwt-lib
 #### syntax
 
 const sign = ({
-  chain: string;
-  privateKey: string;
-  usr: string;
-  time?: number;
-  alg?: string;
+chain: string;
+privateKey: string;
+usr: string;
+time?: number;
+alg?: string;
 })
 
 #### arguments
@@ -74,14 +79,15 @@ If you want to generate cwt for a specific time, please do not ignore it, otherw
 If the private key is ripple or jingtum chain, length is 64 and algorithm is `ed25519`, alg is `ed25519`.
 
 #### Code Examples
+
 ```javascript
-import { sign } from "@jccdex/cwt-lib"
+import { sign } from "@jccdex/cwt-lib";
 // const sign = require("@jccdex/cwt-lib").sign
 
 const cwt = sign({
-    chain: "",
-    privateKey: "",
-    usr: "",
+  chain: "",
+  privateKey: "",
+  usr: ""
 });
 
 // Result example:
@@ -103,5 +109,4 @@ const cwt = sign({
 //   payload: { usr: '...usr...', time: Timestamp(unit:s) },
 //   signature: 'MEUCIH546Iz3wqdTgTLHJg3czMbQqLVJHj9iddqXPIr6MnG9AiEAkvKelTLl-ZWvCNJ9O8rWHhksuggz_jgg8wEM44mf9xk'
 // }
-
 ```
