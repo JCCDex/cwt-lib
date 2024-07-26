@@ -6,9 +6,9 @@ local openssl_digest    = require("resty.openssl.digest")
 local openssl_pkey      = require("resty.openssl.pkey")
 local ffi               = require("ffi")
 local codec             = require("apisix.plugins.cwt.codec")
+local keccak            = require("apisix.plugins.cwt.keccak")
 require("resty.openssl")
 
-local ngx               = ngx
 local ngx_encode_base64 = ngx.encode_base64
 local ngx_decode_base64 = ngx.decode_base64
 local cjson_encode      = cjson.encode
@@ -79,6 +79,10 @@ local schema = {
             type = "string",
             default = "cwt_auth"
         },
+        cookie = {
+            type = "string",
+            default = "cwt_auth"
+        },
         query = {
             type = "string",
             default = "cwt"
@@ -94,25 +98,8 @@ local consumer_schema = {
     type = "object",
     properties = {
         usr = {type = "string"},
-        chain = {
-            type = "string",
-            default = "ethereum"
-        },
         wallet = {type = "string"},
-        exp = {type = "integer", minimum = 1, default = 100}
-    },
-    dependencies = {
-        chain = {
-            oneOf = {
-                {
-                    properties = {
-                        wallet = {type = "string"},
-                        chain = {type = "string"},
-                    },
-                    required = {"wallet"},
-                },
-            }
-        }
+        exp = {type = "integer", minimum = 1}
     },
     required = {"usr", "wallet", "exp"},
 }
@@ -145,7 +132,35 @@ function _M.check_schema(conf, schema_type)
     return true
 end
 
+local function remove_cwt_cookie(src, key)
+    local cookie_key_pattern = "([a-zA-Z0-9-_]*)"
+    local cookie_val_pattern = "([a-zA-Z0-9-._]*)"
+    local t = table.new(1, 0)
+
+    local it, err = ngx.re.gmatch(src, cookie_key_pattern .. "=" .. cookie_val_pattern, "jo")
+    if not it then
+        core.log.error("match origins failed: ", err)
+        return src
+    end
+    while true do
+        local m, err = it()
+        if err then
+            core.log.error("iterate origins failed: ", err)
+            return src
+        end
+        if not m then
+            break
+        end
+        if m[1] ~= key then
+            table.insert(t, m[0])
+        end
+    end
+
+    return table.concat(t, "; ")
+end
+
 local function fetch_cwt_token(conf, ctx)
+    -- first, fetch from header
     local token = core.request.header(ctx, conf.header)
     if token then
         if conf.hide_credentials then
@@ -159,7 +174,7 @@ local function fetch_cwt_token(conf, ctx)
 
         return token
     end
-
+    -- second, fetch from query arg
     local uri_args = core.request.get_uri_args(ctx) or {}
     token = uri_args[conf.query]
     if token then
@@ -169,8 +184,19 @@ local function fetch_cwt_token(conf, ctx)
         end
         return token
     end
+    -- third, fetch from cookie
+    local val = ctx.var["cookie_" .. conf.cookie]
+    if val then
+        if conf.hide_credentials then
+            -- hide for cookie
+            local src = core.request.header(ctx, "Cookie")
+            local reset_val = remove_cwt_cookie(src, conf.cookie)
+            core.request.set_header(ctx, "Cookie", reset_val)
+        end
+        return val
+    end
 
-    return nil, "Missing token in header or args"
+    return nil, "Missing token"
 end
 
 local function cwt_encode(field)
@@ -272,12 +298,7 @@ local function keccak256(public_key)
         return nil, "Failed to cast digest ctx to keccak1600_ctx_st"
     end
     keccak1600_ctx.pad = ffi_typeof("unsigned char")(1)
-    local ok, err = digest:update(public_key)
-    if not ok then
-        core.log.error("failed to update digest: ", err)
-        return nil, "Failed to update digest: " .. err
-    end
-    local final_hash, err = digest:final()
+    local final_hash, err = digest:final(public_key)
     if not final_hash then
         core.log.error("failed to finalize digest: ", err)
         return nil, "Failed to finalize digest: " .. err
@@ -317,7 +338,7 @@ local function verify_ethereum_cwt(public_key_pem, message, signature, address, 
     else
         return false, "Unsupported algorithm: " .. alg
     end
-    local keccak_hash, err = keccak256(public_key_bin)
+    local keccak_hash, err = keccak.keccak256(public_key_bin)
     if not keccak_hash then
         return false, "Failed to get keccak256 hash: " .. err
     end
