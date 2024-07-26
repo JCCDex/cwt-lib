@@ -1,29 +1,56 @@
-const path = require('path')
-module.exports = {
-  mode: 'none',
-  entry: './src/index.ts', // 指定入口文件
+const DuplicatePackageCheckerPlugin = require("duplicate-package-checker-webpack-plugin");
+const path = require("path");
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
+
+const config = {
+  entry: "./src",
   output: {
-    path: path.resolve(__dirname, 'dist'), // 指定打包文件的目录
-    filename: 'bundle.js' // 打包后文件的名称
+    filename: "cwt-lib.min.js",
+    path: path.resolve(__dirname, "./dist"),
+    library: "ChainWebToken",
+    libraryTarget: "umd"
   },
-  // 指定webpack打包时要使用的模块
+  target: "web",
+  resolve: {
+    extensions: [".js", ".ts"],
+    alias: {
+      "bn.js": path.resolve(__dirname, "src/bigint")
+    },
+    fallback: {
+      tls: false,
+      net: false,
+      fs: false,
+      child_process: false
+    }
+  },
+  optimization: {
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        extractComments: false
+      })
+    ]
+  },
+  mode: "production",
   module: {
-    // 指定loader加载的规则
     rules: [
       {
-        test: /\.ts$/, // 指定规则生效的文件：以ts结尾的文件
-        use: 'ts-loader', // 要使用的loader
-        exclude: /node-modules/ // 要排除的文件
+        test: /\.(ts|tsx)$/,
+        use: "ts-loader"
+      },
+      {
+        test: /\.(cjs|mjs|js|jsx)$/,
+        loader: "babel-loader"
       }
     ]
   },
-  // 设置哪些文件类型可以作为模块被引用
-  resolve: {
-    extensions: ['.ts', '.js'],
-    fallback: {
-      "crypto": false,
-      "buffer": false,
-      "stream": false,
-    }
-  }
+  plugins: [new DuplicatePackageCheckerPlugin(), new NodePolyfillPlugin()]
+};
+
+if (process.env.REPORT === "true") {
+  config.plugins.push(new BundleAnalyzerPlugin());
 }
+
+module.exports = config;
