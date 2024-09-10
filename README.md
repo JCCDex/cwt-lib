@@ -25,7 +25,7 @@ Verify the cwt using the blockchain's public key to prove its identity;
 
 This open-source solution includes a frontend development JavaScript package and APISIX plugin code. The official download link for the APISIX plugin is: http://xxxxx.x.xx
 
-商业场景方案定制，请联系:xxxx 
+商业场景方案定制，请联系 1462094357@qq.com
 
 For customized solutions in commercial scenarios, please contact: xxxx
 
