@@ -4,7 +4,6 @@ local cjson             = require("cjson.safe")
 local resty_string      = require("resty.string")
 local openssl_digest    = require("resty.openssl.digest")
 local openssl_pkey      = require("resty.openssl.pkey")
-local ffi               = require("ffi")
 local codec             = require("apisix.plugins.cwt.codec")
 local keccak            = require("apisix.plugins.cwt.keccak")
 require("resty.openssl")
@@ -14,31 +13,7 @@ local ngx_decode_base64 = ngx.decode_base64
 local cjson_encode      = cjson.encode
 local cjson_decode      = cjson.decode
 local ngx_time          = ngx.time
-local ffi_cast          = ffi.cast
-local ffi_typeof        = ffi.typeof
 local plugin_name       = "cwt"
-
-ffi.cdef[[
-    typedef struct {
-        uint64_t A[5][5];
-        size_t block_size;          /* cached ctx->digest->block_size */
-        size_t md_size;             /* output length, variable in XOF */
-        size_t num;                 /* used bytes in below buffer */
-        unsigned char buf[1600 / 8 - 32];
-        unsigned char pad;
-    } my_KECCAK1600_CTX;
-    typedef struct {
-        const EVP_MD *digest;
-        ENGINE *engine;             /* functional reference if 'digest' is
-                                    * ENGINE-provided */
-        unsigned long flags;
-        void *md_data;
-        /* Public key context for sign/verify */
-        EVP_PKEY_CTX *pctx;
-        /* Update function: usually copied from EVP_MD */
-        int (*update) (EVP_MD_CTX *ctx, const void *data, size_t count);
-    } my_evp_md_ctx_st;
-]]
 
 local str_const = {
     chain_ethereum = "ethereum",
@@ -277,33 +252,6 @@ local function load_cwt(cwt_str)
             reason = str_const.invalid_cwt
         }
     end
-end
-
-local function keccak256(public_key)
-    local md_ctx_ptr_ct = ffi_typeof('my_evp_md_ctx_st*')
-    local keccak1600_ctx_ptr_ct = ffi_typeof('my_KECCAK1600_CTX*')
-    local digest, err = openssl_digest.new("sha3-256")
-    if not digest then
-        core.log.error("failed to new digest: ", err)
-        return nil, "Failed to new digest: " .. err
-    end
-    local evp_md_ctx = ffi_cast(md_ctx_ptr_ct, digest.ctx)
-    if not evp_md_ctx then
-        core.log.error("failed to cast digest ctx to evp_md_ctx_st")
-        return nil, "Failed to cast digest ctx to evp_md_ctx_st"
-    end
-    local keccak1600_ctx = ffi_cast(keccak1600_ctx_ptr_ct, evp_md_ctx.md_data)
-    if not keccak1600_ctx then
-        core.log.error("failed to cast digest ctx to keccak1600_ctx_st")
-        return nil, "Failed to cast digest ctx to keccak1600_ctx_st"
-    end
-    keccak1600_ctx.pad = ffi_typeof("unsigned char")(1)
-    local final_hash, err = digest:final(public_key)
-    if not final_hash then
-        core.log.error("failed to finalize digest: ", err)
-        return nil, "Failed to finalize digest: " .. err
-    end
-    return final_hash
 end
 
 local function verify_ethereum_cwt(public_key_pem, message, signature, address, alg)
