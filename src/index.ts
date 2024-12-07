@@ -13,7 +13,7 @@ const WebTokenMap = {
 };
 
 const sign = (data: IQuickSignData): string => {
-  const { chain, usr, privateKey, time, alg } = data;
+  const { chain, usr, privateKey, type, time, alg } = data;
   const WebToken = WebTokenMap[chain];
   if (!WebToken) {
     throw new Error("Unsupported chain");
@@ -21,6 +21,7 @@ const sign = (data: IQuickSignData): string => {
   const webtoken = new WebToken(privateKey, alg);
   return webtoken.sign({
     usr,
+    type,
     time
   });
 };

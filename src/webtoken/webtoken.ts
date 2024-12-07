@@ -15,11 +15,14 @@ export abstract class WebToken {
 
   public abstract verify(token: string): boolean;
 
-  public payload(payload) {
+  public payload(payload, type?: string) {
+    if(type && !(typeof type == 'string' && (type === "CWT" || type === "CWT_ENT"))) {
+      throw new Error("expecting 'CWT' or 'CWT_ENT' as \"type\"");
+    }
     const data = {
       header: {
         x5c: [this.keypair.getPublicPem()],
-        type: "CWT",
+        type: type || "CWT",
         chain: this.chain,
         alg: this.alg
       },

@@ -15,11 +15,11 @@ export class EthereumWebToken extends WebToken {
   }
 
   public sign(signData: ISignData): string {
-    const { usr, time } = signData;
+    const { usr, type, time } = signData;
     const data = super.payload({
       usr,
       time: time || Math.floor(new Date().getTime() / 1000)
-    });
+    }, type);
     return this.keypair.sign(data);
   }
   public verify(token: string) {
