@@ -43,11 +43,18 @@ const fetch = async (cwt?: string) => {
       usr
     };
     const cwt = webToken.sign(payload);
+    const cwt_ent = webToken.sign(Object.assign({}, payload, { type: "CWT_ENT" }));
     try {
       await fetch(cwt);
       console.log(colors.green(`auth success on ${usr}`));
     } catch (_) {
       console.error(colors.red(`auth error on ${usr}`));
+    }
+    try {
+      await fetch(cwt_ent);
+      console.log(colors.green(`enterprise auth success on ${usr}`));
+    } catch (error) {
+      console.error(colors.red(`enterprise auth error on ${usr}`));
     }
   }
 })();
