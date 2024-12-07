@@ -12,19 +12,19 @@ describe("WebToken", () => {
       ];
       for (const seed of seeds) {
         const webToken = new JingtumWebToken(seed[0]);
-        let args = {
+        const args = {
           usr: "jingtum_secp256k1",
           time: 123456
         };
-        let quickArgs = {
+        const quickArgs = {
           usr: "jingtum_secp256k1",
           privateKey: seed[0],
           alg: seed[1],
           time: 123456,
           chain: "jingtum"
         };
-        let args_ent = Object.assign({}, args, { type: "CWT_ENT" });
-        let quickArgs_ent = Object.assign({}, quickArgs, { type: "CWT_ENT" });
+        const args_ent = Object.assign({}, args, { type: "CWT_ENT" });
+        const quickArgs_ent = Object.assign({}, quickArgs, { type: "CWT_ENT" });
         const token = webToken.sign(args);
         const quickToken = sign(quickArgs);
         const token_ent = webToken.sign(args_ent);
@@ -52,19 +52,19 @@ describe("WebToken", () => {
       ];
       for (const seed of seeds) {
         const webToken = new JingtumWebToken(seed[0], seed[1]);
-        let args = {
+        const args = {
           usr: "jingtum_ed25519",
           time: 123456
         };
-        let quickArgs = {
+        const quickArgs = {
           usr: "jingtum_ed25519",
           privateKey: seed[0],
           alg: seed[1],
           time: 123456,
           chain: "jingtum"
         };
-        let args_ent = Object.assign({}, args, { type: "CWT_ENT" });
-        let quickArgs_ent = Object.assign({}, quickArgs, { type: "CWT_ENT" });
+        const args_ent = Object.assign({}, args, { type: "CWT_ENT" });
+        const quickArgs_ent = Object.assign({}, quickArgs, { type: "CWT_ENT" });
         const token = webToken.sign(args);
         const quickToken = sign(quickArgs);
         const token_ent = webToken.sign(args_ent);
@@ -88,18 +88,18 @@ describe("WebToken", () => {
   describe("RippleWebToken", () => {
     it("should sign and verify when is secp256k1", () => {
       const webToken = new RippleWebToken("snhfP8ByWeWKWYNWBnr2avbxGCZwt");
-      let args = {
+      const args = {
         usr: "ripple_secp256k1",
         time: 123456
       };
-      let quickArgs = {
+      const quickArgs = {
         usr: "ripple_secp256k1",
         privateKey: "snhfP8ByWeWKWYNWBnr2avbxGCZwt",
         time: 123456,
         chain: "ripple"
       };
-      let args_ent = Object.assign({}, args, { type: "CWT_ENT" });
-      let quickArgs_ent = Object.assign({}, quickArgs, { type: "CWT_ENT" });
+      const args_ent = Object.assign({}, args, { type: "CWT_ENT" });
+      const quickArgs_ent = Object.assign({}, quickArgs, { type: "CWT_ENT" });
       const token = webToken.sign(args);
       const quickToken = sign(quickArgs);
       const token_ent = webToken.sign(args_ent);
@@ -120,18 +120,18 @@ describe("WebToken", () => {
 
     it("should sign and verify when is ed25519", () => {
       const webToken = new RippleWebToken("sEdTSMh6UwzwexTFEkyvXc5bxWzTs2n");
-      let args = {
+      const args = {
         usr: "ripple_ed25519",
         time: 123456
       };
-      let quickArgs = {
+      const quickArgs = {
         usr: "ripple_ed25519",
         privateKey: "sEdTSMh6UwzwexTFEkyvXc5bxWzTs2n",
         time: 123456,
         chain: "ripple"
       };
-      let args_ent = Object.assign({}, args, { type: "CWT_ENT" });
-      let quickArgs_ent = Object.assign({}, quickArgs, { type: "CWT_ENT" });
+      const args_ent = Object.assign({}, args, { type: "CWT_ENT" });
+      const quickArgs_ent = Object.assign({}, quickArgs, { type: "CWT_ENT" });
       const token = webToken.sign(args);
       const quickToken = sign(quickArgs);
       const token_ent = webToken.sign(args_ent);
@@ -154,18 +154,18 @@ describe("WebToken", () => {
   describe("EthereumWebToken", () => {
     it("should sign and verify when", () => {
       const webToken = new EthereumWebToken("105d31c6d6b19fdac7e3873572f5e1cd787afe912344a4bf3984d94b0cbb8876");
-      let args = {
+      const args = {
         usr: "zhye",
         time: 123456
       };
-      let quickArgs = {
+      const quickArgs = {
         usr: "zhye",
         privateKey: "105d31c6d6b19fdac7e3873572f5e1cd787afe912344a4bf3984d94b0cbb8876",
         time: 123456,
         chain: "ethereum"
       }
-      let args_ent = Object.assign({}, args, { type: "CWT_ENT" });
-      let quickArgs_ent = Object.assign({}, quickArgs, { type: "CWT_ENT" });
+      const args_ent = Object.assign({}, args, { type: "CWT_ENT" });
+      const quickArgs_ent = Object.assign({}, quickArgs, { type: "CWT_ENT" });
       const token = webToken.sign(args);
       const quickToken = sign(quickArgs);
       const token_ent = webToken.sign(args_ent);
@@ -193,18 +193,18 @@ describe("WebToken", () => {
       ];
       for (const seed of seeds) {
         const webToken = new BitcoinWebToken(seed[0]);
-        let args = {
+        const args = {
           usr: "bitcoin_secp256k1",
           time: 123456
         };
-        let quickArgs = {
+        const quickArgs = {
           usr: "bitcoin_secp256k1",
           privateKey: seed[0],
           time: 123456,
           chain: "bitcoin"
         }
-        let args_ent = Object.assign({}, args, { type: "CWT_ENT" });
-        let quickArgs_ent = Object.assign({}, quickArgs, { type: "CWT_ENT" });
+        const args_ent = Object.assign({}, args, { type: "CWT_ENT" });
+        const quickArgs_ent = Object.assign({}, quickArgs, { type: "CWT_ENT" });
         const token = webToken.sign(args);
         const quickToken = sign(quickArgs);
         const token_ent = webToken.sign(args_ent);
