@@ -70,6 +70,10 @@ alg?: string;
 
 **usr:** User name
 
+**type:** To distinguish between individuals and businesses. _Non-essential_ ('CWT'(default), 'CWT_ENT')
+
+If you represent your business, please do not ignore it and assign CWT_ENT to it; if you represent yourself, then it is optional for you, but if you decide to use it, please assign CWT to it.
+
 **time:** Timestamp `unit:s` _Non-essential_
 
 If you want to generate cwt for a specific time, please do not ignore it, otherwise is current time.
