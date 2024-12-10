@@ -23,8 +23,8 @@ describe("WebToken", () => {
           time: 123456,
           chain: "jingtum"
         };
-        const args_ent = Object.assign({}, args, { type: "CWT_ENT" });
-        const quickArgs_ent = Object.assign({}, quickArgs, { type: "CWT_ENT" });
+        const args_ent = Object.assign({}, args, { usr: undefined, group: "jingtum_secp256k1" });
+        const quickArgs_ent = Object.assign({}, quickArgs, { usr: undefined, group: "jingtum_secp256k1" });
         const token = webToken.sign(args);
         const quickToken = sign(quickArgs);
         const token_ent = webToken.sign(args_ent);
@@ -35,7 +35,7 @@ describe("WebToken", () => {
         );
         expect(token_ent).to.equal(quickToken_ent);
         expect(token_ent).to.equal(
-          "eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1EWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RJZ0FDTVRxOXVhdENOQVhXSFV2U2tPYm0wOTd0cDFJVVAyZVJcbjFyKzU4T3ljNHowPVxuLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tIl0sInR5cGUiOiJDV1RfRU5UIiwiY2hhaW4iOiJqaW5ndHVtIiwiYWxnIjoic2VjcDI1NmsxIn0.eyJ1c3IiOiJqaW5ndHVtX3NlY3AyNTZrMSIsInRpbWUiOjEyMzQ1Nn0.MEQCIHNiuvcG_7w_1IxV_DyeEEMdrBQa-E27GjNEs8zEK3DEAiBirqAZXRiRaWpVNZlFlk00F-B-5ji13Zdc2rhLDk7bUg"
+          "eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1EWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RJZ0FDTVRxOXVhdENOQVhXSFV2U2tPYm0wOTd0cDFJVVAyZVJcbjFyKzU4T3ljNHowPVxuLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tIl0sInR5cGUiOiJDV1RfRU5UIiwiY2hhaW4iOiJqaW5ndHVtIiwiYWxnIjoic2VjcDI1NmsxIn0.eyJncm91cCI6Imppbmd0dW1fc2VjcDI1NmsxIiwidGltZSI6MTIzNDU2fQ.MEUCIQC_xRdk_aX73Y6UwgFOhYHwGwgicZV8y-XTfmWcNDDmmQIgcSARyi6Naiis-HmBKmpCoMy4pxcHTUeDyh5YMrFYZn0"
         );
         const result = webToken.verify(token);
         expect(result).to.equal(true);
@@ -63,8 +63,8 @@ describe("WebToken", () => {
           time: 123456,
           chain: "jingtum"
         };
-        const args_ent = Object.assign({}, args, { type: "CWT_ENT" });
-        const quickArgs_ent = Object.assign({}, quickArgs, { type: "CWT_ENT" });
+        const args_ent = Object.assign({}, args, { usr: undefined, group: "jingtum_ed25519" });
+        const quickArgs_ent = Object.assign({}, quickArgs, { usr: undefined, group: "jingtum_ed25519" });
         const token = webToken.sign(args);
         const quickToken = sign(quickArgs);
         const token_ent = webToken.sign(args_ent);
@@ -75,7 +75,7 @@ describe("WebToken", () => {
         );
         expect(token_ent).to.equal(quickToken_ent);
         expect(token_ent).to.equal(
-          "eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1Db3dCUVlESzJWd0F5RUFPREVoam8rdzlDN2JmaUZueUl1UnE1RDQ5VjBjZ1hxUE9hVllWclFDMTVzPVxuLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tXG4iXSwidHlwZSI6IkNXVF9FTlQiLCJjaGFpbiI6Imppbmd0dW0iLCJhbGciOiJlZDI1NTE5In0.eyJ1c3IiOiJqaW5ndHVtX2VkMjU1MTkiLCJ0aW1lIjoxMjM0NTZ9.MH920coHDBxexsoloJ5acuX6Mp2xhk0zUFNAVLALVq_-M_ThQG5oZZLB7v-TVvlB7oSITUW1SO2dHzvYk4TEAA"
+          "eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1Db3dCUVlESzJWd0F5RUFPREVoam8rdzlDN2JmaUZueUl1UnE1RDQ5VjBjZ1hxUE9hVllWclFDMTVzPVxuLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tXG4iXSwidHlwZSI6IkNXVF9FTlQiLCJjaGFpbiI6Imppbmd0dW0iLCJhbGciOiJlZDI1NTE5In0.eyJncm91cCI6Imppbmd0dW1fZWQyNTUxOSIsInRpbWUiOjEyMzQ1Nn0.E9iW1ufGyvJ2W1tvhJvIPGxkPU_RRFddZehwH84fsAkNsrg5kx-sywkhNQjfQqA0B8-pE1eFgiQ_K1EIniuTBA"
         );
         const result = webToken.verify(token);
         expect(result).to.equal(true);
@@ -98,8 +98,8 @@ describe("WebToken", () => {
         time: 123456,
         chain: "ripple"
       };
-      const args_ent = Object.assign({}, args, { type: "CWT_ENT" });
-      const quickArgs_ent = Object.assign({}, quickArgs, { type: "CWT_ENT" });
+      const args_ent = Object.assign({}, args, { usr: undefined, group: "ripple_secp256k1" });
+      const quickArgs_ent = Object.assign({}, quickArgs, { usr: undefined, group: "ripple_secp256k1" });
       const token = webToken.sign(args);
       const quickToken = sign(quickArgs);
       const token_ent = webToken.sign(args_ent);
@@ -110,7 +110,7 @@ describe("WebToken", () => {
       );
       expect(token_ent).to.equal(quickToken_ent);
       expect(token_ent).to.equal(
-        "eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1EWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RJZ0FDRVBqa0hyNzhkL0hLWStydEJKeUIzUmJ0Z2kzRkFDbEFcbmVLSkFjcmNrdTlNPVxuLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tIl0sInR5cGUiOiJDV1RfRU5UIiwiY2hhaW4iOiJyaXBwbGUiLCJhbGciOiJzZWNwMjU2azEifQ.eyJ1c3IiOiJyaXBwbGVfc2VjcDI1NmsxIiwidGltZSI6MTIzNDU2fQ.MEUCIQDnKND5zKsBYusXBdaWlAHsPOmMWwYeMkjDVMY7ImKW4AIgBn09VBi8T_IewFMt_4V5HLIs_Nn9x8SCIRZNdxe4mbw"
+        "eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1EWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RJZ0FDRVBqa0hyNzhkL0hLWStydEJKeUIzUmJ0Z2kzRkFDbEFcbmVLSkFjcmNrdTlNPVxuLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tIl0sInR5cGUiOiJDV1RfRU5UIiwiY2hhaW4iOiJyaXBwbGUiLCJhbGciOiJzZWNwMjU2azEifQ.eyJncm91cCI6InJpcHBsZV9zZWNwMjU2azEiLCJ0aW1lIjoxMjM0NTZ9.MEQCIGjIPXWSJCFVV3NdFv5C-4HzdMyES-A7dYW1TQUpN__hAiB0cVv3im265CzIJr5aZnF51T_cibg5L6Ef_IEZhujomg"
       );
       const result = webToken.verify(token);
       expect(result).to.equal(true);
@@ -130,8 +130,8 @@ describe("WebToken", () => {
         time: 123456,
         chain: "ripple"
       };
-      const args_ent = Object.assign({}, args, { type: "CWT_ENT" });
-      const quickArgs_ent = Object.assign({}, quickArgs, { type: "CWT_ENT" });
+      const args_ent = Object.assign({}, args, { usr: undefined, group: "ripple_ed25519" });
+      const quickArgs_ent = Object.assign({}, quickArgs, { usr: undefined, group: "ripple_ed25519" });
       const token = webToken.sign(args);
       const quickToken = sign(quickArgs);
       const token_ent = webToken.sign(args_ent);
@@ -142,7 +142,7 @@ describe("WebToken", () => {
       );
       expect(token_ent).to.equal(quickToken_ent);
       expect(token_ent).to.equal(
-        "eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1Db3dCUVlESzJWd0F5RUFZSkQ4T1NTdWpYd0hienhBZFFNYUcvZXJkQVRtYllndTVmZVdmRjhRdWJZPVxuLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tXG4iXSwidHlwZSI6IkNXVF9FTlQiLCJjaGFpbiI6InJpcHBsZSIsImFsZyI6ImVkMjU1MTkifQ.eyJ1c3IiOiJyaXBwbGVfZWQyNTUxOSIsInRpbWUiOjEyMzQ1Nn0.YrksDY2hYJlYFahmVbldX6DFbs3V6v2RDUY-BbBqkB5Dl2117PBa61i0SkNoYqo1WYKpYU0iKyKlXf6SH83bDw"
+        "eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1Db3dCUVlESzJWd0F5RUFZSkQ4T1NTdWpYd0hienhBZFFNYUcvZXJkQVRtYllndTVmZVdmRjhRdWJZPVxuLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tXG4iXSwidHlwZSI6IkNXVF9FTlQiLCJjaGFpbiI6InJpcHBsZSIsImFsZyI6ImVkMjU1MTkifQ.eyJncm91cCI6InJpcHBsZV9lZDI1NTE5IiwidGltZSI6MTIzNDU2fQ.YQbZtEufNrcmuXRiYLi1TGuZhpQXZ8bBq4Nd5MjH7QX6VhmtMSfiwMKp77L4o4mI231sgn4Hu9wb-BS7rzanBQ"
       );
       const result = webToken.verify(token);
       expect(result).to.equal(true);
@@ -164,8 +164,8 @@ describe("WebToken", () => {
         time: 123456,
         chain: "ethereum"
       }
-      const args_ent = Object.assign({}, args, { type: "CWT_ENT" });
-      const quickArgs_ent = Object.assign({}, quickArgs, { type: "CWT_ENT" });
+      const args_ent = Object.assign({}, args, { usr: undefined, group: "zhye" });
+      const quickArgs_ent = Object.assign({}, quickArgs, { usr: undefined, group: "zhye" });
       const token = webToken.sign(args);
       const quickToken = sign(quickArgs);
       const token_ent = webToken.sign(args_ent);
@@ -176,7 +176,7 @@ describe("WebToken", () => {
       );
       expect(token_ent).to.equal(quickToken_ent);
       expect(token_ent).to.equal(
-        "eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1GWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RRZ0FFaWJpcmx6eEtnZ0EzNWp1TUNtSmRhbUNDZ0hhOE9ZSkdcbk9HMFlIRzYxMUk5UDdrTEFBYlNqNGg0SFJHeUNSZnA0Ky9ndkxtcGU1Uis3UFV2bDNHU0NvZz09XG4tLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0iXSwidHlwZSI6IkNXVF9FTlQiLCJjaGFpbiI6ImV0aGVyZXVtIiwiYWxnIjoic2VjcDI1NmsxIn0.eyJ1c3IiOiJ6aHllIiwidGltZSI6MTIzNDU2fQ.MEQCIDrf2Le-FkPwiaZpZMLBFpGDosgm3dQ4cIJMx_DW1hhzAiAMzuAZ-dM6dA4fyW7I3-jlGeXT0gUSbGVGKP35ltD9fA"
+        "eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1GWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RRZ0FFaWJpcmx6eEtnZ0EzNWp1TUNtSmRhbUNDZ0hhOE9ZSkdcbk9HMFlIRzYxMUk5UDdrTEFBYlNqNGg0SFJHeUNSZnA0Ky9ndkxtcGU1Uis3UFV2bDNHU0NvZz09XG4tLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0iXSwidHlwZSI6IkNXVF9FTlQiLCJjaGFpbiI6ImV0aGVyZXVtIiwiYWxnIjoic2VjcDI1NmsxIn0.eyJncm91cCI6InpoeWUiLCJ0aW1lIjoxMjM0NTZ9.MEYCIQCQxd-5RiPYNJ3FRUloCqzz6NI60F8dOYvpjtU5KI2yXwIhAIbWCnC_11XKHacqgYShDPIxXumo97QpxDHBvCunJJ6y"
       );
       const result = webToken.verify(token);
       expect(result).to.equal(true);
@@ -203,8 +203,8 @@ describe("WebToken", () => {
           time: 123456,
           chain: "bitcoin"
         }
-        const args_ent = Object.assign({}, args, { type: "CWT_ENT" });
-        const quickArgs_ent = Object.assign({}, quickArgs, { type: "CWT_ENT" });
+        const args_ent = Object.assign({}, args, { usr: undefined, group: "bitcoin_secp256k1" });
+        const quickArgs_ent = Object.assign({}, quickArgs, { usr: undefined, group: "bitcoin_secp256k1" });
         const token = webToken.sign(args);
         const quickToken = sign(quickArgs);
         const token_ent = webToken.sign(args_ent);
@@ -215,7 +215,7 @@ describe("WebToken", () => {
         );
         expect(token_ent).to.equal(quickToken_ent);
         expect(token_ent).to.equal(
-          "eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1GWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RRZ0FFS1duUnc4K3V5SXhYZkxEbXFKbGR3WUlzRlpMTWcrdG5cbmdZd3NxZWZpMGVBNjZRdUJuMTNVcG96cHJrdGIvb2pCNlBKYm1YRi8ydUJuK1d6SlUvVVpRQT09XG4tLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0iXSwidHlwZSI6IkNXVF9FTlQiLCJjaGFpbiI6ImJpdGNvaW4iLCJhbGciOiJzZWNwMjU2azEifQ.eyJ1c3IiOiJiaXRjb2luX3NlY3AyNTZrMSIsInRpbWUiOjEyMzQ1Nn0.MEYCIQDh5Lm5HsEXNENvsEzeq47JjjiRtsPBjxzTj3yPDQhxGgIhAI_w_oy8cLja84FaXYgbDnovg4nXgZ27afouPwzAFmc6"
+          "eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1GWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RRZ0FFS1duUnc4K3V5SXhYZkxEbXFKbGR3WUlzRlpMTWcrdG5cbmdZd3NxZWZpMGVBNjZRdUJuMTNVcG96cHJrdGIvb2pCNlBKYm1YRi8ydUJuK1d6SlUvVVpRQT09XG4tLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0iXSwidHlwZSI6IkNXVF9FTlQiLCJjaGFpbiI6ImJpdGNvaW4iLCJhbGciOiJzZWNwMjU2azEifQ.eyJncm91cCI6ImJpdGNvaW5fc2VjcDI1NmsxIiwidGltZSI6MTIzNDU2fQ.MEQCIBqsoUqy8QLNaam4yqmpgQBNWkzW_yDHuD6rxwg6_c2HAiA_gexTkKMViOQ23B-nUjfzbpexB2f-ouTEP5i8bEVhZg"
         );
         const result = webToken.verify(token);
         expect(result).to.equal(true);

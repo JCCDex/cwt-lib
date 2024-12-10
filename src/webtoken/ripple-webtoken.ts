@@ -27,11 +27,12 @@ export class RippleWebToken extends WebToken {
   }
 
   public sign(signData: ISignData): string {
-    const { usr, type, time } = signData;
+    const { usr, group, time } = signData;
     const data = super.payload({
       usr,
+      group,
       time: time || Math.floor(new Date().getTime() / 1000)
-    }, type);
+    });
     return this.keypair.sign(data);
   }
   public verify(token: string): boolean {

@@ -15,14 +15,18 @@ export abstract class WebToken {
 
   public abstract verify(token: string): boolean;
 
-  public payload(payload, type?: string) {
-    if(type && !(typeof type == 'string' && (type === "CWT" || type === "CWT_ENT"))) {
-      throw new Error("expecting 'CWT' or 'CWT_ENT' as \"type\"");
+  public payload(payload) {
+    const { usr, group } = payload;
+    if(usr && group) {
+      throw new Error("You cannot provide both usr and group, please select one.");
+    }
+    if (!usr && !group) {
+      throw new Error("Must provide either usr or group.");
     }
     const data = {
       header: {
         x5c: [this.keypair.getPublicPem()],
-        type: type || "CWT",
+        type: usr ? "CWT" : "CWT_ENT",
         chain: this.chain,
         alg: this.alg
       },

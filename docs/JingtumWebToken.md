@@ -14,19 +14,27 @@ const JingtumWebToken = require("@jccdex/cwt-lib").JingtumWebToken;
 **priv:** Private key
 
 **alg:** Algorithm _Non-essential_  
-If the private key's length is 64 and algorithm is `ed25519`, alg is `ed25519`.
+If the private key's length is 64 and algorithm is `ed25519`, alg is `ed25519`.  
+如果私钥长度为64，算法为ed25519，则alg为ed25519。
 
 ### sign
 
 **syntax:** new JingtumWebToken(priv: string).sign({ usr: string, time?: string })
 
-**usr:** User name
+**usr:** User name _Non-essential_  
+If you represent an **individual**, please use this parameter. Because it is **required**.  
+如果您代表**个人**，请使用此参数。因为它是**必需的**。
 
-**type:** To distinguish between individuals and businesses. _Non-essential_ ('CWT'(default), 'CWT_ENT')  
-If you represent your business, please do not ignore it and assign CWT_ENT to it; if you represent yourself, then it is optional for you, but if you decide to use it, please assign CWT to it.
+**group:** group name (enterprise name) _Non-essential_  
+If you represent a **business (organization)**, please use this parameter. Because it is **required**.  
+如果您代表一家**企业（组织）**，请使用此参数。因为它是**必需的**。
+
+**Note: One of the two parameters, usr and group, must exist, but not both.**  
+**注意：usr 和 group 两个参数中必须有一个存在，但不能同时存在。**
 
 **time:** Timestamp `unit:s` _Non-essential_  
-If you want to generate cwt for a specific time, please do not ignore it, otherwise is current time.
+If you want to generate cwt for a specific time, please do not ignore it, otherwise is current time.  
+如果要为特定时间生成cwt，请不要忽略它，否则就是当前时间。
 
 ### verify
 
