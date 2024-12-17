@@ -2,23 +2,33 @@ import axios from "axios";
 import * as colors from "colors";
 import { EthereumWebToken, BitcoinWebToken, JingtumWebToken, RippleWebToken, WebToken } from "../src";
 
-type ICase = [{usr?: string, group?: string}, WebToken];
+type ICase = [{usr?: string, group?: string}, WebToken, string];
 
 const cases: ICase[] = [
-  [{usr: "jingtum_secp256k1"}, new JingtumWebToken("sajoigynKobrB8U59g1puxu8GM7Hg")],
-  [{usr: "jingtum_ed25519"}, new JingtumWebToken("sEdVrj9hBjNTPGnm4qN4iVXSQv7KMzB")],
-  [{usr: "ripple_secp256k1"}, new RippleWebToken("snhfP8ByWeWKWYNWBnr2avbxGCZwt")],
-  [{usr: "ripple_ed25519"}, new RippleWebToken("sEdTSMh6UwzwexTFEkyvXc5bxWzTs2n")],
-  [{usr: "bitcoin_secp256k1"}, new BitcoinWebToken("b9d70b775092fc32eea9868c719eda3dbc8e11fae28be95e0a5bd6bf432d3732")],
-  [{usr: "zhye"}, new EthereumWebToken("105d31c6d6b19fdac7e3873572f5e1cd787afe912344a4bf3984d94b0cbb8876")]
+  [{usr: "jingtum_secp256k1"}, new JingtumWebToken("shNhYSvW3rYgXyhPSMsPyTE9FpSf3"), "jingtum_secp256k1"],
+  [{usr: "jingtum_ed25519"}, new JingtumWebToken("sEdVmyqoq2ZhZEQdUtBGCexBAhE7Dof"), "jingtum_ed25519"],
+  [{usr: "ripple_secp256k1"}, new RippleWebToken("snhfP8ByWeWKWYNWBnr2avbxGCZwt"), "ripple_secp256k1"],
+  [{usr: "ripple_ed25519"}, new RippleWebToken("sEdTSMh6UwzwexTFEkyvXc5bxWzTs2n"), "ripple_ed25519"],
+  [{usr: "bitcoin_secp256k1"}, new BitcoinWebToken("c9e8b15186a9be25070edd4a3bf7b261ba50a28317783dea2adf99693ae3009d"), "bitcoin"],
+  [{usr: "ethereum_secp256k1"}, new EthereumWebToken("105d31c6d6b19fdac7e3873572f5e1cd787afe912344a4bf3984d94b0cbb8876"), "ethereum"],
+  [{group: "jingchang"}, new JingtumWebToken("shNhYSvW3rYgXyhPSMsPyTE9FpSf3"), "jingtum_secp256k1"],
+  [{group: "jingchang"}, new JingtumWebToken("sEdVmyqoq2ZhZEQdUtBGCexBAhE7Dof"), "jingtum_ed25519"],
+  [{group: "jingchang"}, new RippleWebToken("snhfP8ByWeWKWYNWBnr2avbxGCZwt"), "ripple_secp256k1"],
+  [{group: "jingchang"}, new RippleWebToken("sEdTSMh6UwzwexTFEkyvXc5bxWzTs2n"), "ripple_ed25519"],
+  [{group: "jingchang"}, new BitcoinWebToken("c9e8b15186a9be25070edd4a3bf7b261ba50a28317783dea2adf99693ae3009d"), "bitcoin"],
+  [{group: "jingchang"}, new EthereumWebToken("105d31c6d6b19fdac7e3873572f5e1cd787afe912344a4bf3984d94b0cbb8876"), "ethereum"],
 ];
 
-const fetch = async (cwt?: string) => {
+const fetch = async (param, header, cookie) => {
   const config = {
     method: "post",
     url: "http://192.168.66.254:50500/",
     headers: {
-      cwt_auth: cwt
+      cwt: header,
+      Cookie: cookie ? `cwt=${cookie}` : ""
+    },
+    params: {
+      cwt: param
     },
     data: {
       method: "server_info",
@@ -28,24 +38,31 @@ const fetch = async (cwt?: string) => {
   const res = await axios(config);
   return res;
 };
+const execute = async(cases, fun) => {
+  for (const c of cases) {
+    const [payload, webToken, memo] = c;
+    const { usr, group } = payload;
+    const cwt = webToken.sign(payload);
+    try {
+      await fun(cwt);
+      console.log(colors.green(` auth success on ${usr || group}, memo is ${memo}`));
+    } catch (_) {
+      console.error(colors.red(` auth error on ${usr || group}, memo is ${memo}`));
+    }
+  }
+}
 (async () => {
   try {
-    await fetch();
+    await fetch(null, null, null);
     console.log(colors.red("server doesn't verify auth"));
     return;
   } catch (error) {
     console.log(colors.green("server verify auth: " + error.message));
   }
-
-  for (const c of cases) {
-    const [payload, webToken] = c;
-    const { usr, group } = payload;
-    const cwt = webToken.sign(payload);
-    try {
-      await fetch(cwt);
-      console.log(colors.green(`auth success on ${usr || group}`));
-    } catch (_) {
-      console.error(colors.red(`auth error on ${usr || group}`));
-    }
-  }
+  console.log(colors.green("cwt in headers:"));
+  await execute(cases, async (cwt) => await fetch(undefined, cwt, undefined));
+  console.log(colors.green("cwt in query:"));
+  await execute(cases, async (cwt) => await fetch(cwt, undefined, undefined));
+  console.log(colors.green("cwt in cookie:"));
+  await execute(cases, async (cwt) => await fetch(undefined, undefined, cwt));
 })();
