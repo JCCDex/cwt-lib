@@ -4,6 +4,7 @@ local cjson             = require("cjson.safe")
 local resty_string      = require("resty.string")
 local openssl_digest    = require("resty.openssl.digest")
 local openssl_pkey      = require("resty.openssl.pkey")
+local http              = require("resty.http")
 local codec             = require("apisix.plugins.cwt.codec")
 local keccak            = require("apisix.plugins.cwt.keccak")
 require("resty.openssl")
@@ -36,9 +37,15 @@ local str_const = {
     header = "header",
     type = "type",
     CWT = "CWT",
+    CWT_ENT = "CWT_ENT",
     alg = "alg",
     chain = "chain",
+    x5c = "x5c",
     payload = "payload",
+    usr = "usr",
+    group = "group",
+    verify_url = "verify_url",
+    verify_timeout = "verify_timeout",
     time = "time",
     signature = "signature",
     reason = "reason",
@@ -52,11 +59,11 @@ local schema = {
     properties = {
         header = {
             type = "string",
-            default = "cwt_auth"
+            default = "cwt"
         },
         cookie = {
             type = "string",
-            default = "cwt_auth"
+            default = "cwt"
         },
         query = {
             type = "string",
@@ -72,11 +79,13 @@ local schema = {
 local consumer_schema = {
     type = "object",
     properties = {
+        exp = {type = "integer", minimum = 1},
         usr = {type = "string"},
         wallet = {type = "string"},
-        exp = {type = "integer", minimum = 1}
+        verify_url = {type = "string"},
+        verify_timeout = {type = "integer", minimum = 1}
     },
-    required = {"usr", "wallet", "exp"},
+    required = {"usr", "exp"}
 }
 
 
@@ -211,7 +220,7 @@ local function parse_cwt(encoded_header, encoded_payload, signature)
     end
 
     local basic_cwt = {
-        type = str_const.CWT,
+        type = header[str_const.type],
         raw_header = encoded_header,
         raw_payload = encoded_payload,
         header = header,
@@ -254,7 +263,47 @@ local function load_cwt(cwt_str)
     end
 end
 
-local function verify_ethereum_cwt(public_key_pem, message, signature, address, alg)
+local function verify_wallet_valid(cwt_type, wallet, auth_conf)
+    if cwt_type == str_const.CWT then
+        local config_wallet = auth_conf.wallet
+        if not config_wallet then
+            return false, "Missing wallet config"
+        end
+        config_wallet = config_wallet:gsub("^0x", "")
+        if wallet ~= config_wallet then
+            return false, "Invalid wallet"
+        end
+        return true
+    end
+    local group = auth_conf[str_const.usr]
+    local verify_url = auth_conf[str_const.verify_url]
+    if not verify_url then
+        return false, "Missing verify_url config"
+    end
+    local httpc = http.new()
+    local timeout = auth_conf[str_const.verify_timeout] or 30000
+    httpc:set_timeout(timeout * 1000)
+    local uri = verify_url.. "?group=".. group.. "&wallet=".. wallet
+    local res, err = httpc:request_uri(uri, {
+        method = "GET"
+    })
+    if err or not res then
+        return false, "Failed to request verify_url: ".. err
+    end
+    if res.status ~= 200 then
+        return false, "Failed to request verify_url: ".. err
+    end
+    local res_body = core.json.decode(res.body)
+    if not res_body then
+        return false, "Failed to decode response body: ".. err
+    end
+    if res_body.code ~= 0 or not res_body.data then
+        return false, "Invalid wallet"
+    end
+    return true
+end
+
+local function verify_ethereum_cwt(cwt_type, public_key_pem, message, signature, auth_conf, alg)
     local pk, err = openssl_pkey.new(public_key_pem, {format = "PEM"})
     if not pk then
         return false, "Failed to load public key: ".. err
@@ -292,11 +341,8 @@ local function verify_ethereum_cwt(public_key_pem, message, signature, address, 
     end
     local hash_last20 = string.sub(keccak_hash, -20)
     local wallet_address = resty_string.to_hex(hash_last20)
-    address = address:gsub("^0x", "")
-    if wallet_address ~= address then
-        return false, "Wallet address mismatch"
-    end
-    return true
+
+    return verify_wallet_valid(cwt_type, wallet_address, auth_conf)
 end
 
 local function isEven(n)
@@ -344,7 +390,7 @@ local function derive_address_from_pubkey(public_key, chain)
     end
 end
 
-local function verify_ripple_cwt(public_key_pem, message, signature, address, alg, chain)
+local function verify_ripple_cwt(cwt_type, public_key_pem, message, signature, auth_conf, alg, chain)
     local pk, err = openssl_pkey.new(public_key_pem, {format = "PEM"})
     if not pk then
         return false, "Failed to load public key: ".. err
@@ -388,13 +434,10 @@ local function verify_ripple_cwt(public_key_pem, message, signature, address, al
     if not wallet_address then
         return false, "Failed to derive wallet address: " .. err
     end
-    if wallet_address ~= address then
-        return false, "Wallet address mismatch"
-    end
-    return true
+    return verify_wallet_valid(cwt_type, wallet_address, auth_conf)
 end
 
-local function verify_bitcoin_cwt(public_key_pem, message, signature, address, alg, chain)
+local function verify_bitcoin_cwt(cwt_type, public_key_pem, message, signature, auth_conf, alg, chain)
     local pk, err = openssl_pkey.new(public_key_pem, {format = "PEM"})
     if not pk then
         return false, "Failed to load public key: ".. err
@@ -428,10 +471,7 @@ local function verify_bitcoin_cwt(public_key_pem, message, signature, address, a
     if not wallet_address then
         return false, "Failed to derive wallet address: " .. err
     end
-    if wallet_address ~= address then
-        return false, "Wallet address mismatch"
-    end
-    return true
+    return verify_wallet_valid(cwt_type, wallet_address, auth_conf)
 end
 
 local function check_expiration(token_time, expiration)
@@ -445,11 +485,16 @@ local function check_expiration(token_time, expiration)
     return true
 end
 
-local function verify_cwt_obj(wallet, cwt_obj, exp)
+local function verify_cwt_obj(auth_conf, cwt_obj, cwt_type)
     if not cwt_obj.valid then
         return cwt_obj
     end
 
+    local exp = auth_conf.exp
+    if not exp then
+        cwt_obj[str_const.reason] = "Missing exp config"
+        return cwt_obj
+    end
     local chain = cwt_obj[str_const.header][str_const.chain]
     if chain == nil then
         cwt_obj[str_const.reason] = "No chain supplied"
@@ -484,19 +529,19 @@ local function verify_cwt_obj(wallet, cwt_obj, exp)
 
     local alg = cwt_obj[str_const.header][str_const.alg] or "secp256k1"
     if chain == str_const.chain_ethereum then
-        local ok, err = verify_ethereum_cwt(public_key_pem, message, sig, wallet, alg)
+        local ok, err = verify_ethereum_cwt(cwt_type, public_key_pem, message, sig, auth_conf, alg)
         if not ok then
             cwt_obj[str_const.reason] = err
             return cwt_obj
         end
     elseif chain == str_const.chain_ripple or chain == str_const.chain_jingtum then
-        local ok, err = verify_ripple_cwt(public_key_pem, message, sig, wallet, alg, chain)
+        local ok, err = verify_ripple_cwt(cwt_type, public_key_pem, message, sig, auth_conf, alg, chain)
         if not ok then
             cwt_obj[str_const.reason] = err
             return cwt_obj
         end
     elseif chain == str_const.chain_bitcoin then
-        local ok, err = verify_bitcoin_cwt(public_key_pem, message, sig, wallet, alg, chain)
+        local ok, err = verify_bitcoin_cwt(cwt_type, public_key_pem, message, sig, auth_conf, alg, chain)
         if not ok then
             cwt_obj[str_const.reason] = err
             return cwt_obj
@@ -524,31 +569,45 @@ function _M.rewrite(conf, ctx)
         core.log.error("cwt token invalid: ", cwt_obj.reason)
         return 401, {message = "cwt token invalid"}
     end
-
-    local usr = cwt_obj.payload and cwt_obj.payload.usr
-    if not usr then
-        return 401, {message = "Missing user in cwt token"}
-    end
-    local token_time = cwt_obj.payload.time
-    if not token_time then
-        return 401, {message = "Missing time in cwt token"}
+    local type = cwt_obj[str_const.header][str_const.type]
+    if not type then
+        return 401, {message = "Missing token type"}
     end
 
     local consumer_conf = consumer_mod.plugin(plugin_name)
     if not consumer_conf then
-        return 401, {message = "Missing related consumer"}
+        return 401, {message = "Missing cwt consumers config"}
+    end
+    local token_time = cwt_obj[str_const.payload][str_const.time]
+    if not token_time then
+        return 401, {message = "Missing time in cwt token"}
     end
 
-    local consumers = consumer_mod.consumers_kv(plugin_name, consumer_conf, "usr")
+    local usr_or_grp
+    if type == str_const.CWT then
+        usr_or_grp = cwt_obj[str_const.payload][str_const.usr]
+        if not usr_or_grp then
+            return 401, {message = "Missing user name"}
+        end
 
-    local consumer = consumers[usr]
+    elseif type == str_const.CWT_ENT then
+        usr_or_grp = cwt_obj[str_const.payload][str_const.group]
+        if not usr_or_grp then
+            return 401, {message = "Missing group name"}
+        end
+    else
+        return 401, {message = "Invalid token type"}
+    end
+
+    local consumers = consumer_mod.consumers_kv(plugin_name, consumer_conf, str_const.usr)
+    if not consumers then
+        return 401, {message = "Missing user consumers config"}
+    end
+    local consumer = consumers[usr_or_grp]
     if not consumer then
-        return 401, {message = "invalid user in cwt token"}
+        return 401, {message = "Invalid user or group name"}
     end
-    local wallet = consumer.auth_conf.wallet
-
-    cwt_obj = verify_cwt_obj(wallet, cwt_obj, consumer.auth_conf.exp)
-
+    cwt_obj = verify_cwt_obj(consumer.auth_conf, cwt_obj, type)
     if not cwt_obj.verified then
         core.log.error("failed to verify cwt: ", cwt_obj.reason)
         return 401, {message = "Failed to verify cwt"}
