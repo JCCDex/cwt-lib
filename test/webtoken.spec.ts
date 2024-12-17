@@ -12,23 +12,35 @@ describe("WebToken", () => {
       ];
       for (const seed of seeds) {
         const webToken = new JingtumWebToken(seed[0]);
-        const token = webToken.sign({
+        const args = {
           usr: "jingtum_secp256k1",
           time: 123456
-        });
-        const quickToken = sign({
+        };
+        const quickArgs = {
           usr: "jingtum_secp256k1",
           privateKey: seed[0],
           alg: seed[1],
           time: 123456,
           chain: "jingtum"
-        });
+        };
+        const args_ent = Object.assign({}, args, { usr: undefined, group: "jingtum_secp256k1" });
+        const quickArgs_ent = Object.assign({}, quickArgs, { usr: undefined, group: "jingtum_secp256k1" });
+        const token = webToken.sign(args);
+        const quickToken = sign(quickArgs);
+        const token_ent = webToken.sign(args_ent);
+        const quickToken_ent = sign(quickArgs_ent);
         expect(token).to.equal(quickToken);
         expect(token).to.equal(
           "eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1EWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RJZ0FDTVRxOXVhdENOQVhXSFV2U2tPYm0wOTd0cDFJVVAyZVJcbjFyKzU4T3ljNHowPVxuLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tIl0sInR5cGUiOiJDV1QiLCJjaGFpbiI6Imppbmd0dW0iLCJhbGciOiJzZWNwMjU2azEifQ.eyJ1c3IiOiJqaW5ndHVtX3NlY3AyNTZrMSIsInRpbWUiOjEyMzQ1Nn0.MEYCIQC_UT0sz_AQN3kmgXgz4Y7OEhHMGhr2MhTgkrlu4WoAgQIhAMIiy7MmCd2MWn18Vbbw0OQndMBw4rqpLw5mBskCxAWz"
         );
+        expect(token_ent).to.equal(quickToken_ent);
+        expect(token_ent).to.equal(
+          "eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1EWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RJZ0FDTVRxOXVhdENOQVhXSFV2U2tPYm0wOTd0cDFJVVAyZVJcbjFyKzU4T3ljNHowPVxuLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tIl0sInR5cGUiOiJDV1RfRU5UIiwiY2hhaW4iOiJqaW5ndHVtIiwiYWxnIjoic2VjcDI1NmsxIn0.eyJncm91cCI6Imppbmd0dW1fc2VjcDI1NmsxIiwidGltZSI6MTIzNDU2fQ.MEUCIQC_xRdk_aX73Y6UwgFOhYHwGwgicZV8y-XTfmWcNDDmmQIgcSARyi6Naiis-HmBKmpCoMy4pxcHTUeDyh5YMrFYZn0"
+        );
         const result = webToken.verify(token);
         expect(result).to.equal(true);
+        const result_ent = webToken.verify(token_ent);
+        expect(result_ent).to.equal(true);
       }
     });
 
@@ -40,23 +52,35 @@ describe("WebToken", () => {
       ];
       for (const seed of seeds) {
         const webToken = new JingtumWebToken(seed[0], seed[1]);
-        const token = webToken.sign({
+        const args = {
           usr: "jingtum_ed25519",
           time: 123456
-        });
-        const quickToken = sign({
+        };
+        const quickArgs = {
           usr: "jingtum_ed25519",
           privateKey: seed[0],
           alg: seed[1],
           time: 123456,
           chain: "jingtum"
-        });
+        };
+        const args_ent = Object.assign({}, args, { usr: undefined, group: "jingtum_ed25519" });
+        const quickArgs_ent = Object.assign({}, quickArgs, { usr: undefined, group: "jingtum_ed25519" });
+        const token = webToken.sign(args);
+        const quickToken = sign(quickArgs);
+        const token_ent = webToken.sign(args_ent);
+        const quickToken_ent = sign(quickArgs_ent);
         expect(token).to.equal(quickToken);
         expect(token).to.equal(
           "eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1Db3dCUVlESzJWd0F5RUFPREVoam8rdzlDN2JmaUZueUl1UnE1RDQ5VjBjZ1hxUE9hVllWclFDMTVzPVxuLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tXG4iXSwidHlwZSI6IkNXVCIsImNoYWluIjoiamluZ3R1bSIsImFsZyI6ImVkMjU1MTkifQ.eyJ1c3IiOiJqaW5ndHVtX2VkMjU1MTkiLCJ0aW1lIjoxMjM0NTZ9.LWbHcA6KzFlhVeBGGo49R5kkQm4MvszKhNUBvH-mRo8YADqx9uBPdByUPYihtNBtQOtzFj4H-jQReMfWggRTCw"
         );
+        expect(token_ent).to.equal(quickToken_ent);
+        expect(token_ent).to.equal(
+          "eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1Db3dCUVlESzJWd0F5RUFPREVoam8rdzlDN2JmaUZueUl1UnE1RDQ5VjBjZ1hxUE9hVllWclFDMTVzPVxuLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tXG4iXSwidHlwZSI6IkNXVF9FTlQiLCJjaGFpbiI6Imppbmd0dW0iLCJhbGciOiJlZDI1NTE5In0.eyJncm91cCI6Imppbmd0dW1fZWQyNTUxOSIsInRpbWUiOjEyMzQ1Nn0.E9iW1ufGyvJ2W1tvhJvIPGxkPU_RRFddZehwH84fsAkNsrg5kx-sywkhNQjfQqA0B8-pE1eFgiQ_K1EIniuTBA"
+        );
         const result = webToken.verify(token);
         expect(result).to.equal(true);
+        const result_ent = webToken.verify(token_ent);
+        expect(result_ent).to.equal(true);
       }
     });
   });
@@ -64,64 +88,100 @@ describe("WebToken", () => {
   describe("RippleWebToken", () => {
     it("should sign and verify when is secp256k1", () => {
       const webToken = new RippleWebToken("snhfP8ByWeWKWYNWBnr2avbxGCZwt");
-      const token = webToken.sign({
+      const args = {
         usr: "ripple_secp256k1",
         time: 123456
-      });
-      const quickToken = sign({
+      };
+      const quickArgs = {
         usr: "ripple_secp256k1",
         privateKey: "snhfP8ByWeWKWYNWBnr2avbxGCZwt",
         time: 123456,
         chain: "ripple"
-      });
+      };
+      const args_ent = Object.assign({}, args, { usr: undefined, group: "ripple_secp256k1" });
+      const quickArgs_ent = Object.assign({}, quickArgs, { usr: undefined, group: "ripple_secp256k1" });
+      const token = webToken.sign(args);
+      const quickToken = sign(quickArgs);
+      const token_ent = webToken.sign(args_ent);
+      const quickToken_ent = sign(quickArgs_ent);
       expect(token).to.equal(quickToken);
       expect(token).to.equal(
         "eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1EWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RJZ0FDRVBqa0hyNzhkL0hLWStydEJKeUIzUmJ0Z2kzRkFDbEFcbmVLSkFjcmNrdTlNPVxuLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tIl0sInR5cGUiOiJDV1QiLCJjaGFpbiI6InJpcHBsZSIsImFsZyI6InNlY3AyNTZrMSJ9.eyJ1c3IiOiJyaXBwbGVfc2VjcDI1NmsxIiwidGltZSI6MTIzNDU2fQ.MEUCIQC19BgTC8l7D7vdgVKNktQAM8oihqZtl8wlphDwWyHHDwIgdCNVFRHoh95-WiYusItsdYxluUlnykeIFs6DZgYFgIQ"
       );
+      expect(token_ent).to.equal(quickToken_ent);
+      expect(token_ent).to.equal(
+        "eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1EWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RJZ0FDRVBqa0hyNzhkL0hLWStydEJKeUIzUmJ0Z2kzRkFDbEFcbmVLSkFjcmNrdTlNPVxuLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tIl0sInR5cGUiOiJDV1RfRU5UIiwiY2hhaW4iOiJyaXBwbGUiLCJhbGciOiJzZWNwMjU2azEifQ.eyJncm91cCI6InJpcHBsZV9zZWNwMjU2azEiLCJ0aW1lIjoxMjM0NTZ9.MEQCIGjIPXWSJCFVV3NdFv5C-4HzdMyES-A7dYW1TQUpN__hAiB0cVv3im265CzIJr5aZnF51T_cibg5L6Ef_IEZhujomg"
+      );
       const result = webToken.verify(token);
       expect(result).to.equal(true);
+      const result_ent = webToken.verify(token_ent);
+      expect(result_ent).to.equal(true);
     });
 
     it("should sign and verify when is ed25519", () => {
       const webToken = new RippleWebToken("sEdTSMh6UwzwexTFEkyvXc5bxWzTs2n");
-      const token = webToken.sign({
+      const args = {
         usr: "ripple_ed25519",
         time: 123456
-      });
-      const quickToken = sign({
+      };
+      const quickArgs = {
         usr: "ripple_ed25519",
         privateKey: "sEdTSMh6UwzwexTFEkyvXc5bxWzTs2n",
         time: 123456,
         chain: "ripple"
-      });
+      };
+      const args_ent = Object.assign({}, args, { usr: undefined, group: "ripple_ed25519" });
+      const quickArgs_ent = Object.assign({}, quickArgs, { usr: undefined, group: "ripple_ed25519" });
+      const token = webToken.sign(args);
+      const quickToken = sign(quickArgs);
+      const token_ent = webToken.sign(args_ent);
+      const quickToken_ent = sign(quickArgs_ent);
       expect(token).to.equal(quickToken);
       expect(token).to.equal(
         "eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1Db3dCUVlESzJWd0F5RUFZSkQ4T1NTdWpYd0hienhBZFFNYUcvZXJkQVRtYllndTVmZVdmRjhRdWJZPVxuLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tXG4iXSwidHlwZSI6IkNXVCIsImNoYWluIjoicmlwcGxlIiwiYWxnIjoiZWQyNTUxOSJ9.eyJ1c3IiOiJyaXBwbGVfZWQyNTUxOSIsInRpbWUiOjEyMzQ1Nn0.6OIV2UMf5XljJufU85SEBkQxXH_OoalViw4RLpDwa-wt9T7hUCT3FyEKDm_cB63YuyUVFrBxnxuuMzthBHUIDA"
       );
+      expect(token_ent).to.equal(quickToken_ent);
+      expect(token_ent).to.equal(
+        "eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1Db3dCUVlESzJWd0F5RUFZSkQ4T1NTdWpYd0hienhBZFFNYUcvZXJkQVRtYllndTVmZVdmRjhRdWJZPVxuLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tXG4iXSwidHlwZSI6IkNXVF9FTlQiLCJjaGFpbiI6InJpcHBsZSIsImFsZyI6ImVkMjU1MTkifQ.eyJncm91cCI6InJpcHBsZV9lZDI1NTE5IiwidGltZSI6MTIzNDU2fQ.YQbZtEufNrcmuXRiYLi1TGuZhpQXZ8bBq4Nd5MjH7QX6VhmtMSfiwMKp77L4o4mI231sgn4Hu9wb-BS7rzanBQ"
+      );
       const result = webToken.verify(token);
       expect(result).to.equal(true);
+      const result_ent = webToken.verify(token_ent);
+      expect(result_ent).to.equal(true);
     });
   });
 
   describe("EthereumWebToken", () => {
     it("should sign and verify when", () => {
       const webToken = new EthereumWebToken("105d31c6d6b19fdac7e3873572f5e1cd787afe912344a4bf3984d94b0cbb8876");
-      const token = webToken.sign({
+      const args = {
         usr: "zhye",
         time: 123456
-      });
-      const quickToken = sign({
+      };
+      const quickArgs = {
         usr: "zhye",
         privateKey: "105d31c6d6b19fdac7e3873572f5e1cd787afe912344a4bf3984d94b0cbb8876",
         time: 123456,
         chain: "ethereum"
-      });
+      }
+      const args_ent = Object.assign({}, args, { usr: undefined, group: "zhye" });
+      const quickArgs_ent = Object.assign({}, quickArgs, { usr: undefined, group: "zhye" });
+      const token = webToken.sign(args);
+      const quickToken = sign(quickArgs);
+      const token_ent = webToken.sign(args_ent);
+      const quickToken_ent = sign(quickArgs_ent);
       expect(token).to.equal(quickToken);
       expect(token).to.equal(
         "eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1GWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RRZ0FFaWJpcmx6eEtnZ0EzNWp1TUNtSmRhbUNDZ0hhOE9ZSkdcbk9HMFlIRzYxMUk5UDdrTEFBYlNqNGg0SFJHeUNSZnA0Ky9ndkxtcGU1Uis3UFV2bDNHU0NvZz09XG4tLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0iXSwidHlwZSI6IkNXVCIsImNoYWluIjoiZXRoZXJldW0iLCJhbGciOiJzZWNwMjU2azEifQ.eyJ1c3IiOiJ6aHllIiwidGltZSI6MTIzNDU2fQ.MEQCIGxzWnR5lNw05bF_vrODHmqf7UrPyBD3UyU4nG5_WuOqAiAbsJIx_VHJ5IoPkXMf1iKIQ7BlsSLJe-INY7FDVPLLFw"
       );
+      expect(token_ent).to.equal(quickToken_ent);
+      expect(token_ent).to.equal(
+        "eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1GWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RRZ0FFaWJpcmx6eEtnZ0EzNWp1TUNtSmRhbUNDZ0hhOE9ZSkdcbk9HMFlIRzYxMUk5UDdrTEFBYlNqNGg0SFJHeUNSZnA0Ky9ndkxtcGU1Uis3UFV2bDNHU0NvZz09XG4tLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0iXSwidHlwZSI6IkNXVF9FTlQiLCJjaGFpbiI6ImV0aGVyZXVtIiwiYWxnIjoic2VjcDI1NmsxIn0.eyJncm91cCI6InpoeWUiLCJ0aW1lIjoxMjM0NTZ9.MEYCIQCQxd-5RiPYNJ3FRUloCqzz6NI60F8dOYvpjtU5KI2yXwIhAIbWCnC_11XKHacqgYShDPIxXumo97QpxDHBvCunJJ6y"
+      );
       const result = webToken.verify(token);
       expect(result).to.equal(true);
+      const result_ent = webToken.verify(token_ent);
+      expect(result_ent).to.equal(true);
     });
   });
 
@@ -133,22 +193,34 @@ describe("WebToken", () => {
       ];
       for (const seed of seeds) {
         const webToken = new BitcoinWebToken(seed[0]);
-        const token = webToken.sign({
+        const args = {
           usr: "bitcoin_secp256k1",
           time: 123456
-        });
-        const quickToken = sign({
+        };
+        const quickArgs = {
           usr: "bitcoin_secp256k1",
           privateKey: seed[0],
           time: 123456,
           chain: "bitcoin"
-        });
+        }
+        const args_ent = Object.assign({}, args, { usr: undefined, group: "bitcoin_secp256k1" });
+        const quickArgs_ent = Object.assign({}, quickArgs, { usr: undefined, group: "bitcoin_secp256k1" });
+        const token = webToken.sign(args);
+        const quickToken = sign(quickArgs);
+        const token_ent = webToken.sign(args_ent);
+        const quickToken_ent = sign(quickArgs_ent);
         expect(token).to.equal(quickToken);
         expect(token).to.equal(
           "eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1GWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RRZ0FFS1duUnc4K3V5SXhYZkxEbXFKbGR3WUlzRlpMTWcrdG5cbmdZd3NxZWZpMGVBNjZRdUJuMTNVcG96cHJrdGIvb2pCNlBKYm1YRi8ydUJuK1d6SlUvVVpRQT09XG4tLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0iXSwidHlwZSI6IkNXVCIsImNoYWluIjoiYml0Y29pbiIsImFsZyI6InNlY3AyNTZrMSJ9.eyJ1c3IiOiJiaXRjb2luX3NlY3AyNTZrMSIsInRpbWUiOjEyMzQ1Nn0.MEYCIQDS0g2ttUlcUv4arqDrMUN8wYebjzrR-LmUAEWPmXAKNAIhAODygQhDV9WHL5ofbnDQmVCQk-nYrK1iv6Sgs46aRF5v"
         );
+        expect(token_ent).to.equal(quickToken_ent);
+        expect(token_ent).to.equal(
+          "eyJ4NWMiOlsiLS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1cbk1GWXdFQVlIS29aSXpqMENBUVlGSzRFRUFBb0RRZ0FFS1duUnc4K3V5SXhYZkxEbXFKbGR3WUlzRlpMTWcrdG5cbmdZd3NxZWZpMGVBNjZRdUJuMTNVcG96cHJrdGIvb2pCNlBKYm1YRi8ydUJuK1d6SlUvVVpRQT09XG4tLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0iXSwidHlwZSI6IkNXVF9FTlQiLCJjaGFpbiI6ImJpdGNvaW4iLCJhbGciOiJzZWNwMjU2azEifQ.eyJncm91cCI6ImJpdGNvaW5fc2VjcDI1NmsxIiwidGltZSI6MTIzNDU2fQ.MEQCIBqsoUqy8QLNaam4yqmpgQBNWkzW_yDHuD6rxwg6_c2HAiA_gexTkKMViOQ23B-nUjfzbpexB2f-ouTEP5i8bEVhZg"
+        );
         const result = webToken.verify(token);
         expect(result).to.equal(true);
+        const result_ent = webToken.verify(token_ent);
+        expect(result_ent).to.equal(true);
       }
     });
   });

@@ -27,9 +27,10 @@ export class JingtumWebToken extends WebToken {
   }
 
   public sign(signData: ISignData): string {
-    const { usr, time } = signData;
+    const { usr, group, time } = signData;
     const data = super.payload({
       usr,
+      group,
       time: time || Math.floor(new Date().getTime() / 1000)
     });
     return this.keypair.sign(data);

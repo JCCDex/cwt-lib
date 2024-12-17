@@ -15,7 +15,8 @@ export enum PrivateKeyFlag {
 }
 
 export interface ISignData {
-  usr: string;
+  usr?: string;
+  group?: string; // enterprise
   time?: number;
 }
 
@@ -27,7 +28,8 @@ export interface IKeyPair {
 export interface IQuickSignData {
   chain: string;
   privateKey: string;
-  usr: string;
+  usr?: string;
+  group?: string; // enterprise
   time?: number;
   alg?: string;
 }
