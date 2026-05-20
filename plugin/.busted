@@ -1,0 +1,11 @@
+-- Run from the plugin/ directory: busted
+-- Prerequisites:
+--   luarocks install busted
+--   luarocks install lua-cjson   (skip if using OpenResty luarocks)
+return {
+  default = {
+    helper  = "spec/helpers",
+    lpath   = "?.lua;?/init.lua",
+    verbose = true,
+  },
+}

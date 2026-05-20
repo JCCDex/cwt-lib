@@ -623,4 +623,14 @@ function _M.rewrite(conf, ctx)
     core.log.info("cwt rewrite ok")
 end
 
+-- Export internal functions when running under busted unit tests
+if _TEST then
+    _M._check_expiration    = check_expiration
+    _M._load_cwt            = load_cwt
+    _M._cwt_encode          = cwt_encode
+    _M._cwt_decode          = cwt_decode
+    _M._verify_wallet_valid = verify_wallet_valid
+    _M._verify_cwt_obj      = verify_cwt_obj
+end
+
 return _M
