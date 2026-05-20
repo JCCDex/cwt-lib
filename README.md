@@ -153,3 +153,47 @@ const cwt = sign({
 }
 
 ```
+
+## Testing
+
+### JavaScript / TypeScript
+
+```shell
+# Node.js unit tests (Jest) + browser tests (Karma) — run both at once
+yarn test
+
+# Run only Node.js unit tests
+yarn test:node
+
+# Run only browser tests
+yarn test:browser
+```
+
+### Lua Plugin (APISIX `cwt.lua`)
+
+The Lua plugin has a standalone unit-test suite built with [busted](https://lunarmodules.github.io/busted/).
+
+**Prerequisites** — install once with [LuaRocks](https://luarocks.org/):
+
+```shell
+luarocks install busted --local
+luarocks install lua-cjson --local
+```
+
+**Run tests** (from the `plugin/` directory):
+
+```shell
+cd plugin
+~/.luarocks/bin/busted
+```
+
+Expected output:
+
+```
+●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●
+31 successes / 0 failures / 0 errors / 0 pending
+```
+
+> **Note:** The test suite stubs out OpenResty (`ngx.*`), APISIX core modules, and LuaJIT-specific
+> libraries (`resty.openssl`, `codec.lua`, `keccak.lua`) so it runs on standard Lua 5.x without
+> a full OpenResty/APISIX installation.
