@@ -11,6 +11,7 @@ require("resty.openssl")
 
 local ngx_encode_base64 = ngx.encode_base64
 local ngx_decode_base64 = ngx.decode_base64
+local ngx_encode_args  = ngx.encode_args
 local cjson_encode      = cjson.encode
 local cjson_decode      = cjson.decode
 local ngx_time          = ngx.time
@@ -283,7 +284,7 @@ local function verify_wallet_valid(cwt_type, wallet, auth_conf)
     local httpc = http.new()
     local timeout = auth_conf[str_const.verify_timeout] or 30000
     httpc:set_timeout(timeout * 1000)
-    local uri = verify_url.. "?group=".. group.. "&wallet=".. wallet
+    local uri = verify_url .. "?" .. ngx_encode_args({group = group, wallet = wallet})
     local res, err = httpc:request_uri(uri, {
         method = "GET"
     })
@@ -500,9 +501,14 @@ local function verify_cwt_obj(auth_conf, cwt_obj, cwt_type)
         cwt_obj[str_const.reason] = "No chain supplied"
         return cwt_obj
     end
-    local public_key_pem = cwt_obj[str_const.header].x5c[1]
-    if not public_key_pem then
+    local x5c = cwt_obj[str_const.header].x5c
+    if type(x5c) ~= "table" or not x5c[1] then
         cwt_obj[str_const.reason] = "No public key supplied"
+        return cwt_obj
+    end
+    local public_key_pem = x5c[1]
+    if #public_key_pem > 4096 then
+        cwt_obj[str_const.reason] = "Public key too large"
         return cwt_obj
     end
     local token_time = cwt_obj[str_const.payload][str_const.time]
