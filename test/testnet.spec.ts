@@ -1,5 +1,5 @@
 import axios from "axios";
-import * as colors from "colors";
+import chalk from "chalk";
 import { EthereumWebToken, BitcoinWebToken, JingtumWebToken, RippleWebToken, WebToken } from "../src";
 
 type ICase = [{usr?: string, group?: string}, WebToken, string];
@@ -45,24 +45,24 @@ const execute = async(cases, fun) => {
     const cwt = webToken.sign(payload);
     try {
       await fun(cwt);
-      console.log(colors.green(` auth success on ${usr || group}, memo is ${memo}`));
+      console.log(chalk.green(` auth success on ${usr || group}, memo is ${memo}`));
     } catch (_) {
-      console.error(colors.red(` auth error on ${usr || group}, memo is ${memo}`));
+      console.error(chalk.red(` auth error on ${usr || group}, memo is ${memo}`));
     }
   }
 }
 (async () => {
   try {
     await fetch(null, null, null);
-    console.log(colors.red("server doesn't verify auth"));
+    console.log(chalk.red("server doesn't verify auth"));
     return;
   } catch (error) {
-    console.log(colors.green("server verify auth: " + error.message));
+    console.log(chalk.green("server verify auth: " + error.message));
   }
-  console.log(colors.green("cwt in headers:"));
+  console.log(chalk.green("cwt in headers:"));
   await execute(cases, async (cwt) => await fetch(undefined, cwt, undefined));
-  console.log(colors.green("cwt in query:"));
+  console.log(chalk.green("cwt in query:"));
   await execute(cases, async (cwt) => await fetch(cwt, undefined, undefined));
-  console.log(colors.green("cwt in cookie:"));
+  console.log(chalk.green("cwt in cookie:"));
   await execute(cases, async (cwt) => await fetch(undefined, undefined, cwt));
 })();

@@ -25,7 +25,14 @@ export default class Ed25519KeyPair extends KeyPair {
   }
 
   public verify(token: string): boolean {
-    const [header, payload, signature] = token.split(".");
+    const parts = token.split(".");
+    if (parts.length !== 3) {
+      return false;
+    }
+    const [header, payload, signature] = parts;
+    if (!header || !payload || !signature) {
+      return false;
+    }
     const signData = header + "." + payload;
     return ed25519.verify(
       Buffer.from(unescape(signature), "base64").toString("hex"),

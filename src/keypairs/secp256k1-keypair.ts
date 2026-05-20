@@ -37,7 +37,7 @@ export default class Secp256k1KeyPair extends KeyPair {
     const signingInputHash = sha256(signingInput);
     const derSignature = secp.signSync(signingInputHash, Buffer.from(this.privateKey, "hex"), {
       der: true,
-      canonical: false
+      canonical: true
     });
     const base64Signature = escape(Buffer.from(derSignature).toString("base64"));
     return [signingInput, base64Signature].join(".");
@@ -48,10 +48,17 @@ export default class Secp256k1KeyPair extends KeyPair {
   }
 
   public verify(token: string): boolean {
-    const [header, payload, signature] = token.split(".");
+    const parts = token.split(".");
+    if (parts.length !== 3) {
+      return false;
+    }
+    const [header, payload, signature] = parts;
+    if (!header || !payload || !signature) {
+      return false;
+    }
     const signingInputHash = sha256(header + "." + payload);
     return secp.verify(Buffer.from(signature, "base64"), signingInputHash, this.publicKey, {
-      strict: false
+      strict: true
     });
   }
 }
